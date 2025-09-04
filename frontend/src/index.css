@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  color-scheme: light;
+}
+
+html, body, #root { height: 100%; }
+body { background: #0B0B0D; color: #fff; }
+
+/***** Premium theme helpers *****/
+.container-premium { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+.h1 { @apply text-3xl sm:text-5xl font-semibold tracking-tight; }
+.h2 { @apply text-2xl sm:text-3xl font-semibold; }
+.btn-primary { @apply inline-flex items-center justify-center rounded-md bg-[#D4AF37] text-[#0B0B0D] font-semibold px-5 py-3 shadow-gold hover:brightness-110 transition; }
+.btn-ghost { @apply inline-flex items-center justify-center rounded-md border border-[#D4AF37]/40 text-white px-5 py-3 hover:bg-white/5; }
+.badge { @apply inline-flex items-center gap-2 rounded-full border border-[#D4AF37] text-[#D4AF37] px-3 py-1 text-sm; }
+.card { @apply rounded-2xl border border-white/10 bg-white/5 backdrop-blur; }
+
+/***** Chatbot floating widget *****/
+.chat-fab { @apply fixed bottom-5 right-5 z-40 rounded-full bg-[#D4AF37] text-[#0B0B0D] w-14 h-14 flex items-center justify-center shadow-gold; }
+.chat-panel { @apply fixed bottom-24 right-5 z-40 w-full max-w-md card p-4; }
