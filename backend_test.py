@@ -10,8 +10,8 @@ import json
 from datetime import datetime
 
 class WebBoostAPITester:
-    def __init__(self, base_url="/api"):
-        # Use the public endpoint from frontend/.env
+    def __init__(self, base_url="https://demobackend.emergentagent.com/api"):
+        # Use the public endpoint 
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
