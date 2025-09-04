@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 
-const BACKEND_URL = (import.meta.env.REACT_APP_BACKEND_URL || '/api')
+const BACKEND_URL = import.meta.env.REACT_APP_BACKEND_URL
 
 function Nav() {
   const navClasses = ({ isActive }) => isActive ? 'text-[#D4AF37]' : 'hover:text-[#D4AF37]'
@@ -49,6 +49,7 @@ function Home(){
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/contact" className="btn-primary">Demander un devis gratuit</Link>
               <Link to="/packs" className="btn-ghost">Voir les tarifs martiniquais</Link>
+              <a href="https://wa.me/596000000" className="btn-ghost">Parler sur WhatsApp</a>
             </div>
             <div className="mt-10 grid grid-cols-2 sm:grid-cols-5 gap-3">
               {[
@@ -60,7 +61,7 @@ function Home(){
             <h3 className="h2 mb-4">Packs tarifaires</h3>
             <ul className="space-y-3 text-white/90">
               <li><b>Essentiel Local — 890€ HT</b> · 3 pages, SEO local de base, tracking appels/clics</li>
-              <li><b>Vitrine Pro — 1 290€ HT</b> · 5-6 pages, SEO étendu, LCP < 2,5s, GA4 & Search Console</li>
+              <li><b>Vitrine Pro — 1 290€ HT</b> · 5-6 pages, SEO étendu, LCP {"< 2,5s"}, GA4 & Search Console</li>
               <li><b>Vitrine Conversion — 1 790€ HT</b> · 6-8 pages, page Réserver/Devis optimisée, tracking avancé</li>
             </ul>
           </div>
@@ -183,6 +184,10 @@ function Contact(){
       alert('Email, téléphone et consentement requis.')
       return
     }
+    if(!BACKEND_URL){
+      alert('Configuration manquante: REACT_APP_BACKEND_URL')
+      return
+    }
     try{
       setStatus('loading')
       const res = await fetch(`${BACKEND_URL}/contact`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({
@@ -229,7 +234,7 @@ function Contact(){
 
 function Dashboard(){
   const [kpi, setKpi] = useState(null)
-  useEffect(()=>{ (async()=>{ try{ const r = await fetch(`${BACKEND_URL}/kpi`); const j = await r.json(); setKpi(j) }catch(e){ console.error(e) } })() },[])
+  useEffect(()=>{ (async()=>{ try{ if(!BACKEND_URL) return; const r = await fetch(`${BACKEND_URL}/kpi`); const j = await r.json(); setKpi(j) }catch(e){ console.error(e) } })() },[])
   return (
     <div className="container-premium py-12">
       <h2 className="h1 mb-6">Dashboard (caché)</h2>
@@ -248,6 +253,7 @@ function Chatbot(){
     setMessages(m=>[...m,{role:'user', content}])
     setInput('')
     try{
+      if(!BACKEND_URL) throw new Error('Missing backend URL')
       const res = await fetch(`${BACKEND_URL}/chat`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ messages: [{role:'user', content}], temperature: 0.3 }) })
       const j = await res.json()
       setMessages(m=>[...m,{role:'assistant', content: j.reply || '...'}])
