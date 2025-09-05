@@ -20,7 +20,6 @@ function Nav() {
           <NavLink to="/packs" className={navClasses}>Packs</NavLink>
           <NavLink to="/options" className={navClasses}>Options</NavLink>
           <NavLink to="/modalites" className={navClasses}>Modalités</NavLink>
-          <NavLink to="/impact" className={navClasses}>Impact</NavLink>
           <NavLink to="/contact" className="btn-cta-header">Devis gratuit</NavLink>
         </nav>
         
