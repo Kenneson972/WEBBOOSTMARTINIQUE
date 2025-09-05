@@ -39,29 +39,93 @@ function Footer(){
 function Home(){
   return (
     <main>
-      <section className="container-premium py-16 sm:py-24">
-        <div className="grid md:grid-cols-2 gap-10 items-center">
-          <div>
-            <h1 className="h1">Sites vitrines martiniquais qui transforment vos visiteurs en clients en 7-12 jours</h1>
-            <p className="mt-6 text-white/80 max-w-2xl">Délais courts, tarifs locaux, SEO local expert et accompagnement continu. Mobile-first et performance certifiée.</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/contact" className="btn-primary">Demander un devis gratuit</Link>
-              <Link to="/packs" className="btn-ghost">Voir les tarifs martiniquais</Link>
-              <a href="https://wa.me/596000000" className="btn-ghost">Parler sur WhatsApp</a>
-            </div>
-            <div className="mt-10 grid grid-cols-2 sm:grid-cols-5 gap-3">
-              {[
-                'Délais 7-12 jours', 'LCP < 2,5s mobile', 'Schema + GBP', 'Révisions incluses', 'Spécialiste Martinique'
-              ].map((b) => <span key={b} className="badge">{b}</span>)}
+      {/* Hero Section Premium */}
+      <section className="hero-premium">
+        <div className="bg-gradient-to-br from-wb-black via-gray-900 to-wb-black">
+          <div className="geometric-overlay opacity-10"></div>
+          
+          <div className="hero-content max-w-6xl mx-auto">
+            <h1 className="animate-fade-in-up">
+              Sites vitrines martiniquais qui 
+              <span className="gradient-text"> transforment </span>
+              vos visiteurs en clients en 7-12 jours
+            </h1>
+            
+            <p className="animate-fade-in-up">
+              Délais courts, tarifs locaux, SEO local expert et accompagnement continu.
+              Mobile-first et performance certifiée.
+            </p>
+            
+            <div className="cta-group animate-fade-in-up">
+              <Link to="/packs" className="btn-premium-primary">
+                Voir les tarifs martiniquais
+              </Link>
+              <a href="https://wa.me/596000000" 
+                 className="btn-premium-secondary"
+                 onClick={() => window.dispatchEvent(new Event('click_whatsapp'))}>
+                Parler sur WhatsApp
+              </a>
             </div>
           </div>
-          <div className="card p-8">
-            <h3 className="h2 mb-4">Packs tarifaires</h3>
-            <ul className="space-y-3 text-white/90">
-              <li><b>Essentiel Local — 890€ HT</b> · 3 pages, SEO local de base, tracking appels/clics</li>
-              <li><b>Vitrine Pro — 1 290€ HT</b> · 5-6 pages, SEO étendu, LCP {"< 2,5s"}, GA4 & Search Console</li>
-              <li><b>Vitrine Conversion — 1 790€ HT</b> · 6-8 pages, page Réserver/Devis optimisée, tracking avancé</li>
-            </ul>
+        </div>
+      </section>
+
+      {/* Section Packs Premium Preview */}
+      <section className="section-premium">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="section-header">
+            <h2 className="section-title">Packs tarifaires</h2>
+            <p className="section-subtitle">
+              Solutions adaptées au marché martiniquais avec garanties
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+            <div className="pack-card animate-fade-in-up">
+              <div className="pack-badge">Pack Essentiel</div>
+              <div className="price-premium">
+                <span className="currency">€</span>
+                <span className="amount">890</span>
+                <span className="period">HT</span>
+              </div>
+              <h3 className="pack-title">Essentiel Local</h3>
+              <p className="text-gray-300">3 pages, SEO local de base, tracking appels/clics</p>
+            </div>
+
+            <div className="pack-card animate-fade-in-up">
+              <div className="pack-badge">Pack Pro</div>
+              <div className="price-premium">
+                <span className="currency">€</span>
+                <span className="amount">1 290</span>
+                <span className="period">HT</span>
+              </div>
+              <h3 className="pack-title">Vitrine Pro</h3>
+              <p className="text-gray-300">5-6 pages, SEO étendu, LCP {"< 2,5s"}, GA4 & Search Console</p>
+            </div>
+
+            <div className="pack-card animate-fade-in-up">
+              <div className="pack-badge">Pack Premium</div>
+              <div className="price-premium">
+                <span className="currency">€</span>
+                <span className="amount">1 790</span>
+                <span className="period">HT</span>
+              </div>
+              <h3 className="pack-title">Vitrine Conversion</h3>
+              <p className="text-gray-300">6-8 pages, page Réserver/Devis optimisée, tracking avancé</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Badges Premium */}
+      <section className="section-premium bg-gradient-to-r from-gray-900/50 to-gray-800/50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="badges-premium">
+            <span className="badge-premium animate-float">Délais 7-12 jours</span>
+            <span className="badge-premium animate-float">LCP < 2,5s mobile</span>
+            <span className="badge-premium animate-float">Schema + GBP</span>
+            <span className="badge-premium animate-float">Révisions incluses</span>
+            <span className="badge-premium animate-float">Spécialiste Martinique</span>
           </div>
         </div>
       </section>
