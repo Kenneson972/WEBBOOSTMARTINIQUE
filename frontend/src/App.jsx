@@ -26,13 +26,11 @@ function Nav() {
 
 function Footer(){
   return (
-    <footer className="border-t border-white/10">
-      <div className="container-premium py-8 text-sm flex flex-wrap items-center justify-between gap-4">
-        <p className="text-white/70">© {new Date().getFullYear()} WebBoost Martinique — Tous droits réservés.</p>
-        <nav className="flex items-center gap-6">
-          <Link to="/mentions" className="hover:text-[#D4AF37]">Mentions</Link>
-          <Link to="/cookies" className="hover:text-[#D4AF37]">Cookies</Link>
-        </nav>
+    <footer className="footer-premium">
+      <p>&copy; {new Date().getFullYear()} WebBoost Martinique. Spécialiste de la transformation numérique locale.</p>
+      <div className="mt-4 space-x-6">
+        <Link to="/mentions" className="text-gray-400 hover:text-wb-gold transition-colors">Mentions légales</Link>
+        <Link to="/cookies" className="text-gray-400 hover:text-wb-gold transition-colors">Cookies</Link>
       </div>
     </footer>
   )
