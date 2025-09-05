@@ -101,9 +101,11 @@ metadata:
 
 test_plan:
   current_focus:
+    - "GitHub Pages deployment fix"
     - "Chatbot functionality testing"
     - "Mobile responsiveness testing"
-  stuck_tasks: []
+  stuck_tasks: 
+    - "GitHub Pages deployment - site shows 404 instead of React app"
   test_all: false
   test_priority: "high_first"
 
