@@ -342,13 +342,22 @@ class WebBoostAPITester:
         print("🚀 Starting WebBoost Martinique Backend API Tests")
         print("=" * 60)
         
-        # Test all endpoints
+        # Test original endpoints
         self.test_health_endpoint()
         self.test_contact_endpoint()
         self.test_contact_validation()
         self.test_chat_endpoint()
         self.test_chat_bonjour()  # Specific test for "Bonjour" as requested
         self.test_kpi_endpoint()
+        
+        # Test new OpenAI integration endpoints
+        print("\n🤖 Testing OpenAI Integration Endpoints")
+        print("-" * 40)
+        self.test_openai_models_endpoint()
+        self.test_openai_chat_with_emergent_key()
+        self.test_openai_chat_with_user_key()
+        self.test_openai_key_config_endpoint()
+        self.test_openai_key_config_missing_key()
         
         # Print summary
         print("\n" + "=" * 60)
