@@ -121,7 +121,7 @@ function Home(){
                 <span className="period">HT</span>
               </div>
               <h3 className="pack-title">Vitrine Pro</h3>
-              <p className="text-gray-300">5-6 pages, SEO étendu, LCP < 2,5s, GA4 & Search Console</p>
+              <p className="text-gray-300">5-6 pages, SEO étendu, LCP inférieur 2,5s, GA4 & Search Console</p>
             </div>
 
             <div className="pack-card animate-fade-in-up">
