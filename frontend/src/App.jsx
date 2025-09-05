@@ -143,7 +143,7 @@ function Home(){
         <div className="max-w-7xl mx-auto px-4">
           <div className="badges-premium">
             <span className="badge-premium animate-float">Délais 7-12 jours</span>
-            <span className="badge-premium animate-float">LCP < 2,5s mobile</span>
+            <span className="badge-premium animate-float">LCP inférieur 2,5s mobile</span>
             <span className="badge-premium animate-float">Schema + GBP</span>
             <span className="badge-premium animate-float">Révisions incluses</span>
             <span className="badge-premium animate-float">Spécialiste Martinique</span>
