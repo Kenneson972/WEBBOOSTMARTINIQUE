@@ -445,7 +445,6 @@ function Layout(){
           <Route path="/packs" element={<Packs/>} />
           <Route path="/options" element={<Options/>} />
           <Route path="/modalites" element={<Modalites/>} />
-          <Route path="/impact" element={<Impact/>} />
           <Route path="/contact" element={<Contact/>} />
           <Route path="/mentions" element={<Mentions/>} />
           <Route path="/cookies" element={<CookiesPolicy/>} />
