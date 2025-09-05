@@ -6,7 +6,8 @@ export default defineConfig({
   base: '/WEBBOOSTMARTINIQUE/',
   server: {
     host: '0.0.0.0',
-    port: 3000
+    port: 3000,
+    allowedHosts: ['digital-martinique-1.preview.emergentagent.com']
   },
   build: {
     outDir: 'dist'
