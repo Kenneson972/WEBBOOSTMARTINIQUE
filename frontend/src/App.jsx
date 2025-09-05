@@ -67,7 +67,7 @@ function Home(){
           
           <div className="hero-content max-w-6xl mx-auto">
             <h1 className="animate-fade-in-up">
-              Sites vitrines martiniquais qui 
+              Sites web qui 
               <span className="gradient-text"> transforment </span>
               vos visiteurs en clients en 7-12 jours
             </h1>
