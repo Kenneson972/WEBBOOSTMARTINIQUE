@@ -515,6 +515,7 @@ function Layout(){
           <Route path="/contact" element={<Contact/>} />
           <Route path="/mentions" element={<Mentions/>} />
           <Route path="/cookies" element={<CookiesPolicy/>} />
+          <Route path="/config" element={<ConfigPage/>} />
           <Route path="/dashboard" element={<Dashboard/>} />
         </Routes>
       </div>
