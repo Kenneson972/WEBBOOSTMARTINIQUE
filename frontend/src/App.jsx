@@ -423,10 +423,18 @@ function CookieBanner(){
   return (
     <div className="fixed bottom-0 inset-x-0 z-50 border-t border-white/10 bg-[#0B0B0D]/90 backdrop-blur">
       <div className="container-premium py-4 flex flex-wrap items-center gap-3 justify-between">
-        <p className="text-sm text-white/80">Nous utilisons des cookies de mesure anonymisés pour améliorer l'expérience. Vous pouvez accepter ou refuser.</p>
+        <p className="text-sm text-white/80">
+          Nous utilisons des cookies pour mesurer l'audience de façon anonyme et améliorer votre expérience. 
+          <br className="hidden md:block" />
+          Vous pouvez accepter tous les cookies ou les refuser.
+        </p>
         <div className="flex gap-2">
-          <button className="btn-ghost" onClick={()=>{localStorage.setItem('cookie-consent','refuse'); setSeen('refuse')}}>Refuser</button>
-          <button className="btn-primary" onClick={()=>{localStorage.setItem('cookie-consent','accept'); setSeen('accept')}}>Accepter</button>
+          <button className="btn-secondary text-sm" onClick={()=>{localStorage.setItem('cookie-consent','refuse'); setSeen('refuse')}}>
+            Refuser tous les cookies
+          </button>
+          <button className="btn-primary text-sm" onClick={()=>{localStorage.setItem('cookie-consent','accept'); setSeen('accept')}}>
+            Accepter tous les cookies
+          </button>
         </div>
       </div>
     </div>
