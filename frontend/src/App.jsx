@@ -4,20 +4,20 @@ import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 const BACKEND_URL = import.meta.env.REACT_APP_BACKEND_URL
 
 function Nav() {
-  const navClasses = ({ isActive }) => isActive ? 'text-[#D4AF37]' : 'hover:text-[#D4AF37]'
+  const navClasses = ({ isActive }) => isActive ? 'text-[#D4AF37]' : 'nav-links a'
   return (
-    <header className="border-b border-white/10 sticky top-0 z-30 backdrop-blur bg-[#0B0B0D]/70">
-      <div className="container-premium flex items-center justify-between py-3">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="h-8 w-8 rounded bg-[#D4AF37] inline-block" />
-          <span className="font-semibold tracking-wide">WebBoost Martinique</span>
+    <header className="header-premium">
+      <div className="nav-premium">
+        <Link to="/" className="logo-premium">
+          <span className="logo-text">WebBoost</span>
+          <span className="logo-accent">Martinique</span>
         </Link>
-        <nav className="hidden md:flex items-center gap-6 text-sm">
+        <nav className="nav-links">
           <NavLink to="/packs" className={navClasses}>Packs</NavLink>
           <NavLink to="/options" className={navClasses}>Options</NavLink>
           <NavLink to="/modalites" className={navClasses}>Modalités</NavLink>
           <NavLink to="/impact" className={navClasses}>Impact</NavLink>
-          <NavLink to="/contact" className="btn-primary">Devis gratuit</NavLink>
+          <NavLink to="/contact" className="btn-cta-header">Devis gratuit</NavLink>
         </nav>
       </div>
     </header>
