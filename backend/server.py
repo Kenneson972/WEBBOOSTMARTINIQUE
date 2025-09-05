@@ -1,41 +1,37 @@
-import os
-import uuid
-from datetime import datetime, timezone
-from typing import List, Optional, Literal, Dict
-
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel, EmailStr, Field
+from typing import Optional, List, Literal
+import os
+import uuid
+import json
 from pymongo import MongoClient
+from datetime import datetime, timezone, timedelta
+import orjson
+from dotenv import load_dotenv
 
-# IMPORTANT: All backend routes must be prefixed with '/api'
-API_PREFIX = "/api"
+# Load environment variables
+load_dotenv()
 
-# Read Mongo URL strictly from environment
-MONGO_URL = os.environ.get("MONGO_URL")
+# Initialize FastAPI app
+app = FastAPI(title="WebBoost Martinique API")
 
-# Mongo setup (optional if MONGO_URL missing - app should still start for /api/health)
-client = None
-db = None
-leads_col = None
-chats_col = None
+# CORS configuration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
-if MONGO_URL:
-    try:
-        client = MongoClient(MONGO_URL, serverSelectionTimeoutMS=3000)
-        db = client.get_database()
-        leads_col = db.get_collection("contact_leads")
-        chats_col = db.get_collection("chat_leads")
-        # Create indexes lightweight
-        leads_col.create_index("createdAt")
-        chats_col.create_index("createdAt")
-    except Exception as e:
-        # Do not crash if DB not reachable; log to stdout
-        print(f"[backend] Warning: Mongo connection failed: {e}")
-else:
-    print("[backend] Warning: MONGO_URL not set. DB features disabled.")
+# Database connection
+MONGO_URL = os.getenv("MONGO_URL")
+if not MONGO_URL:
+    raise Exception("MONGO_URL environment variable is required")
 
+client = MongoClient(MONGO_URL)
+db = client.get_database()
 
 # Pydantic models
 class ContactPayload(BaseModel):
@@ -59,173 +55,311 @@ class ChatRequest(BaseModel):
     temperature: Optional[float] = 0.3
 
 
-class ChatResponse(BaseModel):
-    reply: str
-    used_llm: bool
+class OpenAIChatRequest(BaseModel):
+    message: str
+    api_key: Optional[str] = None
+    model: Optional[str] = "gpt-4o-mini"
 
 
-# FastAPI app
-app = FastAPI(title="WebBoost Martinique API", version="1.0.0")
-
-# CORS - allow all origins; in production restrict via env
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+class APIKeyConfig(BaseModel):
+    openai_api_key: Optional[str] = None
 
 
-@app.get(f"{API_PREFIX}/health")
-async def health():
-    return {"status": "ok", "mongo": bool(db)}
-
-
-@app.post(f"{API_PREFIX}/contact")
-async def submit_contact(payload: ContactPayload):
-    if not payload.consent:
-        raise HTTPException(status_code=400, detail="Consentement RGPD requis")
-    doc = {
-        "id": str(uuid.uuid4()),
-        "name": payload.name.strip(),
-        "email": str(payload.email),
-        "phone": payload.phone.strip(),
-        "sector": (payload.sector or "").strip(),
-        "pack": payload.pack,
-        "message": (payload.message or "").strip(),
-        "consent": payload.consent,
-        "source": payload.source or "contact_form",
-        "createdAt": datetime.now(timezone.utc).isoformat(),
-    }
-    if leads_col is None:
-        # Accept request in memory if DB is not configured
-        return JSONResponse(status_code=201, content={"saved": False, "id": doc["id"]})
-    try:
-        leads_col.insert_one(doc)
-        return JSONResponse(status_code=201, content={"saved": True, "id": doc["id"]})
-    except Exception as e:
-        print(f"[backend] insert lead error: {e}")
-        raise HTTPException(status_code=500, detail="Erreur d'enregistrement")
-
-
-SYSTEM_PROMPT = (
-    "Assistant commercial WebBoost Martinique, expert transformation numérique TPE/PME locales. "
-    "Réponds uniquement sur : packs (Essentiel/Pro/Conversion), options à la carte, délais 7-12j, modalités 50/40/10, "
-    "révisions incluses et supplémentaires 60€/h. Hors périmètre = proposition devis additif. "
-    "Ton chaleureux martiniquais, orienté action, toujours proposer prochaine étape concrète. "
-    "Références locales bienvenues."
-)
-
-
-def _simple_rules_reply(user_text: str) -> str:
-    t = user_text.lower()
-    if "prix" in t or "tarif" in t or "packs" in t or "pack" in t:
-        return (
-            "Nos tarifs martiniquais: Essentiel 890€ HT, Vitrine Pro 1 290€ HT, Conversion 1 790€ HT. "
-            "Je peux vous conseiller le pack adapté à votre secteur. Vous préférez un devis gratuit ou parler sur WhatsApp ?"
-        )
-    if "paiement" in t or "50/40/10" in t:
-        return (
-            "Modalités: 50% à la commande, 40% avant mise en ligne (validation V2), 10% à la livraison. "
-            "Souhaitez-vous que je prépare le lien d'acompte 50% ou un RDV Calendly ?"
-        )
-    if "whatsapp" in t:
-        return "Parfait ! Je peux vous mettre en relation via WhatsApp. Quel créneau vous convient ?"
-    if "délai" in t or "delai" in t or "livraison" in t:
-        return "Délais garantis 7 à 12 jours ouvrés selon pack et disponibilité de vos contenus."
-    return (
-        "Bienvenue chez WebBoost Martinique 🇲🇶 ! Souhaitez-vous voir les prix, comprendre le paiement 50/40/10, "
-        "parler sur WhatsApp, ou calculer un délai de livraison ?"
-    )
-
-
-# Attempt optional LLM integration via Emergent universal key if available
-USE_LLM = False
+# Initialize emergentintegrations for LLM
 try:
-    # Lazy import to avoid hard dependency
-    import os as _os
-    EMERGENT_KEY = _os.environ.get("EMERGENT_LLM_KEY")
-    if EMERGENT_KEY:
-        USE_LLM = True
-except Exception as _:
-    USE_LLM = False
+    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    EMERGENT_AVAILABLE = True
+except ImportError:
+    EMERGENT_AVAILABLE = False
+    print("Warning: emergentintegrations not available")
 
-
-async def call_llm(messages: List[Dict[str, str]], temperature: float = 0.3) -> str:
-    """Attempt to call an LLM using Emergent universal key if available; fallback to simple rules."""
-    if not USE_LLM:
-        # Fallback basic assistant
-        last_user = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "")
-        return _simple_rules_reply(last_user)
-
-    # Try OpenAI-compatible client via environment if present
-    # We don't import vendor SDKs directly as per policy; attempt minimal HTTP call via OpenAI-compatible endpoint
+# Health check endpoint
+@app.get("/api/health")
+async def health_check():
     try:
-        import requests  # lightweight; part of std images, else raise
-        api_key = os.environ.get("EMERGENT_LLM_KEY")
-        if not api_key:
-            last_user = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "")
-            return _simple_rules_reply(last_user)
-
-        # Use OpenAI compatible endpoint if routed by Emergent universal key provider
-        headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-        body = {
-            "model": os.environ.get("EMERGENT_LLM_MODEL", "gpt-4o-mini"),
-            "messages": messages,
-            "temperature": temperature,
+        # Test database connection
+        server_info = client.server_info()
+        return {
+            "status": "healthy",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "database": "connected",
+            "mongo_version": server_info.get("version", "unknown")
         }
-        # Default to OpenAI URL if provided by environment; else fallback local rules
-        base_url = os.environ.get("EMERGENT_OPENAI_API_BASE", "https://api.openai.com/v1")
-        url = f"{base_url}/chat/completions"
-        resp = requests.post(url, json=body, headers=headers, timeout=30)
-        if resp.status_code == 200:
-            data = resp.json()
-            reply = data.get("choices", [{}])[0].get("message", {}).get("content", "") or ""
-            if reply.strip():
-                return reply
-        else:
-            print(f"[backend] LLM error {resp.status_code}: {resp.text[:200]}")
     except Exception as e:
-        print(f"[backend] LLM exception: {e}")
-
-    last_user = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "")
-    return _simple_rules_reply(last_user)
+        raise HTTPException(status_code=503, detail=f"Database connection failed: {str(e)}")
 
 
-@app.post(f"{API_PREFIX}/chat", response_model=ChatResponse)
-async def chat(req: ChatRequest):
-    # Assemble messages with fixed system prompt prepended
-    msgs = [{"role": "system", "content": SYSTEM_PROMPT}] + [m.model_dump() for m in req.messages]
-    reply_text = await call_llm(messages=msgs, temperature=req.temperature or 0.3)
+# Contact form endpoint
+@app.post("/api/contact")
+async def submit_contact(payload: ContactPayload):
+    try:
+        contact_data = {
+            "id": str(uuid.uuid4()),
+            "name": payload.name,
+            "email": payload.email,
+            "phone": payload.phone,
+            "sector": payload.sector,
+            "pack": payload.pack,
+            "message": payload.message,
+            "consent": payload.consent,
+            "source": payload.source,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "status": "new"
+        }
+        
+        result = db.contacts.insert_one(contact_data)
+        
+        return {
+            "success": True,
+            "message": "Contact submitted successfully",
+            "id": contact_data["id"]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save contact: {str(e)}")
 
-    # Save minimal chat lead (non-sensitive) if DB available
-    if chats_col is not None:
-        try:
-            chats_col.insert_one({
-                "id": str(uuid.uuid4()),
-                "createdAt": datetime.now(timezone.utc).isoformat(),
-                "lastUser": next((m["content"] for m in reversed(req.messages) if m.role == "user"), ""),
-                "used_llm": bool(USE_LLM),
-            })
-        except Exception as e:
-            print(f"[backend] save chat lead error: {e}")
 
-    return ChatResponse(reply=reply_text, used_llm=bool(USE_LLM))
+# Original fallback chat endpoint (keeping for compatibility)
+@app.post("/api/chat")
+async def chat_endpoint(request: ChatRequest):
+    try:
+        user_message = request.messages[-1].content if request.messages else ""
+        
+        # Try Emergent LLM first
+        if EMERGENT_AVAILABLE:
+            try:
+                emergent_key = os.getenv("EMERGENT_LLM_KEY")
+                if emergent_key:
+                    chat = LlmChat(
+                        api_key=emergent_key,
+                        session_id=str(uuid.uuid4()),
+                        system_message="Tu es l'assistant WebBoost Martinique. Réponds en français de manière professionnelle et locale."
+                    ).with_model("openai", "gpt-4o-mini")
+                    
+                    user_msg = UserMessage(text=user_message)
+                    response = await chat.send_message(user_msg)
+                    
+                    # Store in database
+                    chat_data = {
+                        "id": str(uuid.uuid4()),
+                        "message": user_message,
+                        "response": response,
+                        "model": "gpt-4o-mini",
+                        "provider": "emergent",
+                        "created_at": datetime.now(timezone.utc).isoformat()
+                    }
+                    db.chats.insert_one(chat_data)
+                    
+                    return {"reply": response, "used_llm": True, "provider": "emergent"}
+            except Exception as e:
+                print(f"Emergent LLM failed: {e}")
+        
+        # Fallback responses
+        fallback_responses = {
+            "bonjour": "Bienvenue chez WebBoost Martinique 🇲🇶 ! Souhaitez-vous voir les prix, comprendre le paiement 50/40/10, parler sur WhatsApp, ou calculer un délai de livraison ?",
+            "prix": "Nos packs : Essentiel Local (890€ HT), Vitrine Pro (1290€ HT), Vitrine Conversion (1790€ HT). Paiement échelonné 50/40/10 possible.",
+            "paiement": "Modalités 50/40/10 : 50% à la commande, 40% avant mise en ligne, 10% à la livraison. Révisions incluses selon le pack choisi.",
+            "délai": "Délais selon pack : Essentiel (7-10j), Pro (7-10j), Conversion (10-12j). Délais déclenchés à réception complète de vos contenus.",
+            "whatsapp": "Contactez-nous directement sur WhatsApp pour un échange personnalisé : https://wa.me/596000000"
+        }
+        
+        response_text = "Je suis l'assistant WebBoost Martinique. Comment puis-je vous aider avec votre projet web ?"
+        message_lower = user_message.lower()
+        
+        for keyword, response in fallback_responses.items():
+            if keyword in message_lower:
+                response_text = response
+                break
+        
+        # Store fallback in database
+        chat_data = {
+            "id": str(uuid.uuid4()),
+            "message": user_message,
+            "response": response_text,
+            "model": "fallback",
+            "provider": "local",
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        db.chats.insert_one(chat_data)
+        
+        return {"reply": response_text, "used_llm": False, "provider": "fallback"}
+        
+    except Exception as e:
+        print(f"Chat endpoint error: {e}")
+        raise HTTPException(status_code=500, detail="Chat service temporarily unavailable")
 
 
-@app.get(f"{API_PREFIX}/kpi")
-async def kpi():
-    # Very lightweight KPIs (counts), no PII
-    counts = {"leads": 0, "chats": 0}
-    if leads_col is not None:
-        try:
-            counts["leads"] = leads_col.count_documents({})
-        except Exception as e:
-            print(f"[backend] kpi leads error: {e}")
-    if chats_col is not None:
-        try:
-            counts["chats"] = chats_col.count_documents({})
-        except Exception as e:
-            print(f"[backend] kpi chats error: {e}")
-    return counts
+# NEW OpenAI Chat endpoint with API key configuration
+@app.post("/api/chat/openai")
+async def openai_chat_endpoint(request: OpenAIChatRequest):
+    """
+    OpenAI Chat endpoint - allows user to provide their own API key
+    """
+    try:
+        # Try user-provided API key first, then environment variable
+        api_key = request.api_key or os.getenv("OPENAI_API_KEY")
+        
+        if not api_key:
+            # Try Emergent LLM as fallback
+            if EMERGENT_AVAILABLE:
+                emergent_key = os.getenv("EMERGENT_LLM_KEY")
+                if emergent_key:
+                    chat = LlmChat(
+                        api_key=emergent_key,
+                        session_id=str(uuid.uuid4()),
+                        system_message="Tu es l'assistant WebBoost Martinique. Réponds en français de manière professionnelle et adaptée au marché martiniquais. Sois concis et utile."
+                    ).with_model("openai", request.model)
+                    
+                    user_msg = UserMessage(text=request.message)
+                    response = await chat.send_message(user_msg)
+                    
+                    # Store in database
+                    chat_data = {
+                        "id": str(uuid.uuid4()),
+                        "message": request.message,
+                        "response": response,
+                        "model": request.model,
+                        "provider": "emergent",
+                        "created_at": datetime.now(timezone.utc).isoformat()
+                    }
+                    db.chats.insert_one(chat_data)
+                    
+                    return {
+                        "reply": response, 
+                        "model": request.model, 
+                        "provider": "emergent",
+                        "success": True
+                    }
+            
+            raise HTTPException(
+                status_code=400, 
+                detail="Aucune clé API OpenAI fournie. Veuillez fournir votre clé API OpenAI ou configurer OPENAI_API_KEY dans l'environnement."
+            )
+        
+        # Use emergentintegrations with OpenAI API key
+        if EMERGENT_AVAILABLE:
+            try:
+                chat = LlmChat(
+                    api_key=api_key,
+                    session_id=str(uuid.uuid4()),
+                    system_message="Tu es l'assistant WebBoost Martinique. Réponds en français de manière professionnelle et adaptée au marché martiniquais. Sois concis et utile."
+                ).with_model("openai", request.model)
+                
+                user_msg = UserMessage(text=request.message)
+                response = await chat.send_message(user_msg)
+                
+                # Store in database
+                chat_data = {
+                    "id": str(uuid.uuid4()),
+                    "message": request.message,
+                    "response": response,
+                    "model": request.model,
+                    "provider": "openai",
+                    "created_at": datetime.now(timezone.utc).isoformat(),
+                    "api_key_used": "provided" if request.api_key else "environment"
+                }
+                db.chats.insert_one(chat_data)
+                
+                return {
+                    "reply": response, 
+                    "model": request.model, 
+                    "provider": "openai",
+                    "success": True
+                }
+                
+            except Exception as e:
+                error_msg = str(e)
+                if "api key" in error_msg.lower() or "authentication" in error_msg.lower():
+                    raise HTTPException(status_code=401, detail="Clé API OpenAI invalide. Vérifiez votre clé API.")
+                elif "quota" in error_msg.lower() or "billing" in error_msg.lower():
+                    raise HTTPException(status_code=429, detail="Quota OpenAI dépassé. Vérifiez votre compte OpenAI.")
+                else:
+                    raise HTTPException(status_code=500, detail=f"Erreur OpenAI: {error_msg}")
+        else:
+            raise HTTPException(status_code=503, detail="Service LLM non disponible")
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"OpenAI chat error: {e}")
+        raise HTTPException(status_code=500, detail="Service de chat temporairement indisponible")
+
+
+# API Key configuration endpoint
+@app.post("/api/config/openai-key")
+async def configure_openai_key(config: APIKeyConfig):
+    """
+    Endpoint to test and configure OpenAI API key
+    """
+    if not config.openai_api_key:
+        raise HTTPException(status_code=400, detail="Clé API OpenAI requise")
+    
+    try:
+        # Test the API key with a simple request
+        if EMERGENT_AVAILABLE:
+            chat = LlmChat(
+                api_key=config.openai_api_key,
+                session_id=str(uuid.uuid4()),
+                system_message="Réponds juste 'Test réussi' en français."
+            ).with_model("openai", "gpt-4o-mini")
+            
+            user_msg = UserMessage(text="Test")
+            response = await chat.send_message(user_msg)
+            
+            return {
+                "success": True,
+                "message": "Clé API OpenAI validée avec succès",
+                "test_response": response
+            }
+        else:
+            raise HTTPException(status_code=503, detail="Service de validation non disponible")
+            
+    except Exception as e:
+        error_msg = str(e)
+        if "api key" in error_msg.lower() or "authentication" in error_msg.lower():
+            raise HTTPException(status_code=401, detail="Clé API OpenAI invalide")
+        else:
+            raise HTTPException(status_code=500, detail=f"Erreur de validation: {error_msg}")
+
+
+# KPI endpoint
+@app.get("/api/kpi")
+async def get_kpi():
+    try:
+        total_contacts = db.contacts.count_documents({})
+        total_chats = db.chats.count_documents({})
+        
+        # Recent activity (last 7 days)
+        recent_contacts = db.contacts.count_documents({
+            "created_at": {"$gte": (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()}
+        })
+        
+        return {
+            "total_leads": total_contacts,
+            "total_chats": total_chats,
+            "recent_leads": recent_contacts,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch KPI: {str(e)}")
+
+
+# Get available OpenAI models
+@app.get("/api/models/openai")
+async def get_openai_models():
+    """
+    Return available OpenAI models
+    """
+    return {
+        "models": [
+            {"id": "gpt-4o-mini", "name": "GPT-4o Mini", "description": "Rapide et économique"},
+            {"id": "gpt-4o", "name": "GPT-4o", "description": "Modèle principal d'OpenAI"},
+            {"id": "gpt-4", "name": "GPT-4", "description": "Modèle GPT-4 standard"},
+            {"id": "gpt-5", "name": "GPT-5", "description": "Dernier modèle OpenAI (si disponible)"}
+        ],
+        "default": "gpt-4o-mini"
+    }
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("server:app", host="0.0.0.0", port=8001, reload=True)
