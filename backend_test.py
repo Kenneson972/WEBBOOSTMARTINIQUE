@@ -211,6 +211,7 @@ class WebBoostAPITester:
         self.test_contact_endpoint()
         self.test_contact_validation()
         self.test_chat_endpoint()
+        self.test_chat_bonjour()  # Specific test for "Bonjour" as requested
         self.test_kpi_endpoint()
         
         # Print summary
