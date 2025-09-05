@@ -87,12 +87,13 @@ frontend:
 metadata:
   created_by: "testing_agent"
   version: "1.0"
-  test_sequence: 1
-  run_ui: false
+  test_sequence: 2
+  run_ui: true
 
 test_plan:
   current_focus:
-    - "Chat endpoint functionality"
+    - "Chatbot functionality testing"
+    - "Mobile responsiveness testing"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -100,3 +101,5 @@ test_plan:
 agent_communication:
   - agent: "testing"
     message: "Backend API testing completed successfully. All endpoints working correctly including the specific chatbot test with 'Bonjour' message. LLM integration functioning with proper fallback mechanism. No critical issues found."
+  - agent: "testing"
+    message: "✅ COMPREHENSIVE FRONTEND TESTING COMPLETED: Fixed Vite configuration issue with allowedHosts. All chatbot functionality working perfectly - button clicks, message sending, 'Bonjour' responses, quick reply buttons. Mobile responsiveness excellent - hamburger menu, proper scaling, no horizontal scroll. Minor routing warnings present but non-critical. Website fully functional on both desktop (1920x800) and mobile (375x667) viewports."
