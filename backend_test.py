@@ -50,7 +50,7 @@ class WebBoostAPITester:
             
             if response.status_code == 200:
                 data = response.json()
-                if "status" in data and data["status"] == "ok":
+                if "status" in data and data["status"] == "healthy":
                     self.log_result("Health Check", True, f"Status: {data}")
                     return True
                 else:
