@@ -10,9 +10,24 @@ import json
 from datetime import datetime
 
 class WebBoostAPITester:
-    def __init__(self, base_url="http://localhost:8001/api"):
-        # Use the local backend endpoint for testing
+    def __init__(self, base_url=None):
+        # Read the backend URL from frontend/.env
+        if base_url is None:
+            try:
+                with open('/app/frontend/.env', 'r') as f:
+                    for line in f:
+                        if line.startswith('REACT_APP_BACKEND_URL='):
+                            backend_url = line.split('=', 1)[1].strip()
+                            base_url = f"{backend_url}/api"
+                            break
+                if base_url is None:
+                    base_url = "http://localhost:8001/api"  # fallback
+            except Exception as e:
+                print(f"Warning: Could not read frontend/.env: {e}")
+                base_url = "http://localhost:8001/api"  # fallback
+        
         self.base_url = base_url
+        print(f"Testing backend at: {self.base_url}")
         self.tests_run = 0
         self.tests_passed = 0
         self.failures = []
