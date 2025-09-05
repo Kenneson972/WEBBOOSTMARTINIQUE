@@ -333,33 +333,63 @@ function Dashboard(){
 function Chatbot(){
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
-  const [messages, setMessages] = useState([{role:'assistant', content:"Bonjour ! Je suis l'assistant WebBoost Martinique 🇲🇶\nComment puis-je vous accompagner dans votre projet web ?"}])
+  const [showConfig, setShowConfig] = useState(false)
+  const [apiKey, setApiKey] = useState(() => localStorage.getItem('openai_api_key'))
+  const [selectedModel, setSelectedModel] = useState(() => localStorage.getItem('openai_model') || 'gpt-4o-mini')
+  const [messages, setMessages] = useState([{role:'assistant', content:"Bonjour ! Je suis l'assistant WebBoost Martinique 🇲🇶\nComment puis-je vous accompagner dans votre projet web ?\n\n💡 Cliquez sur ⚙️ pour configurer l'IA avancée avec votre clé OpenAI"}])
   
   const send = async (text) => {
     const content = (text ?? input).trim()
     if(!content) return
     setMessages(m=>[...m,{role:'user', content}])
     setInput('')
+    
     try{
       if(!BACKEND_URL) throw new Error('Missing backend URL')
-      const res = await fetch(`${BACKEND_URL}/chat`, { 
+      
+      // Use OpenAI endpoint if we have a key, otherwise fallback
+      const endpoint = apiKey ? '/chat/openai' : '/chat'
+      const payload = apiKey 
+        ? { message: content, api_key: apiKey, model: selectedModel }
+        : { messages: [{role: 'user', content: content}], temperature: 0.3 }
+      
+      const res = await fetch(`${BACKEND_URL}${endpoint}`, { 
         method:'POST', 
         headers:{'Content-Type':'application/json'}, 
-        body: JSON.stringify({ 
-          messages: [{role: 'user', content: content}],
-          temperature: 0.3
-        }) 
+        body: JSON.stringify(payload)
       })
+      
       if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: ${res.statusText}`)
+        const errorData = await res.json()
+        throw new Error(errorData.detail || `HTTP ${res.status}: ${res.statusText}`)
       }
+      
       const j = await res.json()
-      setMessages(m=>[...m,{role:'assistant', content: j.reply || '...'}])
-      if(content.toLowerCase().includes('whatsapp')) window.dispatchEvent(new CustomEvent('click_whatsapp'))
+      const reply = j.reply || j.message || '...'
+      setMessages(m=>[...m,{role:'assistant', content: reply}])
+      
+      if(content.toLowerCase().includes('whatsapp')) {
+        window.dispatchEvent(new CustomEvent('click_whatsapp'))
+      }
     }catch(e){
       console.error('Chatbot error:', e)
-      setMessages(m=>[...m,{role:'assistant', content: "Désolé, une erreur est survenue. Réessayez dans un instant."}])
+      let errorMessage = "Désolé, une erreur est survenue. "
+      if (e.message.includes('api key') || e.message.includes('authentication')) {
+        errorMessage += "Vérifiez votre clé API OpenAI dans les paramètres."
+      } else if (e.message.includes('quota')) {
+        errorMessage += "Quota OpenAI dépassé. Vérifiez votre compte OpenAI."
+      } else {
+        errorMessage += "Réessayez dans un instant."
+      }
+      setMessages(m=>[...m,{role:'assistant', content: errorMessage}])
     }
+  }
+  
+  const onKeyValidated = (key, model) => {
+    setApiKey(key)
+    setSelectedModel(model)
+    setShowConfig(false)
+    setMessages(m=>[...m,{role:'assistant', content: "✅ Configuration mise à jour ! Vous pouvez maintenant profiter de l'IA avancée."}])
   }
   
   // quick replies
@@ -383,24 +413,61 @@ function Chatbot(){
         <div className="chat-panel">
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-semibold">Assistant WebBoost</h4>
-            <button className="text-white/60 hover:text-white" onClick={()=>setOpen(false)}>✕</button>
+            <div className="flex items-center gap-2">
+              <button 
+                className="text-gold hover:text-gold/80 text-sm"
+                onClick={() => setShowConfig(!showConfig)}
+                title="Configurer IA"
+              >
+                ⚙️
+              </button>
+              <button className="text-white/60 hover:text-white" onClick={()=>setOpen(false)}>✕</button>
+            </div>
           </div>
+          
+          {showConfig && (
+            <div className="mb-4 max-h-64 overflow-y-auto">
+              <OpenAIConfig onKeyValidated={onKeyValidated} />
+            </div>
+          )}
+          
           <div className="h-64 overflow-y-auto space-y-2 mb-3 pr-2">
             {messages.map((m,i)=> (
               <div key={i} className={m.role==='user' ? 'text-right' : ''}>
-                <div className={`inline-block card px-3 py-2 ${m.role==='user' ? 'bg-[#D4AF37] text-[#0B0B0D]' : ''}`}>{m.content}</div>
+                <div className={`inline-block card px-3 py-2 ${m.role==='user' ? 'bg-[#D4AF37] text-[#0B0B0D]' : ''}`}>
+                  {m.content.split('\n').map((line, idx) => (
+                    <React.Fragment key={idx}>
+                      {line}
+                      {idx < m.content.split('\n').length - 1 && <br />}
+                    </React.Fragment>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
+          
           <div className="grid gap-2 mb-2">
             <div className="flex flex-wrap gap-2">
               {quick.map(q => <button key={q} className="badge" onClick={()=>send(q)}>{q}</button>)}
             </div>
             <div className="flex gap-2">
-              <input value={input} onChange={e=>setInput(e.target.value)} placeholder="Écrire un message..." className="flex-1 card px-3 py-2" onKeyPress={e => e.key === 'Enter' && send()} />
+              <input 
+                value={input} 
+                onChange={e=>setInput(e.target.value)} 
+                placeholder="Écrire un message..." 
+                className="flex-1 card px-3 py-2" 
+                onKeyPress={e => e.key === 'Enter' && send()} 
+              />
               <button className="btn-primary" onClick={()=>send()}>Envoyer</button>
             </div>
-            <p className="text-xs text-white/50">En utilisant le chat, vous acceptez la <Link to="/cookies" className="underline">Politique cookies</Link>. Opt-out à tout moment.</p>
+            <p className="text-xs text-white/50">
+              En utilisant le chat, vous acceptez la <Link to="/cookies" className="underline">Politique cookies</Link>. 
+              {apiKey ? (
+                <span className="text-green-400"> • IA avancée activée</span>
+              ) : (
+                <span className="text-yellow-400"> • Mode basique</span>
+              )}
+            </p>
           </div>
         </div>
       )}
