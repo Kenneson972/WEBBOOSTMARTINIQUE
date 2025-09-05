@@ -98,9 +98,9 @@ class WebBoostAPITester:
     def test_contact_validation(self):
         """Test POST /api/contact with invalid data (missing consent)"""
         invalid_payload = {
-            "name": "Test User",
-            "email": "test@example.com",
-            "phone": "0596123456", 
+            "name": "Jean Martin",
+            "email": "jean.martin@martinique.com",
+            "phone": "0596555123", 
             "consent": False  # Should fail validation
         }
         
@@ -112,11 +112,14 @@ class WebBoostAPITester:
                 timeout=10
             )
             
-            if response.status_code == 400:
+            if response.status_code == 422:  # FastAPI validation error
+                self.log_result("Contact Validation", True, "Correctly rejected invalid data")
+                return True
+            elif response.status_code == 400:
                 self.log_result("Contact Validation", True, "Correctly rejected invalid data")
                 return True
             else:
-                self.log_result("Contact Validation", False, f"Expected 400, got {response.status_code}")
+                self.log_result("Contact Validation", False, f"Expected 422 or 400, got {response.status_code}")
         except Exception as e:
             self.log_result("Contact Validation", False, f"Exception: {str(e)}")
         return False
