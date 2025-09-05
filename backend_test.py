@@ -151,6 +151,38 @@ class WebBoostAPITester:
             self.log_result("Chat Endpoint", False, f"Exception: {str(e)}")
         return False
 
+    def test_chat_bonjour(self):
+        """Test POST /api/chat with 'Bonjour' message as requested"""
+        test_payload = {
+            "messages": [
+                {"role": "user", "content": "Bonjour"}
+            ],
+            "temperature": 0.3
+        }
+        
+        try:
+            response = requests.post(
+                f"{self.base_url}/chat",
+                json=test_payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30  # Longer timeout for LLM calls
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "reply" in data and "used_llm" in data:
+                    reply_length = len(data["reply"])
+                    print(f"  📝 Bonjour Reply: {data['reply'][:100]}...")
+                    self.log_result("Chat Bonjour Test", True, f"Reply length: {reply_length}, Used LLM: {data['used_llm']}")
+                    return True
+                else:
+                    self.log_result("Chat Bonjour Test", False, f"Invalid response format: {data}")
+            else:
+                self.log_result("Chat Bonjour Test", False, f"Status code: {response.status_code}, Response: {response.text}")
+        except Exception as e:
+            self.log_result("Chat Bonjour Test", False, f"Exception: {str(e)}")
+        return False
+
     def test_kpi_endpoint(self):
         """Test GET /api/kpi"""
         try:
