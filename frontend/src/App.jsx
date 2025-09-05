@@ -136,25 +136,40 @@ function Home(){
 function Packs(){
   useEffect(()=>{ window.dispatchEvent(new CustomEvent('pack_selection_view')) }, [])
   return (
-    <div className="container-premium py-12">
-      <h2 className="h1 mb-8">Packs tarifaires</h2>
-      <div className="grid md:grid-cols-3 gap-6">
-        {[
-          {title:'Essentiel Local', price:'890€ HT', points:['3 pages','SEO local de base','Données structurées','Tracking appels/clics','1 révision ≤ 15 pts','Délai: 10 j']},
-          {title:'Vitrine Pro', price:'1 290€ HT', points:['5-6 pages','SEO on-page étendu','LCP < 2,5s & CLS < 0,1','Alignement GBP + GA4 + GSC','2 révisions ≤ 20 pts','Délai: 7-10 j']},
-          {title:'Vitrine Conversion', price:'1 790€ HT', points:['6-8 pages + Réserver/Devis','Tracking avancé + schema enrichi','Formation 45min','SEO expert + CRO','2 révisions ≤ 25 pts','Délai: 10-12 j']},
-        ].map((p)=> (
-          <div key={p.title} className="card p-6">
-            <div className="flex items-baseline justify-between">
-              <h3 className="h2">{p.title}</h3>
-              <span className="text-[#D4AF37] font-semibold">{p.price}</span>
+    <div className="section-premium">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="section-header">
+          <h1 className="section-title">Packs tarifaires</h1>
+          <p className="section-subtitle">Solutions adaptées au marché martiniquais</p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+          {[
+            {title:'Essentiel Local', price:'890€ HT', points:['3 pages','SEO local de base','Données structurées','Tracking appels/clics','1 révision ≤ 15 pts','Délai: 10 j']},
+            {title:'Vitrine Pro', price:'1 290€ HT', points:['5-6 pages','SEO on-page étendu','LCP < 2,5s & CLS < 0,1','Alignement GBP + GA4 + GSC','2 révisions ≤ 20 pts','Délai: 7-10 j']},
+            {title:'Vitrine Conversion', price:'1 790€ HT', points:['6-8 pages + Réserver/Devis','Tracking avancé + schema enrichi','Formation 45min','SEO expert + CRO','2 révisions ≤ 25 pts','Délai: 10-12 j']},
+          ].map((p)=> (
+            <div key={p.title} className="pack-card">
+              <div className="pack-badge">{p.title}</div>
+              <div className="price-premium">
+                <span className="currency">€</span>
+                <span className="amount">{p.price.split('€')[0]}</span>
+                <span className="period">HT</span>
+              </div>
+              <h3 className="pack-title">{p.title}</h3>
+              <ul className="features-premium">
+                {p.points.map(pt => (
+                  <li key={pt} className="feature-item">
+                    <svg className="check-gold" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    {pt}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/contact" className="btn-pack-select">Choisir ce pack</Link>
             </div>
-            <ul className="mt-4 space-y-2 text-white/80">
-              {p.points.map(pt => <li key={pt}>• {pt}</li>)}
-            </ul>
-            <Link to="/contact" className="btn-primary mt-6 inline-block">Choisir ce pack</Link>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   )
