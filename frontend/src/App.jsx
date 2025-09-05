@@ -79,7 +79,7 @@ function Home(){
             
             <div className="cta-group animate-fade-in-up">
               <Link to="/packs" className="btn-premium-primary">
-                Voir les tarifs martiniquais
+                Voir nos tarifs
               </Link>
               <a href="https://wa.me/596000000" 
                  className="btn-premium-secondary"
@@ -121,7 +121,7 @@ function Home(){
                 <span className="period">HT</span>
               </div>
               <h3 className="pack-title">Vitrine Pro</h3>
-              <p className="text-gray-300">5-6 pages, SEO étendu, LCP {"< 2,5s"}, GA4 & Search Console</p>
+              <p className="text-gray-300">5-6 pages, SEO étendu, LCP < 2,5s, GA4 & Search Console</p>
             </div>
 
             <div className="pack-card animate-fade-in-up">
@@ -143,7 +143,7 @@ function Home(){
         <div className="max-w-7xl mx-auto px-4">
           <div className="badges-premium">
             <span className="badge-premium animate-float">Délais 7-12 jours</span>
-            <span className="badge-premium animate-float">LCP {"< 2,5s"} mobile</span>
+            <span className="badge-premium animate-float">LCP < 2,5s mobile</span>
             <span className="badge-premium animate-float">Schema + GBP</span>
             <span className="badge-premium animate-float">Révisions incluses</span>
             <span className="badge-premium animate-float">Spécialiste Martinique</span>
@@ -200,22 +200,12 @@ function Options(){
   return (
     <div className="container-premium py-12">
       <h2 className="h1 mb-8">Options à la carte</h2>
-      <ul className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-6">
         {[
-          'Rédaction web ≤ 800 mots : 180€ HT',
-          'Optimisation 20 images : 120€ HT',
-          'Page locale supplémentaire : 120€ HT/page',
-          'Intégration réservation : 150-300€ HT',
-          'Traduction FR-EN (3 pages) : 150€ HT',
-        ].map((o)=> <li key={o} className="card p-6">{o}</li>)}
-      </ul>
-
-      <h3 className="h2 mt-10">Services récurrents</h3>
-      <div className="grid md:grid-cols-3 gap-6 mt-4">
-        {[
-          {title:'Maintenance Basic', price:'49€ HT/mois', pts:['Mises à jour + sauvegardes + sécurité','Support email']},
-          {title:'Maintenance Pro', price:'89€ HT/mois', pts:['Tout Basic + 1h modifs/mois','Rapport performance/SEO local']},
-          {title:'Croissance Locale', price:'149€ HT/mois', pts:['Tout Pro + optimisation GBP','2 posts/mois + mini-SEO continu']},
+          {title:'Page supplémentaire', price:'150€ HT', pts:['Page complète avec SEO','Design cohérent','Responsive']},
+          {title:'E-commerce Woo', price:'400€ HT', pts:['Installation WooCommerce','5 produits max','Paiement CB']},
+          {title:'Formation WordPress', price:'180€ HT', pts:['2h de formation','Support par téléphone','Documentation']},
+          {title:'Maintenance mensuelle', price:'50€ HT/mois', pts:['Mises à jour','Sauvegarde','Support technique']},
         ].map((o)=> (
           <div key={o.title} className="card p-6">
             <div className="flex items-baseline justify-between">
@@ -242,18 +232,6 @@ function Modalites(){
   )
 }
 
-function Impact(){
-  return (
-    <div className="container-premium py-12">
-      <h2 className="h1 mb-4">Impact territorial</h2>
-      <p className="text-white/80 max-w-3xl">En Martinique, 74% de la population est en difficulté avec le numérique contre 33% en métropole. Notre mission : accompagner les 100% d'entreprises digitalisées d'ici 2028.</p>
-      <div className="grid md:grid-cols-3 gap-6 mt-8">
-        {['Délais 3x plus courts','Tarifs adaptés','Expertise fracture numérique'].map(t => <div key={t} className="card p-6">{t}</div>)}
-      </div>
-    </div>
-  )
-}
-
 function Mentions(){
   return (
     <div className="container-premium py-12">
@@ -267,7 +245,18 @@ function CookiesPolicy(){
   return (
     <div className="container-premium py-12">
       <h2 className="h1 mb-4">Politique de cookies</h2>
-      <p className="text-white/80">Cette bannière permet d'accepter ou refuser les cookies de mesure (GA4). Lien présent en bas de page.</p>
+      <div className="prose prose-invert max-w-none">
+        <p>Cette page explique notre utilisation des cookies de mesure d'audience anonyme.</p>
+        <h3>Cookies utilisés</h3>
+        <p>• <strong>Cookies de mesure (Google Analytics)</strong> : Pour comprendre comment les visiteurs utilisent notre site</p>
+        <p>• <strong>Cookies de préférences</strong> : Pour mémoriser vos choix de consentement</p>
+        <h3>Vos choix</h3>
+        <p>Via la bannière de cookies, vous pouvez :</p>
+        <p>• Accepter tous les cookies</p>
+        <p>• Refuser tous les cookies (seuls les cookies techniques seront conservés)</p>
+        <h3>Contact</h3>
+        <p>Pour toute question concernant les cookies : contact@webboost-martinique.com</p>
+      </div>
     </div>
   )
 }
@@ -283,7 +272,7 @@ function Contact(){
       return
     }
     if(!BACKEND_URL){
-      alert('Configuration manquante: REACT_APP_BACKEND_URL')
+      alert('Configuration manquante: VITE_BACKEND_URL')
       return
     }
     try{
@@ -345,6 +334,7 @@ function Chatbot(){
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState([{role:'assistant', content:"Bonjour ! Je suis l'assistant WebBoost Martinique 🇲🇶\nComment puis-je vous accompagner dans votre projet web ?"}])
+  
   const send = async (text) => {
     const content = (text ?? input).trim()
     if(!content) return
@@ -371,9 +361,10 @@ function Chatbot(){
       setMessages(m=>[...m,{role:'assistant', content: "Désolé, une erreur est survenue. Réessayez dans un instant."}])
     }
   }
+  
   // quick replies
   const quick = [
-    'Voir les prix spécial Martinique',
+    'Voir les prix en Martinique',
     'Comprendre le paiement 50/40/10',
     'Parler directement sur WhatsApp',
     'Calculer mon délai de livraison',
@@ -406,7 +397,7 @@ function Chatbot(){
               {quick.map(q => <button key={q} className="badge" onClick={()=>send(q)}>{q}</button>)}
             </div>
             <div className="flex gap-2">
-              <input value={input} onChange={e=>setInput(e.target.value)} placeholder="Écrire un message..." className="flex-1 card px-3 py-2" />
+              <input value={input} onChange={e=>setInput(e.target.value)} placeholder="Écrire un message..." className="flex-1 card px-3 py-2" onKeyPress={e => e.key === 'Enter' && send()} />
               <button className="btn-primary" onClick={()=>send()}>Envoyer</button>
             </div>
             <p className="text-xs text-white/50">En utilisant le chat, vous acceptez la <Link to="/cookies" className="underline">Politique cookies</Link>. Opt-out à tout moment.</p>
