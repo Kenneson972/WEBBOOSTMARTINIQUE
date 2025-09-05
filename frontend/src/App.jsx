@@ -166,7 +166,7 @@ function Packs(){
         <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
           {[
             {title:'Essentiel Local', price:'890€ HT', points:['3 pages','SEO local de base','Données structurées','Tracking appels/clics','1 révision ≤ 15 pts','Délai: 10 j']},
-            {title:'Vitrine Pro', price:'1 290€ HT', points:['5-6 pages','SEO on-page étendu','LCP < 2,5s & CLS < 0,1','Alignement GBP + GA4 + GSC','2 révisions ≤ 20 pts','Délai: 7-10 j']},
+            {title:'Vitrine Pro', price:'1 290€ HT', points:['5-6 pages','SEO on-page étendu','LCP inférieur 2,5s & CLS inférieur 0,1','Alignement GBP + GA4 + GSC','2 révisions ≤ 20 pts','Délai: 7-10 j']},
             {title:'Vitrine Conversion', price:'1 790€ HT', points:['6-8 pages + Réserver/Devis','Tracking avancé + schema enrichi','Formation 45min','SEO expert + CRO','2 révisions ≤ 25 pts','Délai: 10-12 j']},
           ].map((p)=> (
             <div key={p.title} className="pack-card">
