@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
+import OpenAIConfig from './components/OpenAIConfig'
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
