@@ -1069,7 +1069,8 @@ body {
   .logo-premium {
     font-size: 1.5rem;
   }
-  
+}
+
 /* Mobile navigation styles */
 .mobile-nav {
   display: none;
