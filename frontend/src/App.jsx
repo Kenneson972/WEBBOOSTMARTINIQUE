@@ -357,7 +357,10 @@ function Chatbot(){
       const res = await fetch(`${BACKEND_URL}/chat`, { 
         method:'POST', 
         headers:{'Content-Type':'application/json'}, 
-        body: JSON.stringify({ message: content }) 
+        body: JSON.stringify({ 
+          messages: [{role: 'user', content: content}],
+          temperature: 0.3
+        }) 
       })
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}: ${res.statusText}`)
