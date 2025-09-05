@@ -262,6 +262,38 @@ function CookiesPolicy(){
   )
 }
 
+function ConfigPage(){
+  return (
+    <div className="container-premium py-12">
+      <h2 className="h1 mb-6">🤖 Configuration ChatBot IA</h2>
+      <div className="max-w-2xl mx-auto">
+        <OpenAIConfig />
+        
+        <div className="mt-8 p-4 bg-gray-800/30 border border-gray-600/50 rounded-lg">
+          <h3 className="font-semibold text-gold mb-2">📋 Instructions</h3>
+          <ol className="text-sm text-white/80 space-y-2">
+            <li>1. <strong>Option Simple :</strong> Utilisez la clé Universelle Emergent (prête à l'emploi)</li>
+            <li>2. <strong>Option Avancée :</strong> Insérez votre clé API OpenAI personnelle</li>
+            <li>3. Testez la configuration avec le bouton "Tester & Sauvegarder"</li>
+            <li>4. Une fois validée, votre chatbot utilisera l'IA avancée</li>
+          </ol>
+          
+          <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded text-xs">
+            <strong>💡 Note :</strong> Cette configuration est sauvegardée localement dans votre navigateur.
+            Pour un usage en production, ajoutez votre clé dans les variables d'environnement du serveur.
+          </div>
+        </div>
+        
+        <div className="text-center mt-6">
+          <Link to="/" className="btn-primary">
+            Retour à l'accueil
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function Contact(){
   const [form, setForm] = useState({name:'', email:'', phone:'', sector:'', pack:'', message:'', consent:false})
   const [status, setStatus] = useState('idle')
