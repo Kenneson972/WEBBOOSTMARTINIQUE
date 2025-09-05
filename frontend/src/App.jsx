@@ -331,12 +331,19 @@ function Chatbot(){
     setInput('')
     try{
       if(!BACKEND_URL) throw new Error('Missing backend URL')
-      const res = await fetch(`${BACKEND_URL}/chat`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ messages: [{role:'user', content}], temperature: 0.3 }) })
+      const res = await fetch(`${BACKEND_URL}/chat`, { 
+        method:'POST', 
+        headers:{'Content-Type':'application/json'}, 
+        body: JSON.stringify({ message: content }) 
+      })
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`)
+      }
       const j = await res.json()
       setMessages(m=>[...m,{role:'assistant', content: j.reply || '...'}])
       if(content.toLowerCase().includes('whatsapp')) window.dispatchEvent(new CustomEvent('click_whatsapp'))
     }catch(e){
-      console.error(e)
+      console.error('Chatbot error:', e)
       setMessages(m=>[...m,{role:'assistant', content: "Désolé, une erreur est survenue. Réessayez dans un instant."}])
     }
   }
