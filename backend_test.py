@@ -64,12 +64,12 @@ class WebBoostAPITester:
     def test_contact_endpoint(self):
         """Test POST /api/contact"""
         test_payload = {
-            "name": "Test User",
-            "email": "test@example.com", 
-            "phone": "0596123456",
-            "sector": "Test Sector",
-            "pack": "Essentiel Local",
-            "message": "Test message for API testing",
+            "name": "Marie Dubois",
+            "email": "marie.dubois@martinique-business.com", 
+            "phone": "0596987654",
+            "sector": "Commerce Local",
+            "pack": "Vitrine Pro",
+            "message": "Intéressée par vos services pour développer ma présence en ligne en Martinique",
             "consent": True,
             "source": "api_test"
         }
@@ -82,9 +82,9 @@ class WebBoostAPITester:
                 timeout=10
             )
             
-            if response.status_code == 201:
+            if response.status_code == 200:
                 data = response.json()
-                if "id" in data and "saved" in data:
+                if "success" in data and data["success"] and "id" in data:
                     self.log_result("Contact Submission", True, f"Response: {data}")
                     return True
                 else:
