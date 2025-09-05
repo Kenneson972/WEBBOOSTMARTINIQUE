@@ -47,7 +47,17 @@ backend:
         agent: "testing"
         comment: "KPI endpoint working correctly, returning leads and chats counts."
 
-frontend:
+  - task: "GitHub Pages deployment fix"
+    implemented: false
+    working: false
+    file: "frontend/src/main.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL DEPLOYMENT ISSUES: 1) GitHub Pages site at https://kenneson972.github.io/WEBBOOSTMARTINIQUE/ shows 404 'Not Found' error - deployment completely failed. 2) Local React app also not loading properly due to React Router configuration issues with base path '/WEBBOOSTMARTINIQUE/'. 3) Built files exist but routing is broken. URGENT: Need to fix React Router basename configuration AND GitHub Pages deployment process."
   - task: "Chatbot functionality testing"
     implemented: true
     working: false
