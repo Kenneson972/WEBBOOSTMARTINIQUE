@@ -4,7 +4,9 @@ import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 const BACKEND_URL = import.meta.env.REACT_APP_BACKEND_URL
 
 function Nav() {
+  const [showMobileNav, setShowMobileNav] = useState(false)
   const navClasses = ({ isActive }) => isActive ? 'text-[#D4AF37]' : 'nav-links a'
+  
   return (
     <header className="header-premium">
       <div className="nav-premium">
@@ -12,6 +14,8 @@ function Nav() {
           <span className="logo-text">WebBoost</span>
           <span className="logo-accent">Martinique</span>
         </Link>
+        
+        {/* Desktop Navigation */}
         <nav className="nav-links">
           <NavLink to="/packs" className={navClasses}>Packs</NavLink>
           <NavLink to="/options" className={navClasses}>Options</NavLink>
@@ -19,6 +23,25 @@ function Nav() {
           <NavLink to="/impact" className={navClasses}>Impact</NavLink>
           <NavLink to="/contact" className="btn-cta-header">Devis gratuit</NavLink>
         </nav>
+        
+        {/* Mobile Menu Button */}
+        <button 
+          className="mobile-nav text-wb-gold text-2xl"
+          onClick={() => setShowMobileNav(!showMobileNav)}
+        >
+          ☰
+        </button>
+        
+        {/* Mobile Navigation */}
+        {showMobileNav && (
+          <div className="mobile-nav-menu">
+            <NavLink to="/packs" className="mobile-nav-link" onClick={() => setShowMobileNav(false)}>Packs</NavLink>
+            <NavLink to="/options" className="mobile-nav-link" onClick={() => setShowMobileNav(false)}>Options</NavLink>
+            <NavLink to="/modalites" className="mobile-nav-link" onClick={() => setShowMobileNav(false)}>Modalités</NavLink>
+            <NavLink to="/impact" className="mobile-nav-link" onClick={() => setShowMobileNav(false)}>Impact</NavLink>
+            <NavLink to="/contact" className="mobile-nav-link" onClick={() => setShowMobileNav(false)}>Contact</NavLink>
+          </div>
+        )}
       </div>
     </header>
   )
