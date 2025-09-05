@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 
-const BACKEND_URL = import.meta.env.REACT_APP_BACKEND_URL
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
 function Nav() {
   const [showMobileNav, setShowMobileNav] = useState(false)
