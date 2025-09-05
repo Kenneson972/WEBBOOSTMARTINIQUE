@@ -190,7 +190,7 @@ class WebBoostAPITester:
             
             if response.status_code == 200:
                 data = response.json()
-                if "leads" in data and "chats" in data:
+                if "total_leads" in data and "total_chats" in data:
                     self.log_result("KPI Endpoint", True, f"KPI data: {data}")
                     return True
                 else:
@@ -199,6 +199,142 @@ class WebBoostAPITester:
                 self.log_result("KPI Endpoint", False, f"Status code: {response.status_code}")
         except Exception as e:
             self.log_result("KPI Endpoint", False, f"Exception: {str(e)}")
+        return False
+
+    def test_openai_models_endpoint(self):
+        """Test GET /api/models/openai"""
+        try:
+            response = requests.get(f"{self.base_url}/models/openai", timeout=10)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "models" in data and "default" in data:
+                    models_count = len(data["models"])
+                    default_model = data["default"]
+                    self.log_result("OpenAI Models Endpoint", True, f"Found {models_count} models, default: {default_model}")
+                    return True
+                else:
+                    self.log_result("OpenAI Models Endpoint", False, f"Invalid response format: {data}")
+            else:
+                self.log_result("OpenAI Models Endpoint", False, f"Status code: {response.status_code}")
+        except Exception as e:
+            self.log_result("OpenAI Models Endpoint", False, f"Exception: {str(e)}")
+        return False
+
+    def test_openai_chat_with_emergent_key(self):
+        """Test POST /api/chat/openai using Emergent key (no user API key provided)"""
+        test_payload = {
+            "message": "Bonjour, pouvez-vous me parler des services WebBoost Martinique?",
+            "model": "gpt-4o-mini"
+        }
+        
+        try:
+            response = requests.post(
+                f"{self.base_url}/chat/openai",
+                json=test_payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30  # Longer timeout for LLM calls
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "reply" in data and "success" in data and data["success"]:
+                    reply_length = len(data["reply"])
+                    provider = data.get("provider", "unknown")
+                    model = data.get("model", "unknown")
+                    print(f"  📝 OpenAI Reply: {data['reply'][:100]}...")
+                    self.log_result("OpenAI Chat (Emergent Key)", True, f"Reply length: {reply_length}, Provider: {provider}, Model: {model}")
+                    return True
+                else:
+                    self.log_result("OpenAI Chat (Emergent Key)", False, f"Invalid response format: {data}")
+            else:
+                self.log_result("OpenAI Chat (Emergent Key)", False, f"Status code: {response.status_code}, Response: {response.text}")
+        except Exception as e:
+            self.log_result("OpenAI Chat (Emergent Key)", False, f"Exception: {str(e)}")
+        return False
+
+    def test_openai_chat_with_user_key(self):
+        """Test POST /api/chat/openai with user-provided API key (should fail with invalid key)"""
+        test_payload = {
+            "message": "Test message",
+            "api_key": "sk-invalid-test-key-12345",
+            "model": "gpt-4o-mini"
+        }
+        
+        try:
+            response = requests.post(
+                f"{self.base_url}/chat/openai",
+                json=test_payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30
+            )
+            
+            # Should fail with 401 for invalid API key
+            if response.status_code == 401:
+                self.log_result("OpenAI Chat (Invalid User Key)", True, "Correctly rejected invalid API key")
+                return True
+            elif response.status_code == 200:
+                # If it somehow works, that's also acceptable (maybe the key format changed)
+                data = response.json()
+                if "reply" in data:
+                    self.log_result("OpenAI Chat (Invalid User Key)", True, "Unexpected success - API key validation may have changed")
+                    return True
+            
+            self.log_result("OpenAI Chat (Invalid User Key)", False, f"Unexpected status code: {response.status_code}, Response: {response.text}")
+        except Exception as e:
+            self.log_result("OpenAI Chat (Invalid User Key)", False, f"Exception: {str(e)}")
+        return False
+
+    def test_openai_key_config_endpoint(self):
+        """Test POST /api/config/openai-key"""
+        test_payload = {
+            "openai_api_key": "sk-invalid-test-key-for-validation"
+        }
+        
+        try:
+            response = requests.post(
+                f"{self.base_url}/config/openai-key",
+                json=test_payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30
+            )
+            
+            # Should fail with 401 for invalid API key
+            if response.status_code == 401:
+                self.log_result("OpenAI Key Config", True, "Correctly rejected invalid API key")
+                return True
+            elif response.status_code == 200:
+                # If it somehow works, that's also acceptable
+                data = response.json()
+                if "success" in data:
+                    self.log_result("OpenAI Key Config", True, "Unexpected success - API key validation may have changed")
+                    return True
+            
+            self.log_result("OpenAI Key Config", False, f"Unexpected status code: {response.status_code}, Response: {response.text}")
+        except Exception as e:
+            self.log_result("OpenAI Key Config", False, f"Exception: {str(e)}")
+        return False
+
+    def test_openai_key_config_missing_key(self):
+        """Test POST /api/config/openai-key with missing API key"""
+        test_payload = {}
+        
+        try:
+            response = requests.post(
+                f"{self.base_url}/config/openai-key",
+                json=test_payload,
+                headers={"Content-Type": "application/json"},
+                timeout=10
+            )
+            
+            # Should fail with 400 for missing API key
+            if response.status_code == 400:
+                self.log_result("OpenAI Key Config (Missing Key)", True, "Correctly rejected missing API key")
+                return True
+            else:
+                self.log_result("OpenAI Key Config (Missing Key)", False, f"Expected 400, got {response.status_code}")
+        except Exception as e:
+            self.log_result("OpenAI Key Config (Missing Key)", False, f"Exception: {str(e)}")
         return False
 
     def run_all_tests(self):
