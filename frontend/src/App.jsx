@@ -37,7 +37,6 @@ function Nav() {
             <NavLink to="/packs" className="mobile-nav-link" onClick={() => setShowMobileNav(false)}>Packs</NavLink>
             <NavLink to="/options" className="mobile-nav-link" onClick={() => setShowMobileNav(false)}>Options</NavLink>
             <NavLink to="/modalites" className="mobile-nav-link" onClick={() => setShowMobileNav(false)}>Modalités</NavLink>
-            <NavLink to="/impact" className="mobile-nav-link" onClick={() => setShowMobileNav(false)}>Impact</NavLink>
             <NavLink to="/contact" className="mobile-nav-link" onClick={() => setShowMobileNav(false)}>Contact</NavLink>
           </div>
         )}
