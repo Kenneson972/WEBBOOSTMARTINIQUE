@@ -849,8 +849,57 @@ body {
   display: inline-block;
 }
 
-/* Mobile-first responsive design */
-@media (max-width: 1024px) {
+/* Grid responsive utilities */
+@media (min-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  
+  .md\:col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+  
+  .md\:flex {
+    display: flex;
+  }
+}
+
+/* Responsive spacing */
+@media (min-width: 640px) {
+  .sm\:grid-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* Responsive display */
+.hidden {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .md\:flex {
+    display: flex;
+  }
+}
+
+/* Mobile navigation - simple version */
+.mobile-nav {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .nav-links {
+    display: none;
+  }
+  
+  .mobile-nav {
+    display: block;
+  }
+}
   .hero-content h1 {
     font-size: 3rem;
   }
