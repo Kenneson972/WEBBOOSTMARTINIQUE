@@ -231,12 +231,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Mobile chatbot display fixes"
-    - "Élise avatar image path fix"
-    - "Mobile viewport overflow fix"
-  stuck_tasks:
-    - "Mobile responsiveness for sales"
-    - "Advanced chatbot with Élise photo"
+    - "Order flow complete testing"
+    - "Sales conversion elements testing"
+  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
