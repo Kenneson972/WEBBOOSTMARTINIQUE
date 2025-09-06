@@ -377,23 +377,23 @@ const MobileChatbot = () => {
           50% { transform: scale(1.2); opacity: 0.8; }
         }
 
-        .chat-window {
-          position: absolute;
-          bottom: 75px;
-          right: 0;
-          width: 340px;
-          height: 480px;
-          background: linear-gradient(145deg, rgba(15, 15, 17, 0.98) 0%, rgba(25, 25, 30, 0.98) 100%);
-          backdrop-filter: blur(20px);
-          border-radius: 16px;
-          border: 2px solid rgba(212, 175, 55, 0.3);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-          transform: translateY(10px) scale(0.95);
-          opacity: 0;
-          visibility: hidden;
-          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-          overflow: hidden;
-        }
+          .chat-window {
+            position: absolute;
+            bottom: 75px;
+            right: 0;
+            width: 340px;
+            height: 480px;
+            background: linear-gradient(145deg, rgba(15, 15, 17, 0.98) 0%, rgba(25, 25, 30, 0.98) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transform: translateY(10px) scale(0.95);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            overflow: hidden;
+          }
 
         .chat-window.open {
           transform: translateY(0) scale(1);
