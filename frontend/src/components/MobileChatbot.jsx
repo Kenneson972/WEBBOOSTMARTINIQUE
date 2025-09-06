@@ -760,7 +760,7 @@ const MobileChatbot = () => {
           cursor: not-allowed;
         }
 
-        /* Mobile optimizations */
+        /* Mobile optimizations - CRITICAL FIX */
         @media (max-width: 768px) {
           .chatbot-mobile-container {
             bottom: 12px;
@@ -768,13 +768,14 @@ const MobileChatbot = () => {
           }
 
           .chat-window {
-            width: calc(100vw - 30px);
+            width: calc(100vw - 30px) !important;
             height: calc(100vh - 140px);
             bottom: 75px;
-            right: 15px;
-            left: 15px;
-            max-width: 320px;
+            right: 15px !important;
+            left: 15px !important;
+            max-width: 320px !important;
             max-height: 500px;
+            position: fixed !important;
           }
 
           .messages-container {
