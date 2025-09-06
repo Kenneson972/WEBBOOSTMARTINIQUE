@@ -999,13 +999,26 @@ function Dashboard() {
 }
 
 export default function App() {
+  const [showOrderFlow, setShowOrderFlow] = useState(false)
+  const [selectedPack, setSelectedPack] = useState(null)
+
+  const startOrder = (pack = null) => {
+    setSelectedPack(pack)
+    setShowOrderFlow(true)
+  }
+
+  const closeOrder = () => {
+    setShowOrderFlow(false)
+    setSelectedPack(null)
+  }
+
   return (
     <div className="gradient-bg min-h-screen text-white">
-      <Navigation />
+      <Navigation startOrder={startOrder} />
       
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/packs" element={<PacksPage />} />
+        <Route path="/" element={<HomePage startOrder={startOrder} />} />
+        <Route path="/packs" element={<PacksPage startOrder={startOrder} />} />
         <Route path="/options" element={<OptionsPage />} />
         <Route path="/modalites" element={<ModalitesPage />} />
         <Route path="/contact" element={<ContactPage />} />
@@ -1018,6 +1031,14 @@ export default function App() {
       <Footer />
       <OfflineChatbot />
       <CookieBanner />
+      
+      {/* Tunnel de commande */}
+      {showOrderFlow && (
+        <OrderFlow 
+          selectedPack={selectedPack}
+          onClose={closeOrder}
+        />
+      )}
     </div>
   )
 }
