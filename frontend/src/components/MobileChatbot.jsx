@@ -768,12 +768,13 @@ const MobileChatbot = () => {
           }
 
           .chat-window {
-            width: calc(100vw - 24px);
-            height: calc(100vh - 120px);
+            width: calc(100vw - 30px);
+            height: calc(100vh - 140px);
             bottom: 75px;
-            right: 12px;
-            left: 12px;
-            max-height: 600px;
+            right: 15px;
+            left: 15px;
+            max-width: 340px;
+            max-height: 500px;
           }
 
           .messages-container {
