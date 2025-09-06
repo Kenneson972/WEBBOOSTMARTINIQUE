@@ -132,15 +132,18 @@ backend:
 
   - task: "Advanced chatbot with Élise photo"
     implemented: true
-    working: true
+    working: false
     file: "frontend/src/components/AdvancedChatbot.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
       - working: true
         agent: "testing"
         comment: "✅ ÉLISE CHATBOT FULLY FUNCTIONAL: Chatbot opens successfully with Élise avatar elements (2 found). AI configuration panel working with ⚙️ button. Emergent AI and OpenAI key insertion options working. Quick reply buttons functional (9 found). Message sending/receiving working. Offline mode with intelligent responses working. Conversation flows lead to order actions and WhatsApp redirect."
+      - working: false
+        agent: "testing"
+        comment: "❌ MOBILE CHATBOT CRITICAL ISSUES: 1) Chat window overflows mobile viewport (355px width on 375px screen). 2) Élise avatar image returns 404 error - /elise-avatar.jpg not loading properly. 3) Send button (36x36px) below Apple touch guidelines (44px minimum). 4) AI config panel and send button outside viewport due to overflow. 5) Quick reply buttons work but overall mobile UX severely compromised. Desktop functionality intact but mobile experience broken."
 
   - task: "Mobile responsiveness for sales"
     implemented: true
