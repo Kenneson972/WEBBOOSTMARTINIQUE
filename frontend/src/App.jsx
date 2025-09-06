@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom'
 import OpenAIConfig from './OpenAIConfig'
+import OfflineChatbot from './components/OfflineChatbot'
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
