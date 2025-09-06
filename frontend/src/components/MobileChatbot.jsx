@@ -800,8 +800,10 @@ const MobileChatbot = () => {
           }
 
           .send-btn {
-            width: 36px;
-            height: 36px;
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            min-height: 44px;
           }
         }
 
