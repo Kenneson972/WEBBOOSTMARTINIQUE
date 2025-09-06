@@ -50,7 +50,7 @@ function Navigation() {
   )
 }
 
-function HomePage() {
+function HomePage({ startOrder }) {
   return (
     <div>
       {/* Hero Section */}
@@ -69,17 +69,31 @@ function HomePage() {
             </p>
             
             <div className="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fade-in-up animate-delay-400">
-              <Link to="/packs" className="btn-premium px-8 py-4 rounded-xl font-bold text-lg text-gray-900 w-full sm:w-auto">
-                <i className="fas fa-chart-line mr-2"></i>
-                Voir nos tarifs
-              </Link>
-              <a 
-                href="https://wa.me/596000000" 
+              <button 
+                onClick={() => startOrder()}
+                className="btn-premium px-8 py-4 rounded-xl font-bold text-lg text-gray-900 w-full sm:w-auto"
+              >
+                <i className="fas fa-shopping-cart mr-2"></i>
+                COMMANDER MAINTENANT
+              </button>
+              <button 
+                onClick={() => startOrder('pro')}
                 className="btn-outline-premium px-8 py-4 rounded-xl font-bold text-lg w-full sm:w-auto"
+              >
+                <i className="fas fa-rocket mr-2"></i>
+                RÉSERVER + PAYER 50%
+              </button>
+            </div>
+            
+            {/* WhatsApp repositionné en discret */}
+            <div className="mt-8">
+              <a 
+                href="https://wa.me/596000000?text=Bonjour Kenneson, j'ai une question urgente concernant vos services WebBoost. Pouvez-vous m'appeler ?"
+                className="text-sm text-gray-400 hover:text-yellow-400 transition-colors"
                 onClick={() => window.dispatchEvent(new Event('click_whatsapp'))}
               >
-                <i className="fab fa-whatsapp mr-2"></i>
-                Parler sur WhatsApp
+                <i className="fab fa-whatsapp mr-1"></i>
+                Urgence ? Question rapide sur WhatsApp
               </a>
             </div>
             
@@ -102,8 +116,8 @@ function HomePage() {
                 Révisions incluses
               </div>
               <div className="badge-trust px-4 py-2 rounded-full text-sm font-semibold">
-                <i className="fas fa-map-marker-alt mr-1"></i>
-                Spécialiste Martinique
+                <i className="fas fa-shield-alt mr-1"></i>
+                Satisfait ou remboursé
               </div>
             </div>
           </div>
@@ -118,10 +132,10 @@ function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="gold-gradient">Packs tarifaires</span>
+              <span className="gold-gradient">Commandez votre pack</span>
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Solutions adaptées au marché martiniquais avec garanties
+              Paiement sécurisé • Livraison garantie • Satisfaction ou remboursé
             </p>
           </div>
           
@@ -134,6 +148,10 @@ function HomePage() {
                 </div>
                 <h3 className="text-2xl font-bold text-yellow-400 mb-2">Pack Essentiel</h3>
                 <p className="text-gray-400">Essentiel Local</p>
+                <div className="mt-2 text-sm text-green-300">
+                  <i className="fas fa-arrow-down mr-1"></i>
+                  Acompte : €445 seulement
+                </div>
               </div>
               
               <ul className="space-y-4 mb-8">
@@ -159,9 +177,13 @@ function HomePage() {
                 </li>
               </ul>
               
-              <Link to="/contact" className="btn-premium w-full py-3 rounded-lg font-semibold text-gray-900">
-                Choisir ce pack
-              </Link>
+              <button 
+                onClick={() => startOrder('essentiel')}
+                className="btn-premium w-full py-3 rounded-lg font-semibold text-gray-900"
+              >
+                <i className="fas fa-shopping-cart mr-2"></i>
+                COMMANDER MAINTENANT
+              </button>
             </div>
             
             {/* Pack Pro (Populaire) */}
@@ -178,6 +200,10 @@ function HomePage() {
                 </div>
                 <h3 className="text-2xl font-bold text-yellow-400 mb-2">Pack Pro</h3>
                 <p className="text-gray-400">Vitrine Pro</p>
+                <div className="mt-2 text-sm text-green-300">
+                  <i className="fas fa-arrow-down mr-1"></i>
+                  Acompte : €645 seulement
+                </div>
               </div>
               
               <ul className="space-y-4 mb-8">
@@ -203,9 +229,13 @@ function HomePage() {
                 </li>
               </ul>
               
-              <Link to="/contact" className="btn-premium w-full py-3 rounded-lg font-semibold text-gray-900">
-                Choisir ce pack
-              </Link>
+              <button 
+                onClick={() => startOrder('pro')}
+                className="btn-premium w-full py-3 rounded-lg font-semibold text-gray-900"
+              >
+                <i className="fas fa-rocket mr-2"></i>
+                RÉSERVER + PAYER 50%
+              </button>
             </div>
             
             {/* Pack Premium */}
@@ -216,6 +246,10 @@ function HomePage() {
                 </div>
                 <h3 className="text-2xl font-bold text-yellow-400 mb-2">Pack Premium</h3>
                 <p className="text-gray-400">Vitrine Conversion</p>
+                <div className="mt-2 text-sm text-green-300">
+                  <i className="fas fa-arrow-down mr-1"></i>
+                  Acompte : €895 seulement
+                </div>
               </div>
               
               <ul className="space-y-4 mb-8">
@@ -241,9 +275,13 @@ function HomePage() {
                 </li>
               </ul>
               
-              <Link to="/contact" className="btn-premium w-full py-3 rounded-lg font-semibold text-gray-900">
-                Choisir ce pack
-              </Link>
+              <button 
+                onClick={() => startOrder('premium')}
+                className="btn-premium w-full py-3 rounded-lg font-semibold text-gray-900"
+              >
+                <i className="fas fa-crown mr-2"></i>
+                DÉMARRER MON PROJET
+              </button>
             </div>
           </div>
         </div>
@@ -277,18 +315,18 @@ function HomePage() {
             
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i className="fas fa-chart-line text-2xl text-gray-900"></i>
+                <i className="fas fa-shield-alt text-2xl text-gray-900"></i>
               </div>
-              <h3 className="text-xl font-bold mb-2 text-yellow-400">Performance Garantie</h3>
-              <p className="text-gray-300">LCP &lt; 2,5s mobile et optimisation SEO local incluse</p>
+              <h3 className="text-xl font-bold mb-2 text-yellow-400">Garantie Totale</h3>
+              <p className="text-gray-300">Satisfait ou remboursé sous 15 jours • Délai respecté ou remboursé</p>
             </div>
             
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i className="fas fa-handshake text-2xl text-gray-900"></i>
+                <i className="fas fa-lock text-2xl text-gray-900"></i>
               </div>
-              <h3 className="text-xl font-bold mb-2 text-yellow-400">Accompagnement</h3>
-              <p className="text-gray-300">Support continu et révisions incluses selon votre pack</p>
+              <h3 className="text-xl font-bold mb-2 text-yellow-400">Paiement Sécurisé</h3>
+              <p className="text-gray-300">SSL • Stripe • PayPal • Paiement en 3 fois sans frais</p>
             </div>
           </div>
         </div>
@@ -301,17 +339,20 @@ function HomePage() {
             Prêt à <span className="gold-gradient">transformer</span> votre présence web ?
           </h2>
           <p className="text-xl text-gray-300 mb-8">
-            Rejoignez les entreprises martiniquaises qui font confiance à WebBoost
+            Commandez maintenant et recevez votre site en 7-12 jours
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-            <Link to="/contact" className="btn-premium px-8 py-4 rounded-xl font-bold text-lg text-gray-900 w-full sm:w-auto">
-              <i className="fas fa-rocket mr-2"></i>
-              Commencer mon projet
-            </Link>
-            <Link to="/contact" className="btn-outline-premium px-8 py-4 rounded-xl font-bold text-lg w-full sm:w-auto">
-              <i className="fas fa-phone mr-2"></i>
-              Consultation gratuite
+            <button 
+              onClick={() => startOrder()}
+              className="btn-premium px-8 py-4 rounded-xl font-bold text-lg text-gray-900 w-full sm:w-auto"
+            >
+              <i className="fas fa-credit-card mr-2"></i>
+              COMMANDER MAINTENANT
+            </button>
+            <Link to="/packs" className="btn-outline-premium px-8 py-4 rounded-xl font-bold text-lg w-full sm:w-auto">
+              <i className="fas fa-info-circle mr-2"></i>
+              Voir tous les détails
             </Link>
           </div>
         </div>
