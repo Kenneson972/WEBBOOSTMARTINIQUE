@@ -1015,7 +1015,7 @@ export default function App() {
       </Routes>
       
       <Footer />
-      <EnhancedChatbot />
+      <OfflineChatbot />
       <CookieBanner />
     </div>
   )
