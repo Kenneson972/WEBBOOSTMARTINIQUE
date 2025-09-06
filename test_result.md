@@ -144,15 +144,18 @@ backend:
 
   - task: "Mobile responsiveness for sales"
     implemented: true
-    working: true
+    working: false
     file: "frontend/src/App.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
       - working: true
         agent: "testing"
         comment: "✅ MOBILE OPTIMIZED FOR SALES: Mobile viewport (375x667) renders correctly. Chatbot button properly sized (57x57px, touch-optimized). Mobile chatbot opens and resizes appropriately. 6 CTA buttons found on mobile, all easily tappable. All elements touch-optimized for conversion. Minor: Mobile menu navigation needs attention but doesn't affect core sales funnel."
+      - working: false
+        agent: "testing"
+        comment: "❌ MOBILE CHATBOT DISPLAY ISSUES FOUND: 1) Chat window overflows horizontally by 300px on mobile viewport (355px width vs 375px viewport). 2) Send button too small (36x36px) - below 44px touch target guidelines. 3) Élise avatar image shows 404 error (elise-avatar.jpg not loading). 4) AI config and send buttons outside viewport due to overflow. Core functionality works but mobile UX compromised."
 
   - task: "Sales conversion elements testing"
     implemented: true
