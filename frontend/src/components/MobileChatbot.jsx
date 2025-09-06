@@ -547,7 +547,7 @@ const MobileChatbot = () => {
         .mini-avatar {
           width: 26px;
           height: 26px;
-          background-image: url('/elise-avatar.jpg');
+          background-image: url('/WEBBOOSTMARTINIQUE/elise-avatar.jpg');
           background-size: cover;
           background-position: center;
           border-radius: 50%;
