@@ -381,8 +381,8 @@ const MobileChatbot = () => {
           position: absolute;
           bottom: 75px;
           right: 0;
-          width: 350px;
-          height: 500px;
+          width: 340px;
+          height: 480px;
           background: linear-gradient(145deg, rgba(15, 15, 17, 0.98) 0%, rgba(25, 25, 30, 0.98) 100%);
           backdrop-filter: blur(20px);
           border-radius: 16px;
