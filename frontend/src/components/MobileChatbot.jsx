@@ -773,7 +773,7 @@ const MobileChatbot = () => {
             bottom: 75px;
             right: 15px;
             left: 15px;
-            max-width: 340px;
+            max-width: 320px;
             max-height: 500px;
           }
 
