@@ -6,7 +6,7 @@ import OrderFlow from './components/OrderFlow'
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
-function Navigation() {
+function Navigation({ startOrder }) {
   const [showMobileMenu, setShowMobileMenu] = useState(false)
 
   return (
@@ -22,10 +22,13 @@ function Navigation() {
           <NavLink to="/options">Options</NavLink>
           <NavLink to="/modalites">Modalités</NavLink>
           <NavLink to="/contact">Contact</NavLink>
-          <Link to="/contact" className="btn-premium px-6 py-3 rounded-lg">
-            <i className="fas fa-rocket mr-2"></i>
-            Devis gratuit
-          </Link>
+          <button 
+            onClick={() => startOrder()}
+            className="btn-premium px-6 py-3 rounded-lg"
+          >
+            <i className="fas fa-shopping-cart mr-2"></i>
+            COMMANDER
+          </button>
         </div>
         
         {/* Mobile Menu Button */}
@@ -43,6 +46,13 @@ function Navigation() {
             <NavLink to="/options" onClick={() => setShowMobileMenu(false)}>Options</NavLink>
             <NavLink to="/modalites" onClick={() => setShowMobileMenu(false)}>Modalités</NavLink>
             <NavLink to="/contact" onClick={() => setShowMobileMenu(false)}>Contact</NavLink>
+            <button 
+              onClick={() => {setShowMobileMenu(false); startOrder()}}
+              className="w-full text-left py-4 border-t border-gray-600 text-yellow-400 font-semibold"
+            >
+              <i className="fas fa-shopping-cart mr-2"></i>
+              COMMANDER MAINTENANT
+            </button>
           </div>
         )}
       </div>
