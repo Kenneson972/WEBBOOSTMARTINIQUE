@@ -761,20 +761,27 @@ const AdvancedChatbot = () => {
           margin-right: 6px;
         }
 
-        /* Mobile responsive */
+        /* Mobile responsive optimisé pour chatbot */
         @media (max-width: 768px) {
+          .wb-chatbot-widget {
+            bottom: 15px;
+            right: 15px;
+          }
+
           .wb-chat-container {
             width: calc(100vw - 30px);
-            height: calc(100vh - 120px);
-            bottom: 90px;
+            height: calc(100vh - 140px);
+            bottom: 80px;
             right: 15px;
             left: 15px;
-            border-radius: 15px;
+            border-radius: 16px;
+            max-width: none;
           }
 
           .wb-messages-area {
-            height: calc(100% - 200px);
+            height: calc(100vh - 320px);
             padding: 16px;
+            min-height: 300px;
           }
 
           .wb-chat-button {
@@ -784,9 +791,54 @@ const AdvancedChatbot = () => {
             right: 15px;
           }
 
-          .wb-quick-reply {
+          .wb-notification-badge {
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+          }
+
+          .wb-chat-header {
+            padding: 16px;
+          }
+
+          .wb-avatar {
+            width: 40px;
+            height: 40px;
+          }
+
+          .wb-chat-title {
+            font-size: 16px;
+          }
+
+          .wb-chat-subtitle {
             font-size: 12px;
-            padding: 8px 12px;
+          }
+
+          .wb-ai-indicator {
+            font-size: 10px;
+            padding: 2px 4px;
+          }
+
+          .wb-message-bubble {
+            max-width: 90%;
+            padding: 12px 14px;
+            font-size: 13px;
+          }
+
+          .wb-bot-avatar {
+            width: 28px;
+            height: 28px;
+          }
+
+          .wb-quick-reply {
+            font-size: 11px;
+            padding: 8px 10px;
+            margin-bottom: 4px;
+          }
+
+          .wb-quick-replies {
+            padding: 0 16px 12px;
+            max-height: 100px;
           }
 
           .wb-input-area {
@@ -795,33 +847,166 @@ const AdvancedChatbot = () => {
 
           .wb-input {
             padding: 10px 14px;
-            font-size: 13px;
+            font-size: 15px; /* Important pour éviter zoom iOS */
+            border-radius: 20px;
           }
 
           .wb-send-button {
             width: 40px;
             height: 40px;
+            min-height: 40px;
+          }
+
+          .wb-ai-config {
+            padding: 12px;
+            margin: 12px 16px;
+            border-radius: 8px;
+          }
+
+          .wb-config-input {
+            font-size: 15px;
+            padding: 10px 12px;
+          }
+
+          .wb-config-btn {
+            width: 28px;
+            height: 28px;
+          }
+
+          .wb-config-btn-primary,
+          .wb-config-btn-secondary {
+            padding: 8px 12px;
+            font-size: 11px;
           }
         }
 
         @media (max-width: 480px) {
+          .wb-chatbot-widget {
+            bottom: 12px;
+            right: 12px;
+          }
+
           .wb-chat-container {
-            width: calc(100vw - 20px);
-            height: calc(100vh - 100px);
-            bottom: 80px;
-            right: 10px;
-            left: 10px;
+            width: calc(100vw - 24px);
+            height: calc(100vh - 120px);
+            bottom: 75px;
+            right: 12px;
+            left: 12px;
+            border-radius: 12px;
+          }
+
+          .wb-messages-area {
+            height: calc(100vh - 300px);
+            padding: 12px;
+            min-height: 250px;
           }
 
           .wb-chat-button {
             width: 55px;
             height: 55px;
+            bottom: 12px;
+            right: 12px;
           }
 
           .wb-notification-badge {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            top: -3px;
+            right: -3px;
+          }
+
+          .wb-chat-header {
+            padding: 12px;
+          }
+
+          .wb-avatar {
+            width: 36px;
+            height: 36px;
+          }
+
+          .wb-bot-avatar {
+            width: 24px;
+            height: 24px;
+          }
+
+          .wb-chat-title {
+            font-size: 14px;
+          }
+
+          .wb-chat-subtitle {
             font-size: 11px;
+          }
+
+          .wb-message-bubble {
+            max-width: 85%;
+            padding: 10px 12px;
+            font-size: 12px;
+            line-height: 1.4;
+          }
+
+          .wb-quick-replies {
+            padding: 0 12px 10px;
+            gap: 6px;
+            max-height: 80px;
+          }
+
+          .wb-quick-reply {
+            font-size: 10px;
+            padding: 6px 8px;
+            border-radius: 15px;
+          }
+
+          .wb-typing-indicator {
+            padding: 10px 12px;
+            margin-left: 30px;
+            margin-bottom: 12px;
+          }
+
+          .wb-typing-dot {
+            width: 5px;
+            height: 5px;
+          }
+
+          .wb-input-area {
+            padding: 10px 12px;
+            gap: 8px;
+          }
+
+          .wb-input {
+            padding: 8px 12px;
+            font-size: 15px;
+            border-radius: 18px;
+          }
+
+          .wb-send-button {
+            width: 36px;
+            height: 36px;
+          }
+
+          .wb-ai-config {
+            margin: 8px 12px;
+            padding: 8px;
+          }
+
+          .wb-config-input {
+            font-size: 14px;
+            padding: 8px 10px;
+          }
+        }
+
+        /* Landscape mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+          .wb-chat-container {
+            width: 60vw;
+            height: calc(100vh - 80px);
+            bottom: 60px;
+            right: 20px;
+            left: auto;
+          }
+
+          .wb-messages-area {
+            height: calc(100vh - 220px);
           }
         }
       `}</style>
