@@ -1080,7 +1080,7 @@ export default function App() {
       </Routes>
       
       <Footer />
-      <OfflineChatbot />
+      <AdvancedChatbot />
       <CookieBanner />
       
       {/* Tunnel de commande */}
