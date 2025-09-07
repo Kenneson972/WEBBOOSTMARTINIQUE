@@ -1,17 +1,53 @@
 ---
 deployment:
   tasks:
+    # Préparation environnement
     - export DEPLOYPATH=/home/weboostmartinique.com/public_html/
-    - /bin/cp -R dist/* $DEPLOYPATH
-    - /bin/cp dist/.htaccess $DEPLOYPATH 2>/dev/null || true
-    - /bin/cp dist/.nojekyll $DEPLOYPATH 2>/dev/null || true
+    - /bin/rm -rf $DEPLOYPATH/* 2>/dev/null || true
+    
+    # Déploiement fichiers principaux (racine)
+    - /bin/cp src/index.html $DEPLOYPATH/
+    - /bin/cp src/mentions-legales.html $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp src/cgv.html $DEPLOYPATH/ 2>/dev/null || true
+    
+    # Déploiement assets (structure préservée)
+    - /bin/cp -R src/assets/ $DEPLOYPATH/
+    
+    # Déploiement API backend
+    - /bin/cp -R src/api/ $DEPLOYPATH/
+    - /bin/mv $DEPLOYPATH/api/app.py $DEPLOYPATH/app.py
+    
+    # Configuration serveur
+    - /bin/cp config/.htaccess $DEPLOYPATH/
+    - /bin/cp config/robots.txt $DEPLOYPATH/ 2>/dev/null || true
+    
+    # Image Élise
+    - /bin/cp assets/images/elise-avatar.jpg $DEPLOYPATH/assets/images/ 2>/dev/null || true
+    
+    # Variables environnement (si présent)
+    - /bin/cp .env $DEPLOYPATH/ 2>/dev/null || true
+    
+    # Permissions fichiers (sécurité 02switch)
+    - find $DEPLOYPATH -name "*.py" -exec chmod 755 {} \;
     - find $DEPLOYPATH -name "*.html" -exec chmod 644 {} \;
     - find $DEPLOYPATH -name "*.css" -exec chmod 644 {} \;
     - find $DEPLOYPATH -name "*.js" -exec chmod 644 {} \;
-    - find $DEPLOYPATH -name "*.jpg" -exec chmod 644 {} \;
     - find $DEPLOYPATH -name "*.png" -exec chmod 644 {} \;
-    - find $DEPLOYPATH -name "*.ico" -exec chmod 644 {} \;
+    - find $DEPLOYPATH -name "*.jpg" -exec chmod 644 {} \;
+    - find $DEPLOYPATH -name "*.jpeg" -exec chmod 644 {} \;
+    - find $DEPLOYPATH -name "*.gif" -exec chmod 644 {} \;
     - find $DEPLOYPATH -name "*.svg" -exec chmod 644 {} \;
+    - find $DEPLOYPATH -name "*.ico" -exec chmod 644 {} \;
     - find $DEPLOYPATH -name "*.xml" -exec chmod 644 {} \;
     - find $DEPLOYPATH -name "*.txt" -exec chmod 644 {} \;
-    - echo "WebBoost Martinique deployed successfully at $(date)"
+    - chmod 644 $DEPLOYPATH/.htaccess 2>/dev/null || true
+    - chmod 600 $DEPLOYPATH/.env 2>/dev/null || true
+    
+    # Nettoyage fichiers inutiles
+    - /bin/rm -rf $DEPLOYPATH/node_modules/ 2>/dev/null || true
+    - /bin/rm -rf $DEPLOYPATH/.git/ 2>/dev/null || true
+    - /bin/rm -rf $DEPLOYPATH/src/ 2>/dev/null || true
+    - /bin/rm -rf $DEPLOYPATH/config/ 2>/dev/null || true
+    
+    # Log déploiement
+    - echo "WebBoost Martinique deployed successfully on 02switch at $(date)" >> $DEPLOYPATH/deployment.log
