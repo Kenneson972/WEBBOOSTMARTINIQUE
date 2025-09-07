@@ -57,7 +57,7 @@ class ChatRequest(BaseModel):
 
 class OpenAIChatRequest(BaseModel):
     message: str
-    api_key: Optional[str] = None
+    session_id: Optional[str] = None
     model: Optional[str] = "gpt-4o-mini"
 
 
