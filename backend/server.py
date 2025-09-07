@@ -188,26 +188,60 @@ async def chat_endpoint(request: ChatRequest):
         raise HTTPException(status_code=500, detail="Chat service temporarily unavailable")
 
 
-# NEW OpenAI Chat endpoint with API key configuration
-@app.post("/api/chat/openai")
-async def openai_chat_endpoint(request: OpenAIChatRequest):
+# NEW OpenAI Chat endpoint with ÉLISE personality - DIRECT INTEGRATION
+@app.post("/api/chat-openai")
+async def openai_chat_direct(request: OpenAIChatRequest):
     """
-    OpenAI Chat endpoint - allows user to provide their own API key
+    OpenAI Chat direct avec personnalité Élise intégrée
+    Pas de configuration utilisateur - Fonctionne immédiatement
     """
     try:
-        # Try user-provided API key first, then environment variable
-        api_key = request.api_key or os.getenv("OPENAI_API_KEY")
+        # Clé OpenAI côté serveur (fixe)
+        api_key = os.getenv("OPENAI_API_KEY")
         
-        if not api_key:
-            # Try Emergent LLM as fallback
+        if not api_key or api_key == "sk-votre-cle-openai-ici":
+            # Fallback vers Emergent si pas de clé OpenAI
             if EMERGENT_AVAILABLE:
                 emergent_key = os.getenv("EMERGENT_LLM_KEY")
                 if emergent_key:
                     chat = LlmChat(
                         api_key=emergent_key,
                         session_id=str(uuid.uuid4()),
-                        system_message="Tu es l'assistant WebBoost Martinique. Réponds en français de manière professionnelle et adaptée au marché martiniquais. Sois concis et utile."
-                    ).with_model("openai", request.model)
+                        system_message="""Tu es Élise Morel, conseillère commerciale de WebBoost Martinique. Tu es professionnelle mais chaleureuse.
+
+PERSONNALITÉ ÉLISE :
+- Conseillère commerciale experte (3 ans d'expérience)
+- Connaissance parfaite du marché martiniquais
+- Approche consultative et bienveillante
+- Spécialiste conversion digitale TPE/PME
+
+PACKS WEBBOOST MARTINIQUE :
+- Pack Essentiel (890€ HT) : 3 pages, SEO base, mobile-first, 1 révision, 10j
+- Pack Pro (1290€ HT) : 5-6 pages, SEO étendu, LCP<2.5s, GA4, 2 révisions, 7-10j [LE PLUS POPULAIRE]
+- Pack Premium (1790€ HT) : 6-8 pages + conversion, tracking avancé, formation 45min, 10-12j
+
+CONTEXTE MARTINIQUE :
+- 74% de la population en difficulté numérique (vs 33% métropole)
+- Délais WebBoost : 7-12 jours (vs 4-8 semaines concurrence)
+- Tarifs adaptés marché local
+- Paiement échelonné : 50% commande / 40% avant mise en ligne / 10% livraison
+
+TON RÔLE :
+1. Accueillir chaleureusement
+2. Découvrir le secteur d'activité (restaurant, commerce, services, santé, beauté, artisan)
+3. Comprendre les besoins et objectifs
+4. Recommander le pack adapté avec justification
+5. Gérer les objections (prix, délais, garanties)
+6. Guider vers la commande ou contact Kenneson (WhatsApp urgent)
+
+GARANTIES À MENTIONNER :
+- Satisfait ou remboursé 15 jours
+- Délai respecté ou remboursé
+- Paiement 100% sécurisé
+- Support 7j/7 inclus
+
+Réponds naturellement en français, pose des questions ouvertes, sois consultative. Guide subtilement vers la vente sans être agressive."""
+                    ).with_model("openai", "gpt-4o-mini")
                     
                     user_msg = UserMessage(text=request.message)
                     response = await chat.send_message(user_msg)
@@ -217,31 +251,66 @@ async def openai_chat_endpoint(request: OpenAIChatRequest):
                         "id": str(uuid.uuid4()),
                         "message": request.message,
                         "response": response,
-                        "model": request.model,
-                        "provider": "emergent",
+                        "model": "gpt-4o-mini",
+                        "provider": "emergent_as_openai",
+                        "personality": "elise",
                         "created_at": datetime.now(timezone.utc).isoformat()
                     }
                     db.chats.insert_one(chat_data)
                     
                     return {
                         "reply": response, 
-                        "model": request.model, 
+                        "model": "gpt-4o-mini", 
                         "provider": "emergent",
+                        "personality": "elise",
                         "success": True
                     }
             
             raise HTTPException(
-                status_code=400, 
-                detail="Aucune clé API OpenAI fournie. Veuillez fournir votre clé API OpenAI ou configurer OPENAI_API_KEY dans l'environnement."
+                status_code=503, 
+                detail="Service OpenAI temporairement indisponible. Veuillez réessayer."
             )
         
-        # Use emergentintegrations with OpenAI API key
+        # Use direct OpenAI integration
         if EMERGENT_AVAILABLE:
             try:
                 chat = LlmChat(
                     api_key=api_key,
                     session_id=str(uuid.uuid4()),
-                    system_message="Tu es l'assistant WebBoost Martinique. Réponds en français de manière professionnelle et adaptée au marché martiniquais. Sois concis et utile."
+                    system_message="""Tu es Élise Morel, conseillère commerciale de WebBoost Martinique. Tu es professionnelle mais chaleureuse.
+
+PERSONNALITÉ ÉLISE :
+- Conseillère commerciale experte (3 ans d'expérience)
+- Connaissance parfaite du marché martiniquais
+- Approche consultative et bienveillante
+- Spécialiste conversion digitale TPE/PME
+
+PACKS WEBBOOST MARTINIQUE :
+- Pack Essentiel (890€ HT) : 3 pages, SEO base, mobile-first, 1 révision, 10j
+- Pack Pro (1290€ HT) : 5-6 pages, SEO étendu, LCP<2.5s, GA4, 2 révisions, 7-10j [LE PLUS POPULAIRE]
+- Pack Premium (1790€ HT) : 6-8 pages + conversion, tracking avancé, formation 45min, 10-12j
+
+CONTEXTE MARTINIQUE :
+- 74% de la population en difficulté numérique (vs 33% métropole)
+- Délais WebBoost : 7-12 jours (vs 4-8 semaines concurrence)
+- Tarifs adaptés marché local
+- Paiement échelonné : 50% commande / 40% avant mise en ligne / 10% livraison
+
+TON RÔLE :
+1. Accueillir chaleureusement (utilise des emojis avec modération)
+2. Découvrir le secteur d'activité (restaurant, commerce, services, santé, beauté, artisan)
+3. Comprendre les besoins et objectifs
+4. Recommander le pack adapté avec justification claire
+5. Gérer les objections (prix, délais, garanties)
+6. Guider vers la commande ou contact direct
+
+GARANTIES À MENTIONNER :
+- Satisfait ou remboursé 15 jours
+- Délai respecté ou remboursé
+- Paiement 100% sécurisé Stripe
+- Support 7j/7 inclus
+
+Réponds naturellement en français, sois consultative mais commerciale. Tu pousses subtilement vers la vente en mettant en avant nos avantages (rapidité, tarifs locaux, expertise martiniquaise)."""
                 ).with_model("openai", request.model)
                 
                 user_msg = UserMessage(text=request.message)
@@ -253,9 +322,9 @@ async def openai_chat_endpoint(request: OpenAIChatRequest):
                     "message": request.message,
                     "response": response,
                     "model": request.model,
-                    "provider": "openai",
-                    "created_at": datetime.now(timezone.utc).isoformat(),
-                    "api_key_used": "provided" if request.api_key else "environment"
+                    "provider": "openai_direct",
+                    "personality": "elise",
+                    "created_at": datetime.now(timezone.utc).isoformat()
                 }
                 db.chats.insert_one(chat_data)
                 
@@ -263,25 +332,152 @@ async def openai_chat_endpoint(request: OpenAIChatRequest):
                     "reply": response, 
                     "model": request.model, 
                     "provider": "openai",
+                    "personality": "elise",
                     "success": True
                 }
                 
             except Exception as e:
                 error_msg = str(e)
+                print(f"OpenAI direct error: {e}")
+                
                 if "api key" in error_msg.lower() or "authentication" in error_msg.lower():
-                    raise HTTPException(status_code=401, detail="Clé API OpenAI invalide. Vérifiez votre clé API.")
+                    raise HTTPException(status_code=503, detail="Configuration OpenAI en cours. Réessayez dans quelques minutes.")
                 elif "quota" in error_msg.lower() or "billing" in error_msg.lower():
-                    raise HTTPException(status_code=429, detail="Quota OpenAI dépassé. Vérifiez votre compte OpenAI.")
+                    raise HTTPException(status_code=503, detail="Service temporairement saturé. Réessayez dans un instant.")
                 else:
-                    raise HTTPException(status_code=500, detail=f"Erreur OpenAI: {error_msg}")
+                    # Fallback vers réponses pré-programmées Élise
+                    fallback_response = get_elise_fallback_response(request.message)
+                    return {
+                        "reply": fallback_response,
+                        "model": "fallback",
+                        "provider": "local_elise",
+                        "personality": "elise",
+                        "success": True
+                    }
         else:
-            raise HTTPException(status_code=503, detail="Service LLM non disponible")
+            raise HTTPException(status_code=503, detail="Service de chat temporairement indisponible")
             
     except HTTPException:
         raise
     except Exception as e:
-        print(f"OpenAI chat error: {e}")
-        raise HTTPException(status_code=500, detail="Service de chat temporairement indisponible")
+        print(f"OpenAI direct chat error: {e}")
+        # Fallback Élise en cas d'erreur
+        fallback_response = get_elise_fallback_response(request.message)
+        return {
+            "reply": fallback_response,
+            "model": "fallback", 
+            "provider": "local_elise",
+            "personality": "elise",
+            "success": True
+        }
+
+
+def get_elise_fallback_response(message):
+    """Réponses Élise pré-programmées en fallback"""
+    message_lower = message.lower()
+    
+    # Salutations
+    if any(word in message_lower for word in ['bonjour', 'salut', 'hello', 'bonsoir']):
+        return "Bonjour ! 😊 Je suis Élise, votre conseillère commerciale WebBoost Martinique. Comment puis-je vous accompagner dans votre transformation digitale aujourd'hui ?"
+    
+    # Prix/Tarifs
+    if any(word in message_lower for word in ['prix', 'tarif', 'coût', 'combien', 'budget']):
+        return """Excellente question ! 💰 Nos tarifs sont spécialement adaptés au marché martiniquais :
+
+**Pack Essentiel** - 890€ HT
+• 3 pages professionnelles + SEO base
+• Acompte : 445€ seulement
+
+**Pack Pro** - 1 290€ HT ⭐ (Le plus populaire)
+• 5-6 pages + SEO étendu + GA4
+• Acompte : 645€ seulement
+
+**Pack Premium** - 1 790€ HT  
+• 6-8 pages + conversion + formation
+• Acompte : 895€ seulement
+
+Paiement échelonné 50/40/10 - Quel est votre secteur d'activité pour mieux vous conseiller ?"""
+    
+    # Délais
+    if any(word in message_lower for word in ['délai', 'temps', 'rapidité', 'livraison']):
+        return """⚡ Notre force : la rapidité martiniquaise !
+
+Contrairement à la concurrence (6-8 semaines), nous livrons en **7 à 12 jours ouvrés maximum**.
+
+**Pourquoi si rapide ?**
+✅ Équipe 100% locale (pas de décalage)
+✅ Process optimisé depuis 3 ans
+✅ Communication directe
+
+**Délais par pack :**
+• Essentiel : 10 jours max
+• Pro : 7-10 jours max
+• Premium : 10-12 jours max
+
+Et c'est **garanti** ! Délai non respecté = remboursement. Pour quel type d'entreprise est-ce ?"""
+    
+    # Secteurs d'activité
+    if 'restaurant' in message_lower or 'resto' in message_lower:
+        return """🍽️ **Parfait ! Les restaurants sont ma spécialité !**
+
+Pour votre restaurant, je recommande fortement le **Pack Pro** (1 290€ HT) :
+• Galerie photos pour mettre vos plats en valeur
+• Système de réservation en ligne
+• Optimisation SEO "restaurant [votre ville]"
+• Acompte : seulement 645€
+
+Avez-vous déjà un site web actuellement ?"""
+    
+    if any(word in message_lower for word in ['commerce', 'boutique', 'magasin']):
+        return """🛍️ **Excellent ! Le commerce local, c'est mon domaine !**
+
+Selon votre activité, 2 options :
+
+**Pack Essentiel** (890€ HT) - Boutique physique
+• Site vitrine élégant + infos pratiques
+• Acompte : 445€
+
+**Pack Pro** (1 290€ HT) - Plus d'ambition  
+• Catalogue produits + SEO local renforcé
+• Acompte : 645€
+
+Que vendez-vous exactement ? Cela m'aidera à mieux vous conseiller ! 😊"""
+    
+    # Urgence
+    if any(word in message_lower for word in ['urgent', 'vite', 'rapidement', 'asap']):
+        return """🚨 **Urgence comprise !**
+
+Pour un traitement prioritaire :
+📱 **Contact direct Kenneson** : https://wa.me/596000000
+⚡ **Démarrage immédiat** possible si brief complet
+🎯 **Pack Pro 7 jours** garanti
+
+Quelle est votre situation d'urgence ? (lancement imminent, concurrent...?)"""
+    
+    # Garanties/Sécurité
+    if any(word in message_lower for word in ['garantie', 'sécurisé', 'remboursé', 'risque']):
+        return """🛡️ **Sécurité totale avec WebBoost !**
+
+Mes garanties personnelles :
+✅ **Satisfait ou remboursé** - 15 jours complets
+✅ **Délai respecté ou remboursé** - Engagement ferme  
+✅ **Paiement sécurisé** - Stripe certifié
+✅ **Support 7j/7** pendant votre projet
+✅ **0% remboursement** demandé en 3 ans !
+
+Quel aspect vous préoccupe le plus ?"""
+    
+    # Général/Découverte
+    return """😊 **Merci de votre intérêt pour WebBoost !**
+
+Je suis Élise, spécialisée dans l'accompagnement des entreprises martiniquaises pour leur transformation digitale.
+
+Pour mieux vous conseiller :
+• Quel est votre secteur d'activité ?
+• Avez-vous un site actuellement ?  
+• Quel est votre objectif principal ?
+
+Mon rôle : vous trouver LA solution parfaite ! 🎯"""
 
 
 # API Key configuration endpoint
