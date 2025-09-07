@@ -1,0 +1,46 @@
+# WebBoost Martinique - Robots.txt optimisé
+
+User-agent: *
+Allow: /
+
+# Pages autorisées
+Allow: /index.html
+Allow: /assets/
+Allow: /mentions-legales.html
+Allow: /cgv.html
+Allow: /contact.html
+
+# API non indexable
+Disallow: /api/
+Disallow: /.env*
+Disallow: /*.log
+Disallow: /cache/
+Disallow: /tmp/
+
+# Optimisation crawl
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://weboostmartinique.com/sitemap.xml
+
+# Robots spécifiques
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: facebookexternalhit
+Allow: /
+
+# Bloquer robots indésirables
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /

@@ -1,0 +1,104 @@
+# WebBoost Martinique - Fichiers à ignorer
+# Version 02switch HTML/CSS/JS
+
+# Variables environnement (CRITIQUE)
+.env
+.env.local
+.env.production
+.env.staging
+
+# Clés API et secrets
+*.key
+*.pem
+api-keys.txt
+secrets.json
+
+# Cache et logs
+*.log
+logs/
+cache/
+temp/
+tmp/
+
+# Base de données locales
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE et éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.sublime-*
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Développement
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Build et dist
+build/
+dist/
+coverage/
+
+# Tests
+test-results/
+playwright-report/
+
+# Archives et backups
+*.zip
+*.tar.gz
+*.rar
+backup/
+*.bak
+
+# PHP (si applicable)
+vendor/
+composer.lock
+
+# Déploiement
+deploy/
+.cpanel/
+
+# Analytics et tracking
+.vercel/
+.netlify/
+
+# Documentation temporaire
+docs/temp/
+
+# Fichiers de configuration locaux
+config.local.*
+settings.local.*
+
+# Images temporaires ou de développement
+assets/images/temp/
+assets/images/dev/
+*.tmp.jpg
+*.tmp.png
+
+# Certificats SSL (si stockés localement)
+*.crt
+*.csr
+
+# Maintenance
+maintenance.html
+coming-soon.html
+
+# Fichiers de sauvegarde automatique
+auto-save-*
+*-backup.*
