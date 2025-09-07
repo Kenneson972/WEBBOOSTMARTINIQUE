@@ -1080,7 +1080,7 @@ export default function App() {
       </Routes>
       
       <Footer />
-      <EliseChatbot />
+      <EliseOpenAI />
       <CookieBanner />
       
       {/* Tunnel de commande */}
