@@ -16,11 +16,14 @@ class WebBoostAPITester:
             try:
                 with open('/app/frontend/.env', 'r') as f:
                     for line in f:
-                        if line.startswith('REACT_APP_BACKEND_URL='):
+                        if line.startswith('VITE_BACKEND_URL='):
                             backend_url = line.split('=', 1)[1].strip()
-                            # Add /api to the backend URL and /WEBBOOSTMARTINIQUE/ base path
-                            base_url = f"{backend_url}/WEBBOOSTMARTINIQUE/api"
+                            base_url = backend_url
                             break
+                        elif line.startswith('REACT_APP_BACKEND_URL='):
+                            backend_url = line.split('=', 1)[1].strip()
+                            # Add /api to the backend URL
+                            base_url = f"{backend_url}/api"
                 if base_url is None:
                     base_url = "http://localhost:8001/api"  # fallback
             except Exception as e:
