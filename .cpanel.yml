@@ -1,34 +1,42 @@
 ---
+# WebBoost Martinique - Déploiement automatique GitHub → 02switch
+# Architecture : HTML/CSS/JS + API PHP
+
 deployment:
   tasks:
     # Préparation environnement
-    - export DEPLOYPATH=/home/weboostmartinique.com/public_html/
-    - /bin/rm -rf $DEPLOYPATH/* 2>/dev/null || true
+    - export DEPLOYPATH=/home/weboostmartinique/public_html/
+    - echo "🚀 Début déploiement WebBoost Martinique..."
     
-    # Déploiement fichiers principaux (racine)
-    - /bin/cp src/index.html $DEPLOYPATH/
-    - /bin/cp src/mentions-legales.html $DEPLOYPATH/ 2>/dev/null || true
-    - /bin/cp src/cgv.html $DEPLOYPATH/ 2>/dev/null || true
+    # Nettoyage dossier cible (sécurisé)
+    - /bin/find $DEPLOYPATH -maxdepth 1 -name "*.html" -delete 2>/dev/null || true
+    - /bin/find $DEPLOYPATH -maxdepth 1 -name "*.css" -delete 2>/dev/null || true
+    - /bin/find $DEPLOYPATH -maxdepth 1 -name "*.js" -delete 2>/dev/null || true
+    - /bin/rm -rf $DEPLOYPATH/assets/ 2>/dev/null || true
+    - /bin/rm -rf $DEPLOYPATH/api/ 2>/dev/null || true
+    
+    # Déploiement fichiers principaux
+    - echo "📄 Copie fichiers HTML..."
+    - /bin/cp *.html $DEPLOYPATH/
+    - /bin/cp .htaccess $DEPLOYPATH/
+    - /bin/cp robots.txt $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp sitemap.xml $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp favicon.ico $DEPLOYPATH/ 2>/dev/null || true
     
     # Déploiement assets (structure préservée)
-    - /bin/cp -R src/assets/ $DEPLOYPATH/
+    - echo "🎨 Copie assets (CSS, JS, images)..."
+    - /bin/cp -R assets/ $DEPLOYPATH/
     
     # Déploiement API backend
-    - /bin/cp -R src/api/ $DEPLOYPATH/
-    - /bin/mv $DEPLOYPATH/api/app.py $DEPLOYPATH/app.py
+    - echo "⚙️ Copie API backend..."
+    - /bin/cp -R api/ $DEPLOYPATH/
     
-    # Configuration serveur
-    - /bin/cp config/.htaccess $DEPLOYPATH/
-    - /bin/cp config/robots.txt $DEPLOYPATH/ 2>/dev/null || true
-    
-    # Image Élise
-    - /bin/cp assets/images/elise-avatar.jpg $DEPLOYPATH/assets/images/ 2>/dev/null || true
-    
-    # Variables environnement (si présent)
-    - /bin/cp .env $DEPLOYPATH/ 2>/dev/null || true
+    # Variables environnement (sécurisé)
+    - /bin/cp .env $DEPLOYPATH/ 2>/dev/null || echo "⚠️ Fichier .env non trouvé - normal en développement"
     
     # Permissions fichiers (sécurité 02switch)
-    - find $DEPLOYPATH -name "*.py" -exec chmod 755 {} \;
+    - echo "🔐 Configuration permissions..."
+    - find $DEPLOYPATH -name "*.php" -exec chmod 755 {} \;
     - find $DEPLOYPATH -name "*.html" -exec chmod 644 {} \;
     - find $DEPLOYPATH -name "*.css" -exec chmod 644 {} \;
     - find $DEPLOYPATH -name "*.js" -exec chmod 644 {} \;
@@ -43,11 +51,31 @@ deployment:
     - chmod 644 $DEPLOYPATH/.htaccess 2>/dev/null || true
     - chmod 600 $DEPLOYPATH/.env 2>/dev/null || true
     
-    # Nettoyage fichiers inutiles
-    - /bin/rm -rf $DEPLOYPATH/node_modules/ 2>/dev/null || true
+    # Nettoyage fichiers développement
+    - echo "🧹 Nettoyage fichiers développement..."
     - /bin/rm -rf $DEPLOYPATH/.git/ 2>/dev/null || true
-    - /bin/rm -rf $DEPLOYPATH/src/ 2>/dev/null || true
-    - /bin/rm -rf $DEPLOYPATH/config/ 2>/dev/null || true
+    - /bin/rm -rf $DEPLOYPATH/node_modules/ 2>/dev/null || true
+    - /bin/rm -rf $DEPLOYPATH/.vscode/ 2>/dev/null || true
+    - /bin/rm -rf $DEPLOYPATH/.idea/ 2>/dev/null || true
+    - /bin/rm -f $DEPLOYPATH/package*.json 2>/dev/null || true
+    - /bin/rm -f $DEPLOYPATH/yarn.lock 2>/dev/null || true
+    - /bin/rm -f $DEPLOYPATH/*.log 2>/dev/null || true
+    - /bin/rm -f $DEPLOYPATH/.cpanel.yml 2>/dev/null || true
     
-    # Log déploiement
-    - echo "WebBoost Martinique deployed successfully on 02switch at $(date)" >> $DEPLOYPATH/deployment.log
+    # Vérification structure déployée
+    - echo "🔍 Vérification déploiement..."
+    - ls -la $DEPLOYPATH/
+    - test -f $DEPLOYPATH/index.html && echo "✅ index.html déployé"
+    - test -d $DEPLOYPATH/assets/ && echo "✅ assets déployés"
+    - test -d $DEPLOYPATH/api/ && echo "✅ API déployée"
+    - test -f $DEPLOYPATH/.htaccess && echo "✅ .htaccess configuré"
+    
+    # Test basique de structure
+    - test -f $DEPLOYPATH/assets/css/main.css && echo "✅ CSS principal présent"
+    - test -f $DEPLOYPATH/assets/js/chatbot.js && echo "✅ Chatbot Élise présent"
+    - test -f $DEPLOYPATH/api/chat.php && echo "✅ API chat présente"
+    
+    # Log final
+    - echo "🎉 WebBoost Martinique déployé avec succès sur 02switch à $(date)"
+    - echo "📝 Déploiement terminé" >> $DEPLOYPATH/deployment.log
+    - echo "🌐 Site disponible : https://weboostmartinique.com"
