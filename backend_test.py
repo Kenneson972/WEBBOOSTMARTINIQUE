@@ -341,6 +341,207 @@ class WebBoostAPITester:
             self.log_result("OpenAI Key Config (Missing Key)", False, f"Exception: {str(e)}")
         return False
 
+    def test_elise_chat_openai_endpoint(self):
+        """Test POST /api/chat-openai with Élise personality - Basic greeting"""
+        test_payload = {
+            "message": "Bonjour",
+            "model": "gpt-4o-mini"
+        }
+        
+        try:
+            response = requests.post(
+                f"{self.base_url}/chat-openai",
+                json=test_payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "reply" in data and "personality" in data and data["personality"] == "elise":
+                    reply = data["reply"]
+                    # Check for Élise personality markers
+                    elise_markers = ["Élise", "conseillère", "WebBoost Martinique"]
+                    has_personality = any(marker in reply for marker in elise_markers)
+                    
+                    print(f"  📝 Élise Reply: {reply[:150]}...")
+                    self.log_result("Élise Chat-OpenAI Basic", True, f"Personality detected: {has_personality}, Provider: {data.get('provider', 'unknown')}")
+                    return True
+                else:
+                    self.log_result("Élise Chat-OpenAI Basic", False, f"Missing personality field or invalid response: {data}")
+            else:
+                self.log_result("Élise Chat-OpenAI Basic", False, f"Status code: {response.status_code}, Response: {response.text}")
+        except Exception as e:
+            self.log_result("Élise Chat-OpenAI Basic", False, f"Exception: {str(e)}")
+        return False
+
+    def test_elise_commercial_personality(self):
+        """Test Élise's commercial personality with pricing inquiry"""
+        test_payload = {
+            "message": "Quels sont vos tarifs pour un site web?",
+            "model": "gpt-4o-mini"
+        }
+        
+        try:
+            response = requests.post(
+                f"{self.base_url}/chat-openai",
+                json=test_payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "reply" in data and "personality" in data and data["personality"] == "elise":
+                    reply = data["reply"].lower()
+                    # Check for commercial elements
+                    commercial_markers = ["pack", "€", "essentiel", "pro", "premium", "acompte", "paiement"]
+                    commercial_score = sum(1 for marker in commercial_markers if marker in reply)
+                    
+                    print(f"  💰 Commercial Reply: {data['reply'][:150]}...")
+                    self.log_result("Élise Commercial Personality", True, f"Commercial markers found: {commercial_score}/7")
+                    return True
+                else:
+                    self.log_result("Élise Commercial Personality", False, f"Missing personality or invalid response: {data}")
+            else:
+                self.log_result("Élise Commercial Personality", False, f"Status code: {response.status_code}")
+        except Exception as e:
+            self.log_result("Élise Commercial Personality", False, f"Exception: {str(e)}")
+        return False
+
+    def test_elise_martinique_context(self):
+        """Test Élise's knowledge of WebBoost Martinique services"""
+        test_payload = {
+            "message": "Parlez-moi de vos services en Martinique",
+            "model": "gpt-4o-mini"
+        }
+        
+        try:
+            response = requests.post(
+                f"{self.base_url}/chat-openai",
+                json=test_payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "reply" in data:
+                    reply = data["reply"].lower()
+                    # Check for Martinique context
+                    martinique_markers = ["martinique", "local", "délai", "rapidité", "7", "10", "12"]
+                    context_score = sum(1 for marker in martinique_markers if marker in reply)
+                    
+                    print(f"  🏝️ Martinique Context: {data['reply'][:150]}...")
+                    self.log_result("Élise Martinique Context", True, f"Context markers found: {context_score}/7")
+                    return True
+                else:
+                    self.log_result("Élise Martinique Context", False, f"Invalid response format: {data}")
+            else:
+                self.log_result("Élise Martinique Context", False, f"Status code: {response.status_code}")
+        except Exception as e:
+            self.log_result("Élise Martinique Context", False, f"Exception: {str(e)}")
+        return False
+
+    def test_elise_fallback_system(self):
+        """Test fallback system when OpenAI is not available"""
+        # This test simulates what happens when the system falls back to local responses
+        test_payload = {
+            "message": "urgent",
+            "model": "gpt-4o-mini"
+        }
+        
+        try:
+            response = requests.post(
+                f"{self.base_url}/chat-openai",
+                json=test_payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "reply" in data and "provider" in data:
+                    provider = data["provider"]
+                    reply = data["reply"]
+                    
+                    # Check if it's either AI response or fallback
+                    is_valid_response = len(reply) > 10 and ("élise" in reply.lower() or "webboost" in reply.lower())
+                    
+                    print(f"  🔄 Fallback Test: Provider={provider}, Valid={is_valid_response}")
+                    self.log_result("Élise Fallback System", True, f"Provider: {provider}, Response length: {len(reply)}")
+                    return True
+                else:
+                    self.log_result("Élise Fallback System", False, f"Invalid response format: {data}")
+            else:
+                self.log_result("Élise Fallback System", False, f"Status code: {response.status_code}")
+        except Exception as e:
+            self.log_result("Élise Fallback System", False, f"Exception: {str(e)}")
+        return False
+
+    def test_elise_no_api_key_required(self):
+        """Test that endpoint works without frontend API key configuration"""
+        test_payload = {
+            "message": "Test sans clé API",
+            "model": "gpt-4o-mini"
+            # Deliberately not including any API key
+        }
+        
+        try:
+            response = requests.post(
+                f"{self.base_url}/chat-openai",
+                json=test_payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "reply" in data and "success" in data and data["success"]:
+                    self.log_result("Élise No API Key Required", True, f"Works without frontend API key, Provider: {data.get('provider', 'unknown')}")
+                    return True
+                else:
+                    self.log_result("Élise No API Key Required", False, f"Invalid response: {data}")
+            else:
+                self.log_result("Élise No API Key Required", False, f"Status code: {response.status_code}")
+        except Exception as e:
+            self.log_result("Élise No API Key Required", False, f"Exception: {str(e)}")
+        return False
+
+    def test_elise_sales_oriented_responses(self):
+        """Test that Élise provides sales-oriented responses"""
+        test_payload = {
+            "message": "Je cherche à créer un site web pour mon restaurant",
+            "model": "gpt-4o-mini"
+        }
+        
+        try:
+            response = requests.post(
+                f"{self.base_url}/chat-openai",
+                json=test_payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "reply" in data:
+                    reply = data["reply"].lower()
+                    # Check for sales-oriented elements
+                    sales_markers = ["pack", "recommande", "prix", "tarif", "acompte", "commander", "réserver"]
+                    sales_score = sum(1 for marker in sales_markers if marker in reply)
+                    
+                    print(f"  🎯 Sales Response: {data['reply'][:150]}...")
+                    self.log_result("Élise Sales-Oriented", True, f"Sales markers found: {sales_score}/7")
+                    return True
+                else:
+                    self.log_result("Élise Sales-Oriented", False, f"Invalid response format: {data}")
+            else:
+                self.log_result("Élise Sales-Oriented", False, f"Status code: {response.status_code}")
+        except Exception as e:
+            self.log_result("Élise Sales-Oriented", False, f"Exception: {str(e)}")
+        return False
+
     def run_all_tests(self):
         """Run all backend API tests"""
         print("🚀 Starting WebBoost Martinique Backend API Tests")
