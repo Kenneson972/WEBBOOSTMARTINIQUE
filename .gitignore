@@ -101,4 +101,7 @@ coming-soon.html
 
 # Fichiers de sauvegarde automatique
 auto-save-*
-*-backup.*
+*-backup.*-e 
+# Environment files
+*.env
+*.env.*
