@@ -1,0 +1,17 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/weboostmartinique.com/public_html/
+    - /bin/cp -R dist/* $DEPLOYPATH
+    - /bin/cp dist/.htaccess $DEPLOYPATH 2>/dev/null || true
+    - /bin/cp dist/.nojekyll $DEPLOYPATH 2>/dev/null || true
+    - find $DEPLOYPATH -name "*.html" -exec chmod 644 {} \;
+    - find $DEPLOYPATH -name "*.css" -exec chmod 644 {} \;
+    - find $DEPLOYPATH -name "*.js" -exec chmod 644 {} \;
+    - find $DEPLOYPATH -name "*.jpg" -exec chmod 644 {} \;
+    - find $DEPLOYPATH -name "*.png" -exec chmod 644 {} \;
+    - find $DEPLOYPATH -name "*.ico" -exec chmod 644 {} \;
+    - find $DEPLOYPATH -name "*.svg" -exec chmod 644 {} \;
+    - find $DEPLOYPATH -name "*.xml" -exec chmod 644 {} \;
+    - find $DEPLOYPATH -name "*.txt" -exec chmod 644 {} \;
+    - echo "WebBoost Martinique deployed successfully at $(date)"
