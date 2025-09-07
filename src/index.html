@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebBoost Martinique - Sites Web Professionnels</title>
+    <meta name="description" content="Sites web qui transforment vos visiteurs en clients en 7-12 jours. Tarifs locaux, délais courts, performance garantie.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/chatbot.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    
+    <!-- Schema.org LocalBusiness -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "WebBoost Martinique",
+      "image": "assets/images/logo/webboost-logo.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "À renseigner",
+        "addressLocality": "Fort-de-France",
+        "postalCode": "97200",
+        "addressRegion": "Martinique",
+        "addressCountry": "FR"
+      },
+      "telephone": "À renseigner",
+      "email": "À renseigner",
+      "url": "https://weboostmartinique.com"
+    }
+    </script>
+
+    <!-- Analytics placeholders -->
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag(){ dataLayer.push(arguments) }
+      window.addEventListener('contact_form_submit',() => gtag('event','contact_form_submit'))
+      window.addEventListener('click_whatsapp',() => gtag('event','click_whatsapp'))
+      window.addEventListener('pack_selection_view',() => gtag('event','pack_selection_view'))
+      window.addEventListener('order_started',() => gtag('event','order_started'))
+    </script>
+</head>
+
+<body class="gradient-bg">
+    
+    <!-- Navigation Premium -->
+    <nav class="nav-premium">
+        <div class="nav-container">
+            <a href="#" class="logo-premium">WebBoost Martinique</a>
+            
+            <!-- Desktop Navigation -->
+            <div class="nav-links">
+                <a href="#packs" class="nav-link">Packs</a>
+                <a href="#options" class="nav-link">Options</a>
+                <a href="#modalites" class="nav-link">Modalités</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <button class="btn-premium btn-nav" onclick="startOrder()">
+                    <i class="fas fa-shopping-cart"></i>
+                    COMMANDER
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="mobile-menu" id="mobile-menu">
+                <a href="#packs" onclick="closeMobileMenu()">Packs</a>
+                <a href="#options" onclick="closeMobileMenu()">Options</a>
+                <a href="#modalites" onclick="closeMobileMenu()">Modalités</a>
+                <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+                <button class="btn-premium w-full mt-4" onclick="startOrder(); closeMobileMenu()">
+                    <i class="fas fa-shopping-cart"></i>
+                    COMMANDER MAINTENANT
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-pattern">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title animate-fade-in-up">
+                    Sites web qui <span class="gold-gradient">transforment</span><br>
+                    vos visiteurs en clients<br>
+                    <span class="text-yellow">en 7-12 jours</span>
+                </h1>
+                
+                <p class="hero-subtitle animate-fade-in-up animate-delay-200">
+                    Délais courts, tarifs locaux, SEO local expert et accompagnement continu.<br>
+                    <span class="text-yellow font-bold">Mobile-first et performance certifiée.</span>
+                </p>
+                
+                <div class="hero-cta animate-fade-in-up animate-delay-400">
+                    <button class="btn-premium btn-large" onclick="startOrder()">
+                        <i class="fas fa-shopping-cart"></i>
+                        COMMANDER MAINTENANT
+                    </button>
+                    <button class="btn-outline-premium btn-large" onclick="startOrder('pro')">
+                        <i class="fas fa-rocket"></i>
+                        RÉSERVER + PAYER 50%
+                    </button>
+                </div>
+                
+                <!-- WhatsApp discret -->
+                <div class="hero-whatsapp">
+                    <a href="https://wa.me/596000000?text=Bonjour Kenneson, j'ai une question urgente concernant vos services WebBoost. Pouvez-vous m'appeler ?" 
+                       class="whatsapp-link" 
+                       onclick="gtag('event', 'click_whatsapp')">
+                        <i class="fab fa-whatsapp"></i>
+                        Urgence ? Question rapide sur WhatsApp
+                    </a>
+                </div>
+                
+                <!-- Trust Badges -->
+                <div class="trust-badges animate-fade-in-up animate-delay-600">
+                    <div class="badge-trust">
+                        <i class="fas fa-clock"></i>
+                        Délais 7-12 jours
+                    </div>
+                    <div class="badge-trust">
+                        <i class="fas fa-mobile-alt"></i>
+                        LCP &lt; 2,5s mobile
+                    </div>
+                    <div class="badge-trust">
+                        <i class="fas fa-search"></i>
+                        Schema + GBP
+                    </div>
+                    <div class="badge-trust">
+                        <i class="fas fa-edit"></i>
+                        Révisions incluses
+                    </div>
+                    <div class="badge-trust">
+                        <i class="fas fa-shield-alt"></i>
+                        Satisfait ou remboursé
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Divider -->
+    <div class="section-divider"></div>
+
+    <!-- Packs Section -->
+    <section id="packs" class="packs-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="gold-gradient">Commandez votre pack</span>
+                </h2>
+                <p class="section-subtitle">
+                    Paiement sécurisé • Livraison garantie • Satisfaction ou remboursé
+                </p>
+            </div>
+            
+            <div class="packs-grid">
+                <!-- Pack Essentiel -->
+                <div class="pack-card" data-pack="essentiel">
+                    <div class="pack-header">
+                        <div class="price-badge">
+                            €890<span class="price-unit">HT</span>
+                        </div>
+                        <h3 class="pack-title">Pack Essentiel</h3>
+                        <p class="pack-subtitle">Essentiel Local</p>
+                        <div class="deposit-info">
+                            <i class="fas fa-arrow-down"></i>
+                            Acompte : €445 seulement
+                        </div>
+                    </div>
+                    
+                    <ul class="pack-features">
+                        <li><i class="fas fa-check-circle"></i> 3 pages professionnelles</li>
+                        <li><i class="fas fa-check-circle"></i> SEO local de base</li>
+                        <li><i class="fas fa-check-circle"></i> Tracking appels/clics</li>
+                        <li><i class="fas fa-check-circle"></i> Design mobile-first</li>
+                        <li><i class="fas fa-check-circle"></i> 1 révision incluse</li>
+                    </ul>
+                    
+                    <button class="btn-premium pack-btn" onclick="orderPack('essentiel')">
+                        <i class="fas fa-shopping-cart"></i>
+                        COMMANDER MAINTENANT
+                    </button>
+                </div>
+
+                <!-- Pack Pro (Populaire) -->
+                <div class="pack-card pack-popular" data-pack="pro">
+                    <div class="popular-badge">POPULAIRE</div>
+                    
+                    <div class="pack-header">
+                        <div class="price-badge">
+                            €1,290<span class="price-unit">HT</span>
+                        </div>
+                        <h3 class="pack-title">Pack Pro</h3>
+                        <p class="pack-subtitle">Vitrine Pro</p>
+                        <div class="deposit-info">
+                            <i class="fas fa-arrow-down"></i>
+                            Acompte : €645 seulement
+                        </div>
+                    </div>
+                    
+                    <ul class="pack-features">
+                        <li><i class="fas fa-check-circle"></i> 5-6 pages optimisées</li>
+                        <li><i class="fas fa-check-circle"></i> SEO étendu</li>
+                        <li><i class="fas fa-check-circle"></i> LCP &lt; 2,5s garanti</li>
+                        <li><i class="fas fa-check-circle"></i> GA4 & Search Console</li>
+                        <li><i class="fas fa-check-circle"></i> 2 révisions incluses</li>
+                    </ul>
+                    
+                    <button class="btn-premium pack-btn" onclick="orderPack('pro')">
+                        <i class="fas fa-rocket"></i>
+                        RÉSERVER + PAYER 50%
+                    </button>
+                </div>
+
+                <!-- Pack Premium -->
+                <div class="pack-card" data-pack="premium">
+                    <div class="pack-header">
+                        <div class="price-badge">
+                            €1,790<span class="price-unit">HT</span>
+                        </div>
+                        <h3 class="pack-title">Pack Premium</h3>
+                        <p class="pack-subtitle">Vitrine Conversion</p>
+                        <div class="deposit-info">
+                            <i class="fas fa-arrow-down"></i>
+                            Acompte : €895 seulement
+                        </div>
+                    </div>
+                    
+                    <ul class="pack-features">
+                        <li><i class="fas fa-check-circle"></i> 6-8 pages + conversion</li>
+                        <li><i class="fas fa-check-circle"></i> Page Réserver/Devis optimisée</li>
+                        <li><i class="fas fa-check-circle"></i> Tracking avancé</li>
+                        <li><i class="fas fa-check-circle"></i> Formation 45min incluse</li>
+                        <li><i class="fas fa-check-circle"></i> 2 révisions incluses</li>
+                    </ul>
+                    
+                    <button class="btn-premium pack-btn" onclick="orderPack('premium')">
+                        <i class="fas fa-crown"></i>
+                        DÉMARRER MON PROJET
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    Pourquoi choisir <span class="gold-gradient">WebBoost Martinique</span> ?
+                </h2>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Délais Express</h3>
+                    <p>Livraison en 7-12 jours ouvrés contre 4-8 semaines ailleurs</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Expertise Locale</h3>
+                    <p>Solutions adaptées au marché martiniquais et aux TPE/PME locales</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Garantie Totale</h3>
+                    <p>Satisfait ou remboursé sous 15 jours • Délai respecté ou remboursé</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Paiement Sécurisé</h3>
+                    <p>SSL • Stripe • PayPal • Paiement en 3 fois sans frais</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-container">
+            <h2 class="cta-title">
+                Prêt à <span class="gold-gradient">transformer</span> votre présence web ?
+            </h2>
+            <p class="cta-subtitle">
+                Commandez maintenant et recevez votre site en 7-12 jours
+            </p>
+            
+            <div class="cta-buttons">
+                <button class="btn-premium btn-large" onclick="startOrder()">
+                    <i class="fas fa-credit-card"></i>
+                    COMMANDER MAINTENANT
+                </button>
+                <button class="btn-outline-premium btn-large" onclick="scrollToSection('packs')">
+                    <i class="fas fa-info-circle"></i>
+                    Voir tous les détails
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-premium">
+        <div class="footer-container">
+            <p>&copy; 2025 WebBoost Martinique. Spécialiste de la transformation numérique locale.</p>
+            <div class="footer-links">
+                <a href="mentions-legales.html">Mentions légales</a>
+                <a href="cgv.html">CGV</a>
+                <a href="#" onclick="showCookieSettings()">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tunnel de Commande (Modal) -->
+    <div id="order-modal" class="order-modal">
+        <div class="order-container">
+            <div class="order-header">
+                <h2><i class="fas fa-shopping-cart"></i> Commande WebBoost</h2>
+                <button class="order-close" onclick="closeOrder()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="order-progress">
+                <div class="progress-steps">
+                    <span class="step active" data-step="1">Pack</span>
+                    <span class="step" data-step="2">Options</span>
+                    <span class="step" data-step="3">Infos</span>
+                    <span class="step" data-step="4">Planning</span>
+                    <span class="step" data-step="5">Paiement</span>
+                    <span class="step" data-step="6">Confirmé</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+            
+            <!-- Contenu des étapes -->
+            <div class="order-content" id="order-content">
+                <!-- Contenu généré dynamiquement par JS -->
+            </div>
+            
+            <!-- Footer commande -->
+            <div class="order-footer" id="order-footer">
+                <button class="btn-outline-premium" id="prev-btn" onclick="prevStep()">
+                    <i class="fas fa-arrow-left"></i>
+                    Précédent
+                </button>
+                
+                <div class="order-total" id="order-total">
+                    <div class="total-price">Total : €0</div>
+                    <div class="deposit-price">Acompte : €0</div>
+                </div>
+                
+                <button class="btn-premium" id="next-btn" onclick="nextStep()">
+                    Suivant
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Élise (Widget fixe) -->
+    <div id="chatbot-widget" class="chatbot-widget">
+        <!-- Fenêtre de chat -->
+        <div id="chat-panel" class="chat-panel">
+            <!-- Header Élise -->
+            <div class="chat-header" onclick="showEliseProfile()">
+                <div class="elise-profile">
+                    <div class="elise-avatar"></div>
+                    <div class="elise-info">
+                        <h4>Élise Morel</h4>
+                        <p>Conseillère WebBoost Martinique</p>
+                    </div>
+                </div>
+                <button class="chat-close" onclick="toggleChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Messages -->
+            <div id="chat-messages" class="chat-messages">
+                <!-- Messages générés par JS -->
+            </div>
+            
+            <!-- Input -->
+            <div class="chat-input">
+                <input type="text" id="message-input" placeholder="Tapez votre message à Élise...">
+                <button id="send-button" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- FAB Élise -->
+        <button id="chat-fab" class="chat-fab" onclick="toggleChat()">
+            <div class="notification-badge" id="chat-notification">1</div>
+            <div class="elise-fab-photo"></div>
+        </button>
+    </div>
+
+    <!-- Profil Élise (Overlay) -->
+    <div id="elise-profile-overlay" class="profile-overlay">
+        <div class="profile-card">
+            <div class="profile-header">
+                <img src="assets/images/elise-avatar.jpg" alt="Élise Morel" class="profile-photo">
+                <button class="profile-close" onclick="closeEliseProfile()">✕</button>
+            </div>
+            <div class="profile-content">
+                <h3>Élise Morel</h3>
+                <p class="profile-title">Conseillère Commerciale WebBoost Martinique</p>
+                <div class="profile-stats">
+                    <div class="stat">
+                        <strong>3 ans</strong>
+                        <span>d'expérience</span>
+                    </div>
+                    <div class="stat">
+                        <strong>95%</strong>
+                        <span>clients satisfaits</span>
+                    </div>
+                    <div class="stat">
+                        <strong>180+</strong>
+                        <span>sites livrés</span>
+                    </div>
+                </div>
+                <div class="profile-expertise">
+                    <h4>💼 Mes spécialités :</h4>
+                    <ul>
+                        <li>🎯 Conversion digitale TPE/PME</li>
+                        <li>🇲🇶 Marché martiniquais</li>
+                        <li>📱 Sites mobiles performants</li>
+                        <li>💰 Optimisation ROI web</li>
+                    </ul>
+                </div>
+                <div class="profile-quote">
+                    <em>"J'accompagne chaque entrepreneur martiniquais avec une approche personnalisée. Mon objectif : transformer votre vision en succès digital mesurable."</em>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" class="cookie-banner">
+        <div class="cookie-content">
+            <p>Nous utilisons des cookies pour mesurer l'audience de façon anonyme et améliorer votre expérience. 
+               Vous pouvez accepter tous les cookies ou les refuser.</p>
+            <div class="cookie-buttons">
+                <button class="btn-cookie-refuse" onclick="refuseCookies()">
+                    Refuser tous les cookies
+                </button>
+                <button class="btn-cookie-accept" onclick="acceptCookies()">
+                    Accepter tous les cookies
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/chatbot.js"></script>
+    <script src="assets/js/order-flow.js"></script>
+    <script src="assets/js/animations.js"></script>
+    
+</body>
+</html>
