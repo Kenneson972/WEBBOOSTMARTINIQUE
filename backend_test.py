@@ -564,6 +564,16 @@ class WebBoostAPITester:
         self.test_openai_key_config_endpoint()
         self.test_openai_key_config_missing_key()
         
+        # Test NEW Élise personality chat-openai endpoint
+        print("\n👩‍💼 Testing Élise Personality Chat-OpenAI Endpoint")
+        print("-" * 50)
+        self.test_elise_chat_openai_endpoint()
+        self.test_elise_commercial_personality()
+        self.test_elise_martinique_context()
+        self.test_elise_fallback_system()
+        self.test_elise_no_api_key_required()
+        self.test_elise_sales_oriented_responses()
+        
         # Print summary
         print("\n" + "=" * 60)
         print(f"📊 Test Results: {self.tests_passed}/{self.tests_run} passed")
