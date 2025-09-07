@@ -18,8 +18,8 @@ class WebBoostAPITester:
                     for line in f:
                         if line.startswith('REACT_APP_BACKEND_URL='):
                             backend_url = line.split('=', 1)[1].strip()
-                            # The REACT_APP_BACKEND_URL already includes /api
-                            base_url = backend_url
+                            # Add /api to the backend URL and /WEBBOOSTMARTINIQUE/ base path
+                            base_url = f"{backend_url}/WEBBOOSTMARTINIQUE/api"
                             break
                 if base_url is None:
                     base_url = "http://localhost:8001/api"  # fallback
