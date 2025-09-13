@@ -196,7 +196,8 @@ function orderPack(packKey) {
     
     // Scroll vers le tunnel si nécessaire
     setTimeout(() => {
-        document.getElementById('order-modal').scrollIntoView({ 
+        const modal = ensureOrderModal();
+        modal.scrollIntoView({ 
             behavior: 'smooth', 
             block: 'center' 
         });
