@@ -50,16 +50,17 @@ document.addEventListener('DOMContentLoaded', function() {
     setupNavigation();
     trackPageLoad();
 
-    // Délégation de clic robuste (secours si onclick inline bloqué)
+    // Délégation de clic robuste (limitée aux packs de la page, pas dans le modal)
     document.addEventListener('click', function(e){
-        const btn = e.target.closest('.pack-btn, [data-pack]');
+        if (e.target.closest('#order-modal')) return; // ignorer les clics à l'intérieur du tunnel
+        const btn = e.target.closest('.pack-btn');
         if(!btn) return;
         const pack = btn.dataset.pack || (btn.closest('.pack-card') && btn.closest('.pack-card').dataset.pack) || 'pro';
-        console.log('🖱️ Delegation: pack click detected →', pack);
+        console.log('🖱️ Delegation (main packs):', pack);
         try { orderPack(pack); } catch(err) { console.error('orderPack delegation error:', err); }
     }, { capture: true });
 
-    // Binding direct sur les boutons/cartes (renfort)
+    // Binding direct sur les boutons (renfort)
     bindPackButtons();
 });
 
