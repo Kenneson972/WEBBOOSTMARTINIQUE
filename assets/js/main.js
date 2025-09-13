@@ -62,6 +62,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Binding direct sur les boutons (renfort)
     bindPackButtons();
+
+    // Échap pour fermer le tunnel
+    window.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('order-modal');
+            if (modal && modal.classList.contains('active')) {
+                closeOrder();
+            }
+        }
+    });
 });
 
 function initWebBoost() {
@@ -191,6 +201,15 @@ function ensureOrderModal() {
         document.body.appendChild(modal);
         console.log('🧩 order-modal injected');
     }
+    // Binder la fermeture par clic overlay une seule fois
+    if (!modal.dataset.bound) {
+        modal.addEventListener('click', function(e){
+            if (e.target === modal) {
+                closeOrder();
+            }
+        });
+        modal.dataset.bound = '1';
+    }
     return modal;
 }
 
@@ -238,6 +257,7 @@ function orderPack(packKey) {
 function closeOrder() {
     const modal = ensureOrderModal();
     modal.classList.remove('active');
+    modal.style.display = 'none';
     document.body.style.overflow = 'auto';
     
     // Analytics
