@@ -1,0 +1,212 @@
+<!-- WEBOOSTMARTINIQUE - Devis en 6 étapes -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Devis – WEBOOSTMARTINIQUE</title>
+  <meta name="description" content="Devis en temps réel – Tunnel intelligent 6 étapes avec sauvegarde automatique et récapitulatif des prix." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+</head>
+<body class="page-devis">
+  <header class="site-header">
+    <div class="container flex-between py-16">
+      <a href="/index.html" class="brand">
+        <span class="logo"><span class="dot"></span></span>
+        <span class="brand-text">WEBOOSTMARTINIQUE</span>
+      </a>
+      <nav class="main-nav" id="mainNav">
+        <a href="/services.html">Services</a>
+        <a href="/realisations.html">Réalisations</a>
+        <a href="/methode.html">Méthode</a>
+        <a href="/about.html">À propos</a>
+        <a href="/contact.html">Contact</a>
+        <a class="btn btn-primary" href="/devis.html">Devis</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu">☰</button>
+    </div>
+  </header>
+
+  <main class="container py-40">
+    <div id="alertBox"></div>
+    <h1>Devis en 6 étapes</h1>
+    <p class="lead">Prix en temps réel, délai estimé et acompte affichés en continu.</p>
+
+    <div class="steps mt-16">
+      <span class="step" data-step="1">1. Pack</span>
+      <span class="step" data-step="2">2. Besoins</span>
+      <span class="step" data-step="3">3. Options</span>
+      <span class="step" data-step="4">4. Récap &amp; Délai</span>
+      <span class="step" data-step="5">5. Brief</span>
+      <span class="step" data-step="6">6. Finalisation</span>
+    </div>
+
+    <div class="grid-2 gap-24 mt-24">
+      <div class="form-area" style="display:grid;gap:20px">
+        <!-- STEP 1 -->
+        <section data-step-pane="1" class="form">
+          <h2>Étape 1 — Sélection du pack</h2>
+          <label class="card">
+            <div class="flex-between">
+              <div>
+                <strong>Essentiel</strong>
+                <div class="muted">3 pages, SEO local, tracking</div>
+              </div>
+              <input type="radio" name="pack" value="essentiel" />
+            </div>
+          </label>
+          <label class="card">
+            <div class="flex-between">
+              <div>
+                <strong>Pro</strong>
+                <div class="muted">5-6 pages, SEO étendu, LCP &lt; 2,5s</div>
+              </div>
+              <input type="radio" name="pack" value="pro" />
+            </div>
+          </label>
+          <label class="card">
+            <div class="flex-between">
+              <div>
+                <strong>Premium</strong>
+                <div class="muted">6-8 pages + conversion, tracking avancé</div>
+              </div>
+              <input type="radio" name="pack" value="premium" />
+            </div>
+          </label>
+          <div>
+            <button class="btn btn-primary" data-next>Personnaliser mon pack</button>
+          </div>
+        </section>
+
+        <!-- STEP 2 -->
+        <section data-step-pane="2" class="form">
+          <h2>Étape 2 — Personnalisation intelligente</h2>
+          <label>De combien de pages avez-vous besoin ?
+            <input id="pages" class="input" type="number" min="0" step="1" placeholder="ex: 5" />
+          </label>
+          <label>Quel type d'activité ?
+            <input id="activity" class="input" type="text" placeholder="ex: Restaurant, Service, Santé…" />
+          </label>
+          <div class="flex-between">
+            <button class="btn" data-prev>Retour</button>
+            <button class="btn btn-primary" data-next>Continuer</button>
+          </div>
+        </section>
+
+        <!-- STEP 3 -->
+        <section data-step-pane="3" class="form">
+          <h2>Étape 3 — Options à la carte</h2>
+          <div class="grid-2 gap-16">
+            <div class="card">
+              <h3>Marketing Digital</h3>
+              <label><input type="checkbox" data-option="gmb" /> Google My Business optimisé (89€)</label>
+              <label><input type="checkbox" data-option="audit_seo" /> Audit SEO technique complet (149€)</label>
+              <label><input type="checkbox" data-option="social" /> Stratégie réseaux sociaux (99€)</label>
+              <label><input type="checkbox" data-option="ga4" /> Configuration GA4 avancée (79€)</label>
+            </div>
+            <div class="card">
+              <h3>Fonctionnalités avancées</h3>
+              <label><input type="checkbox" data-option="rdv" /> Système de prise de RDV automatisé (199€)</label>
+              <label><input type="checkbox" data-option="ecom" /> Module e‑commerce (≤20 produits) (299€)</label>
+              <label><input type="checkbox" data-option="devis_forms" /> Formulaires de devis personnalisés (119€)</label>
+              <label><input type="checkbox" data-option="chat" /> Chat en direct automatisé (149€)</label>
+            </div>
+            <div class="card">
+              <h3>Performance &amp; Sécurité</h3>
+              <label><input type="checkbox" data-option="lcp" /> Optimisation LCP &lt; 1,5s (99€)</label>
+              <label><input type="checkbox" data-option="ssl" /> Certificat SSL + sécurisation (69€)</label>
+              <label><input type="checkbox" data-option="backup" /> Sauvegarde auto mensuelle (39€/mois)</label>
+              <label><input type="checkbox" data-option="monitor" /> Monitoring 24/7 + alertes (59€/mois)</label>
+            </div>
+          </div>
+          <div class="flex-between mt-16">
+            <button class="btn" data-prev>Retour</button>
+            <button class="btn btn-primary" data-next>Continuer</button>
+          </div>
+        </section>
+
+        <!-- STEP 4 -->
+        <section data-step-pane="4" class="form">
+          <h2>Étape 4 — Récapitulatif &amp; délai</h2>
+          <p>Vérifiez votre sélection et passez à l'étape suivante.</p>
+          <div class="flex-between">
+            <button class="btn" data-prev>Retour</button>
+            <button class="btn btn-primary" data-next>Continuer</button>
+          </div>
+        </section>
+
+        <!-- STEP 5 -->
+        <section data-step-pane="5" class="form">
+          <h2>Étape 5 — Informations projet</h2>
+          <div class="grid-2 gap-16">
+            <label>Nom complet*
+              <input id="c_name" class="input" type="text" placeholder="Votre nom" required />
+            </label>
+            <label>Email*
+              <input id="c_email" class="input" type="email" placeholder="vous@exemple.com" required />
+            </label>
+            <label>Téléphone*
+              <input id="c_phone" class="input" type="tel" placeholder="06 12 34 56 78" required />
+            </label>
+            <label>Entreprise
+              <input id="c_company" class="input" type="text" placeholder="(optionnel)" />
+            </label>
+          </div>
+          <label>Brief / Notes
+            <textarea id="notes" class="textarea" rows="4" placeholder="Détails, inspirations, objectifs…"></textarea>
+          </label>
+          <div class="flex-between">
+            <button class="btn" data-prev>Retour</button>
+            <button class="btn btn-primary" data-next>Continuer</button>
+          </div>
+        </section>
+
+        <!-- STEP 6 -->
+        <section data-step-pane="6" class="form">
+          <h2>Étape 6 — Finalisation de la commande</h2>
+          <form id="finalize" class="form">
+            <fieldset class="card">
+              <legend>Paiement</legend>
+              <label><input type="radio" name="pay" value="50_40_10" checked /> 50/40/10 (acompte réduit)</label>
+              <label><input type="radio" name="pay" value="full" /> Comptant (réduction possible)</label>
+            </fieldset>
+            <button id="submitBtn" class="btn btn-primary" type="submit">Finaliser ma commande</button>
+          </form>
+          <div class="mt-16">
+            <button class="btn" data-prev>Retour</button>
+          </div>
+        </section>
+      </div>
+
+      <aside class="summary">
+        <h3>Récapitulatif</h3>
+        <div class="row"><span>Pack</span><strong id="sum-pack">—</strong></div>
+        <div class="row"><span>Prix pack</span><strong id="sum-pack-price">—</strong></div>
+        <div class="row"><span>Options</span><strong id="sum-options">€0</strong></div>
+        <hr style="border:1px solid var(--border);border-bottom:0" />
+        <div class="row total"><span>Total HT</span><strong id="sum-total">€0</strong></div>
+        <div class="row"><span>Acompte</span><strong id="sum-deposit">—</strong></div>
+        <div class="row"><span>Délai estimé</span><strong id="sum-delay">—</strong></div>
+        <p class="muted">Sauvegardé automatiquement. Référence communiquée par email.</p>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container flex-between py-24">
+      <p>© <span id="year"></span> WEBOOSTMARTINIQUE — Tous droits réservés</p>
+      <nav class="foot-nav">
+        <a href="/mentions-legales.html">Mentions légales</a>
+        <a href="/cgv.html">CGV</a>
+        <a href="/cookies.html">Cookies</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/devis.js"></script>
+</body>
+</html>
