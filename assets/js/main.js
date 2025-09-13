@@ -5,6 +5,13 @@
  */
 
 // Configuration globale
+// Stripe Payment Links mapping (to be filled by you)
+const STRIPE_PAYMENT_LINKS = {
+    essentiel: '', // e.g. https://buy.stripe.com/...
+    pro: '',
+    premium: ''
+};
+
 const WEBBOOST_CONFIG = {
     packs: {
         'essentiel': { name: 'Pack Essentiel Local', price: 890, pages: '3', delivery: '10 jours' },
