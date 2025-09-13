@@ -54,9 +54,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e){
         const btn = e.target.closest('.pack-btn, [data-pack]');
         if(!btn) return;
-        const pack = btn.dataset.pack || (btn.closest('.pack-card') &amp;&amp; btn.closest('.pack-card').dataset.pack) || 'pro';
+        const pack = btn.dataset.pack || (btn.closest('.pack-card') && btn.closest('.pack-card').dataset.pack) || 'pro';
+        console.log('🖱️ Delegation: pack click detected →', pack);
         try { orderPack(pack); } catch(err) { console.error('orderPack delegation error:', err); }
     }, { capture: true });
+
+    // Binding direct sur les boutons/cartes (renfort)
+    bindPackButtons();
 });
 
 function initWebBoost() {
@@ -79,7 +83,7 @@ function initWebBoost() {
 }
 
 function setupSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor =&gt; {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href').substring(1);
@@ -103,7 +107,7 @@ function setupSmoothScroll() {
 
 function handleNavScroll() {
     const nav = document.querySelector('.nav-premium');
-    if (window.scrollY &gt; 100) {
+    if (window.scrollY > 100) {
         nav.classList.add('scrolled');
     } else {
         nav.classList.remove('scrolled');
@@ -111,8 +115,8 @@ function handleNavScroll() {
 }
 
 function setupScrollAnimations() {
-    const observer = new IntersectionObserver((entries) =&gt; {
-        entries.forEach(entry =&gt; {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate-in');
             }
@@ -120,7 +124,7 @@ function setupScrollAnimations() {
     }, { threshold: 0.1, rootMargin: '50px' });
     
     // Observer éléments à animer
-    document.querySelectorAll('.pack-card, .feature-item, .option-card').forEach(el =&gt; {
+    document.querySelectorAll('.pack-card, .feature-item, .option-card').forEach(el => {
         observer.observe(el);
     });
 }
@@ -152,10 +156,27 @@ function setupNavigation() {
         const menu = document.getElementById('mobile-menu');
         const btn = document.querySelector('.mobile-menu-btn');
         
-        if (mobileMenuOpen &amp;&amp; !menu.contains(e.target) &amp;&amp; !btn.contains(e.target)) {
+        if (mobileMenuOpen && !menu.contains(e.target) && !btn.contains(e.target)) {
             closeMobileMenu();
         }
     });
+}
+
+// ===== Renfort: binding direct sur boutons et cartes =====
+function bindPackButtons() {
+    try {
+        document.querySelectorAll('.pack-btn, .pack-card[data-pack]').forEach(el => {
+            el.addEventListener('click', (e) => {
+                const pack = el.dataset.pack || (el.closest('.pack-card') && el.closest('.pack-card').dataset.pack) || 'pro';
+                console.log('🧲 Direct bind: pack click →', pack);
+                try { orderPack(pack); } catch(err) { console.error('orderPack bind error:', err); }
+                e.preventDefault();
+                e.stopPropagation();
+            }, { passive: false });
+        });
+    } catch (err) {
+        console.error('bindPackButtons error:', err);
+    }
 }
 
 // Machine de vente - Tunnel de commande
@@ -165,8 +186,9 @@ function ensureOrderModal() {
         modal = document.createElement('div');
         modal.id = 'order-modal';
         modal.className = 'order-modal';
-        modal.innerHTML = '&lt;div class="order-container"&gt;&lt;/div&gt;';
+        modal.innerHTML = '<div class="order-container"></div>';
         document.body.appendChild(modal);
+        console.log('🧩 order-modal injected');
     }
     return modal;
 }
@@ -203,7 +225,7 @@ function orderPack(packKey) {
     startOrder(packKey);
     
     // Scroll vers le tunnel si nécessaire
-    setTimeout(() =&gt; {
+    setTimeout(() => {
         const modal = ensureOrderModal();
         modal.scrollIntoView({ 
             behavior: 'smooth', 
@@ -224,54 +246,54 @@ function closeOrder() {
 function renderOrderModal() {
     const modal = ensureOrderModal();
     modal.innerHTML = `
-        &lt;div class="order-container"&gt;
-            &lt;div class="order-header"&gt;
-                &lt;h2&gt;
-                    &lt;i class="fas fa-shopping-cart mr-2"&gt;&lt;/i&gt;
+        <div class="order-container">
+            <div class="order-header">
+                <h2>
+                    <i class="fas fa-shopping-cart mr-2"></i>
                     Commande WebBoost
-                &lt;/h2&gt;
-                &lt;button class="order-close-btn" onclick="closeOrder()"&gt;
-                    &lt;i class="fas fa-times"&gt;&lt;/i&gt;
-                &lt;/button&gt;
-            &lt;/div&gt;
+                </h2>
+                <button class="order-close-btn" onclick="closeOrder()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
             
-            &lt;div class="order-progress"&gt;
-                &lt;div class="progress-steps"&gt;
-                    &lt;span class="progress-step ${orderData.step &gt;= 1 ? 'active' : ''}" data-step="1"&gt;Pack&lt;/span&gt;
-                    &lt;span class="progress-step ${orderData.step &gt;= 2 ? 'active' : ''}" data-step="2"&gt;Options&lt;/span&gt;
-                    &lt;span class="progress-step ${orderData.step &gt;= 3 ? 'active' : ''}" data-step="3"&gt;Infos&lt;/span&gt;
-                    &lt;span class="progress-step ${orderData.step &gt;= 4 ? 'active' : ''}" data-step="4"&gt;Planning&lt;/span&gt;
-                    &lt;span class="progress-step ${orderData.step &gt;= 5 ? 'active' : ''}" data-step="5"&gt;Paiement&lt;/span&gt;
-                    &lt;span class="progress-step ${orderData.step &gt;= 6 ? 'active' : ''}" data-step="6"&gt;Confirmé&lt;/span&gt;
-                &lt;/div&gt;
-                &lt;div class="progress-bar"&gt;
-                    &lt;div class="progress-fill" style="width: ${(orderData.step / 6) * 100}%"&gt;&lt;/div&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
+            <div class="order-progress">
+                <div class="progress-steps">
+                    <span class="progress-step ${orderData.step >= 1 ? 'active' : ''}" data-step="1">Pack</span>
+                    <span class="progress-step ${orderData.step >= 2 ? 'active' : ''}" data-step="2">Options</span>
+                    <span class="progress-step ${orderData.step >= 3 ? 'active' : ''}" data-step="3">Infos</span>
+                    <span class="progress-step ${orderData.step >= 4 ? 'active' : ''}" data-step="4">Planning</span>
+                    <span class="progress-step ${orderData.step >= 5 ? 'active' : ''}" data-step="5">Paiement</span>
+                    <span class="progress-step ${orderData.step >= 6 ? 'active' : ''}" data-step="6">Confirmé</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${(orderData.step / 6) * 100}%"></div>
+                </div>
+            </div>
             
-            &lt;div class="order-content" id="order-step-content"&gt;
-                &lt;!-- Contenu généré par renderOrderStep() --&gt;
-            &lt;/div&gt;
+            <div class="order-content" id="order-step-content">
+                <!-- Contenu généré par renderOrderStep() -->
+            </div>
             
-            ${orderData.step &lt; 6 ? `
-                &lt;div class="order-footer"&gt;
-                    &lt;button class="btn-outline-premium" onclick="prevOrderStep()" ${orderData.step === 1 ? 'style="visibility:hidden"' : ''}&gt;
-                        &lt;i class="fas fa-arrow-left mr-2"&gt;&lt;/i&gt;
+            ${orderData.step < 6 ? `
+                <div class="order-footer">
+                    <button class="btn-outline-premium" onclick="prevOrderStep()" ${orderData.step === 1 ? 'style="visibility:hidden"' : ''}>
+                        <i class="fas fa-arrow-left mr-2"></i>
                         Précédent
-                    &lt;/button&gt;
+                    </button>
                     
-                    &lt;div class="order-pricing"&gt;
-                        &lt;div class="pricing-total"&gt;Total : €${orderData.pricing.total.toFixed(2)}&lt;/div&gt;
-                        &lt;div class="pricing-deposit"&gt;Acompte : €${orderData.pricing.deposit}&lt;/div&gt;
-                    &lt;/div&gt;
+                    <div class="order-pricing">
+                        <div class="pricing-total">Total : €${orderData.pricing.total.toFixed(2)}</div>
+                        <div class="pricing-deposit">Acompte : €${orderData.pricing.deposit}</div>
+                    </div>
                     
-                    &lt;button class="btn-premium" onclick="nextOrderStep()"&gt;
+                    <button class="btn-premium" onclick="nextOrderStep()">
                         ${orderData.step === 5 ? 'FINALISER' : 'Suivant'}
-                        &lt;i class="fas ${orderData.step === 5 ? 'fa-credit-card' : 'fa-arrow-right'} ml-2"&gt;&lt;/i&gt;
-                    &lt;/button&gt;
-                &lt;/div&gt;
+                        <i class="fas ${orderData.step === 5 ? 'fa-credit-card' : 'fa-arrow-right'} ml-2"></i>
+                    </button>
+                </div>
             ` : ''}
-        &lt;/div&gt;
+        </div>
     `;
     
     renderOrderStep();
@@ -290,7 +312,7 @@ function nextOrderStep() {
 }
 
 function prevOrderStep() {
-    if (orderData.step &gt; 1) {
+    if (orderData.step > 1) {
         orderData.step--;
         renderOrderModal();
     }
@@ -342,25 +364,25 @@ function renderOrderStep() {
 
 function renderPackSelection() {
     return `
-        &lt;div class="step-content"&gt;
-            &lt;h3 class="step-title"&gt;Sélectionnez votre pack&lt;/h3&gt;
-            &lt;p class="step-desc"&gt;Choisissez la solution qui correspond à vos besoins&lt;/p&gt;
+        <div class="step-content">
+            <h3 class="step-title">Sélectionnez votre pack</h3>
+            <p class="step-desc">Choisissez la solution qui correspond à vos besoins</p>
             
-            &lt;div class="pack-selection-grid"&gt;
-                ${Object.entries(WEBBOOST_CONFIG.packs).map(([key, pack]) =&gt; `
-                    &lt;div class="pack-selector ${orderData.pack === key ? 'selected' : ''}" 
-                         onclick="selectPack('${key}')" data-pack="${key}"&gt;
-                        &lt;h4&gt;${pack.name}&lt;/h4&gt;
-                        &lt;div class="selector-price"&gt;€${pack.price} HT&lt;/div&gt;
-                        &lt;div class="selector-deposit"&gt;Acompte : €${Math.round(pack.price * 0.5)}&lt;/div&gt;
-                        &lt;p class="selector-desc"&gt;${pack.pages} pages • ${pack.delivery}&lt;/p&gt;
-                        &lt;div class="selector-check"&gt;
-                            &lt;i class="fas ${orderData.pack === key ? 'fa-check-circle' : 'fa-circle'}"&gt;&lt;/i&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
+            <div class="pack-selection-grid">
+                ${Object.entries(WEBBOOST_CONFIG.packs).map(([key, pack]) => `
+                    <div class="pack-selector ${orderData.pack === key ? 'selected' : ''}" 
+                         onclick="selectPack('${key}')" data-pack="${key}">
+                        <h4>${pack.name}</h4>
+                        <div class="selector-price">€${pack.price} HT</div>
+                        <div class="selector-deposit">Acompte : €${Math.round(pack.price * 0.5)}</div>
+                        <p class="selector-desc">${pack.pages} pages • ${pack.delivery}</p>
+                        <div class="selector-check">
+                            <i class="fas ${orderData.pack === key ? 'fa-check-circle' : 'fa-circle'}"></i>
+                        </div>
+                    </div>
                 `).join('')}
-            &lt;/div&gt;
-        &lt;/div&gt;
+            </div>
+        </div>
     `;
 }
 
@@ -369,9 +391,10 @@ function selectPack(packKey) {
     calculatePricing();
     
     // Mettre à jour visual
-    document.querySelectorAll('.pack-selector').forEach(el =&gt; {
+    document.querySelectorAll('.pack-selector').forEach(el => {
         el.classList.remove('selected');
-        el.querySelector('.selector-check i').className = 'fas fa-circle';
+        const icon = el.querySelector('.selector-check i');
+        if (icon) icon.className = 'fas fa-circle';
     });
     
     const selected = document.querySelector(`[data-pack="${packKey}"]`);
@@ -384,43 +407,43 @@ function selectPack(packKey) {
 
 function renderOptionsSelection() {
     return `
-        &lt;div class="step-content"&gt;
-            &lt;h3 class="step-title"&gt;Options supplémentaires&lt;/h3&gt;
-            &lt;p class="step-desc"&gt;Ajoutez des services pour booster votre projet&lt;/p&gt;
-            &lt;p&gt;Sélection via les cartes options sur la page (retournez en arrière si besoin).&lt;/p&gt;
-        &lt;/div&gt;
+        <div class="step-content">
+            <h3 class="step-title">Options supplémentaires</h3>
+            <p class="step-desc">Ajoutez des services pour booster votre projet</p>
+            <p>Sélection via les cartes options sur la page (retournez en arrière si besoin).</p>
+        </div>
     `;
 }
 
 function renderCustomerForm() {
     return `
-        &lt;div class="step-content"&gt;
-            &lt;h3 class="step-title"&gt;Vos informations&lt;/h3&gt;
-            &lt;p class="step-desc"&gt;Renseignez vos coordonnées pour la suite du projet&lt;/p&gt;
-            &lt;div class="form-grid"&gt;
-                &lt;div class="form-group"&gt;
-                    &lt;label for="cust_nom"&gt;Nom &amp;amp; Prénom&lt;/label&gt;
-                    &lt;input id="cust_nom" type="text" oninput="orderData.customer.nom = this.value" required&gt;
-                &lt;/div&gt;
-                &lt;div class="form-group"&gt;
-                    &lt;label for="cust_email"&gt;Email&lt;/label&gt;
-                    &lt;input id="cust_email" type="email" oninput="orderData.customer.email = this.value" required&gt;
-                &lt;/div&gt;
-                &lt;div class="form-group"&gt;
-                    &lt;label for="cust_tel"&gt;Téléphone&lt;/label&gt;
-                    &lt;input id="cust_tel" type="tel" oninput="orderData.customer.telephone = this.value" required&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
+        <div class="step-content">
+            <h3 class="step-title">Vos informations</h3>
+            <p class="step-desc">Renseignez vos coordonnées pour la suite du projet</p>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="cust_nom">Nom &amp; Prénom</label>
+                    <input id="cust_nom" type="text" oninput="orderData.customer.nom = this.value" required>
+                </div>
+                <div class="form-group">
+                    <label for="cust_email">Email</label>
+                    <input id="cust_email" type="email" oninput="orderData.customer.email = this.value" required>
+                </div>
+                <div class="form-group">
+                    <label for="cust_tel">Téléphone</label>
+                    <input id="cust_tel" type="tel" oninput="orderData.customer.telephone = this.value" required>
+                </div>
+            </div>
+        </div>
     `;
 }
 
 function renderPlanning() {
     return `
-        &lt;div class="step-content"&gt;
-            &lt;h3 class="step-title"&gt;Planning&lt;/h3&gt;
-            &lt;p class="step-desc"&gt;Nous revenons vers vous sous 24h pour fixer les jalons.&lt;/p&gt;
-        &lt;/div&gt;
+        <div class="step-content">
+            <h3 class="step-title">Planning</h3>
+            <p class="step-desc">Nous revenons vers vous sous 24h pour fixer les jalons.</p>
+        </div>
     `;
 }
 
@@ -432,20 +455,20 @@ function renderPayment() {
     const deposit = Math.round(subtotal * 0.5);
 
     return `
-        &lt;div class="step-content"&gt;
-            &lt;h3 class="step-title"&gt;Paiement de l'acompte (50%)&lt;/h3&gt;
-            &lt;p class="step-desc"&gt;Redirection vers paiement sécurisé Stripe&lt;/p&gt;
-            &lt;div class="recap-total" style="margin:12px 0;"&gt;
-                &lt;div class="total-line"&gt;&lt;span&gt;Total HT&lt;/span&gt;&lt;span&gt;€${subtotal}&lt;/span&gt;&lt;/div&gt;
-                &lt;div class="total-line"&gt;&lt;span&gt;TVA (8.5%)&lt;/span&gt;&lt;span&gt;€${Math.round(vat)}&lt;/span&gt;&lt;/div&gt;
-                &lt;div class="total-line total-final"&gt;&lt;span&gt;Total TTC&lt;/span&gt;&lt;span&gt;€${Math.round(total)}&lt;/span&gt;&lt;/div&gt;
-                &lt;div class="total-line"&gt;&lt;span&gt;Acompte (50%)&lt;/span&gt;&lt;span&gt;€${deposit}&lt;/span&gt;&lt;/div&gt;
-            &lt;/div&gt;
-            &lt;button class="btn-premium" onclick="redirectToStripe()"&gt;
-                &lt;i class="fas fa-lock mr-2"&gt;&lt;/i&gt;
+        <div class="step-content">
+            <h3 class="step-title">Paiement de l'acompte (50%)</h3>
+            <p class="step-desc">Redirection vers paiement sécurisé Stripe</p>
+            <div class="recap-total" style="margin:12px 0;">
+                <div class="total-line"><span>Total HT</span><span>€${subtotal}</span></div>
+                <div class="total-line"><span>TVA (8.5%)</span><span>€${Math.round(vat)}</span></div>
+                <div class="total-line total-final"><span>Total TTC</span><span>€${Math.round(total)}</span></div>
+                <div class="total-line"><span>Acompte (50%)</span><span>€${deposit}</span></div>
+            </div>
+            <button class="btn-premium" onclick="redirectToStripe()">
+                <i class="fas fa-lock mr-2"></i>
                 Payer l'acompte
-            &lt;/button&gt;
-        &lt;/div&gt;
+            </button>
+        </div>
     `;
 }
 
@@ -461,10 +484,10 @@ function redirectToStripe() {
 
 function renderConfirmation() {
     return `
-        &lt;div class="step-content"&gt;
-            &lt;h3 class="step-title"&gt;Commande initiée&lt;/h3&gt;
-            &lt;p class="step-desc"&gt;Merci ! Finalisez le règlement via Stripe pour valider votre acompte.&lt;/p&gt;
-        &lt;/div&gt;
+        <div class="step-content">
+            <h3 class="step-title">Commande initiée</h3>
+            <p class="step-desc">Merci ! Finalisez le règlement via Stripe pour valider votre acompte.</p>
+        </div>
     `;
 }
 
@@ -474,8 +497,8 @@ function calculatePricing() {
     const pack = WEBBOOST_CONFIG.packs[orderData.pack];
     const packPrice = pack.price;
     
-    const optionsPrice = orderData.options.reduce((sum, optionId) =&gt; {
-        const option = WEBBOOST_CONFIG.options.find(opt =&gt; opt.id === optionId);
+    const optionsPrice = orderData.options.reduce((sum, optionId) => {
+        const option = WEBBOOST_CONFIG.options.find(opt => opt.id === optionId);
         return sum + (option ? option.price : 0);
     }, 0);
     
@@ -575,7 +598,7 @@ function initCookieBanner() {
     const cookieConsent = localStorage.getItem('webboost_cookie_consent');
     if (!cookieConsent) {
         // Afficher bannière après 2 secondes
-        setTimeout(() =&gt; {
+        setTimeout(() => {
             document.getElementById('cookie-banner').classList.add('active');
         }, 2000);
     } else if (cookieConsent === 'accept') {
@@ -625,8 +648,8 @@ function enableAnalytics() {
 // Animations et interactions
 function initAnimations() {
     // Intersection Observer pour animations on scroll
-    const animationObserver = new IntersectionObserver((entries) =&gt; {
-        entries.forEach(entry =&gt; {
+    const animationObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const element = entry.target;
                 
@@ -646,16 +669,16 @@ function initAnimations() {
     }, { threshold: 0.2 });
     
     // Appliquer observer aux éléments
-    document.querySelectorAll('.pack-card, .feature-item, .badge-trust').forEach(el =&gt; {
+    document.querySelectorAll('.pack-card, .feature-item, .badge-trust').forEach(el => {
         animationObserver.observe(el);
     });
 }
 
 function handleResize() {
     // Ajustements responsive si nécessaire
-    const isMobile = window.innerWidth &lt; 768;
+    const isMobile = window.innerWidth < 768;
     
-    if (isMobile &amp;&amp; mobileMenuOpen) {
+    if (isMobile && mobileMenuOpen) {
         // Ajuster menu mobile
         const menu = document.getElementById('mobile-menu');
         menu.style.height = `${window.innerHeight - 80}px`;
@@ -667,21 +690,21 @@ function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
-        &lt;div class="notification-content"&gt;
-            &lt;i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"&gt;&lt;/i&gt;
-            &lt;span&gt;${message}&lt;/span&gt;
-        &lt;/div&gt;
+        <div class="notification-content">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+            <span>${message}</span>
+        </div>
     `;
     
     document.body.appendChild(notification);
     
     // Animation d'apparition
-    setTimeout(() =&gt; notification.classList.add('show'), 100);
+    setTimeout(() => notification.classList.add('show'), 100);
     
     // Suppression automatique
-    setTimeout(() =&gt; {
+    setTimeout(() => {
         notification.classList.remove('show');
-        setTimeout(() =&gt; notification.remove(), 300);
+        setTimeout(() => notification.remove(), 300);
     }, 4000);
 }
 
@@ -719,7 +742,7 @@ function submitBrief(event) {
     showNotification('Brief enregistré ! Choisissez maintenant votre pack ⬇️', 'success');
     
     // Scroll vers les packs après 1.5 secondes
-    setTimeout(() =&gt; {
+    setTimeout(() => {
         scrollToSection('packs');
     }, 1500);
     
@@ -744,7 +767,7 @@ function formatPrice(amount) {
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
-        const later = () =&gt; {
+        const later = () => {
             clearTimeout(timeout);
             func(...args);
         };
@@ -776,7 +799,7 @@ window.WebBoostApp = {
     acceptCookies,
     refuseCookies,
     showCookieSettings,
-    submitContact: (e)=>{ try{e&amp;&amp;e.preventDefault&amp;&amp;e.preventDefault();}catch(_){} showNotification('Message envoyé, nous vous recontactons sous 24h.', 'success'); },
+    submitContact: (e)=>{ try{e&&e.preventDefault&&e.preventDefault();}catch(_){} showNotification('Message envoyé, nous vous recontactons sous 24h.', 'success'); },
     trackEvent,
     showNotification
 };
@@ -792,14 +815,14 @@ try {
 function setupCounterAnimations() {
     const counters = document.querySelectorAll('.animate-count');
     
-    const counterObserver = new IntersectionObserver((entries) =&gt; {
-        entries.forEach(entry =&gt; {
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const counter = entry.target;
                 const target = parseFloat(counter.dataset.target);
                 const numberElement = counter.querySelector('.badge-number');
                 
-                if (numberElement &amp;&amp; !counter.hasAttribute('data-counted')) {
+                if (numberElement && !counter.hasAttribute('data-counted')) {
                     counter.setAttribute('data-counted', 'true');
                     animateCounter(numberElement, target);
                 }
@@ -809,7 +832,7 @@ function setupCounterAnimations() {
         });
     }, { threshold: 0.5 });
     
-    counters.forEach(counter =&gt; {
+    counters.forEach(counter => {
         counterObserver.observe(counter);
     });
 }
@@ -819,10 +842,10 @@ function animateCounter(element, target) {
     const increment = target / (duration / 16);
     let current = 0;
     
-    const timer = setInterval(() =&gt; {
+    const timer = setInterval(() => {
         current += increment;
         
-        if (current &gt;= target) {
+        if (current >= target) {
             current = target;
             clearInterval(timer);
         }
@@ -830,7 +853,7 @@ function animateCounter(element, target) {
         // Format selon le type de nombre
         if (target === 4.9) {
             element.textContent = current.toFixed(1) + '/5';
-        } else if (target &gt;= 100) {
+        } else if (target >= 100) {
             element.textContent = Math.floor(current) + '%';
         } else {
             element.textContent = Math.floor(current) + '+';
