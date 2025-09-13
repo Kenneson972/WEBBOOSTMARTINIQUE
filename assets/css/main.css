@@ -786,7 +786,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(212,175,55,0.1)"/></svg>') repeat;
+  background: url('data:image/svg+xml,&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"&gt;&lt;circle cx="50" cy="50" r="2" fill="rgba(212,175,55,0.1)"/&gt;&lt;/svg&gt;') repeat;
   background-size: 50px 50px;
   opacity: 0.3;
   pointer-events: none;
@@ -1289,9 +1289,10 @@ textarea:focus {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.6);
-  z-index: 2000;
+  z-index: 99999;
+  pointer-events: auto;
 }
-.order-modal.active { display: block; }
+.order-modal.active { display: block !important; }
 
 .order-container {
   position: relative;
