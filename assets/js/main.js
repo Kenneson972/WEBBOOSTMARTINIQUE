@@ -175,9 +175,11 @@ function startOrder(preselectedPack = null) {
     };
     
     // Ouvrir modal
-    const modal = document.getElementById('order-modal');
+    const modal = ensureOrderModal();
     modal.classList.add('active');
+    modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
+    console.log('✅ order-modal opened');
     
     // Initialiser tunnel
     renderOrderModal();
