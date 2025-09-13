@@ -566,31 +566,51 @@ function showNotification(message, type = 'success') {
     }, 4000);
 }
 
-// Formulaire de contact
-function submitContact(event) {
+// Formulaire brief projet
+function submitBrief(event) {
     event.preventDefault();
     
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
     
     // Validation basique
-    if (!data.nom || !data.email || !data.telephone || !data.message) {
+    if (!data.entreprise || !data.secteur || !data.telephone || !data.email) {
         showNotification('Veuillez remplir tous les champs obligatoires', 'error');
         return;
     }
     
-    // Envoi au backend (TODO: implémenter)
-    console.log('📧 Contact envoyé:', data);
+    // Validation email simple
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.email)) {
+        showNotification('Veuillez saisir une adresse email valide', 'error');
+        return;
+    }
     
-    // Simulation réussite
-    showNotification('Merci ! Élise vous contactera sous 24h ouvrées.', 'success');
-    event.target.reset();
+    // Validation téléphone martiniquais
+    const phoneRegex = /^(0596|596|\+596)/;
+    if (!phoneRegex.test(data.telephone)) {
+        showNotification('Veuillez saisir un numéro martiniquais (0596...)', 'error');
+        return;
+    }
+    
+    // Stocker les données du brief pour le tunnel de commande
+    localStorage.setItem('webboost_brief', JSON.stringify(data));
+    
+    // Feedback utilisateur
+    showNotification('Brief enregistré ! Choisissez maintenant votre pack ⬇️', 'success');
+    
+    // Scroll vers les packs après 1.5 secondes
+    setTimeout(() => {
+        scrollToSection('packs');
+    }, 1500);
     
     // Analytics
-    trackEvent('contact_form_submit', {
-        pack: data.pack,
-        has_entreprise: !!data.entreprise
+    trackEvent('brief_submitted', {
+        secteur: data.secteur,
+        has_objectifs: !!data.objectifs
     });
+    
+    console.log('📋 Brief projet soumis:', data);
 }
 
 // Utilitaires
