@@ -7,6 +7,34 @@
     <meta name="description" content="LE spécialiste martiniquais des sites web haute conversion. Livraison garantie 7-12 jours, prix fixes dès 890€. Satisfait ou remboursé.">
     <meta name="keywords" content="spécialiste site web martinique, création site rapide, webdesign 7 jours, SEO martinique, alternative agence web">
     
+    <!-- Précharger ressources critiques pour performance -->
+    <link rel="preload" href="assets/css/main.css" as="style">
+    <link rel="preload" href="assets/css/premium-effects.css" as="style">
+    <link rel="preload" href="assets/js/premium-animations.js" as="script">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style">
+    
+    <!-- CSS critique inline pour chargement instantané -->
+    <style>
+      body { 
+        font-family: 'Inter', Arial, sans-serif; 
+        background: #1a1a1a; 
+        opacity: 1;
+        animation: quickFadeIn 0.5s ease-out;
+      }
+      @keyframes quickFadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .hero-section { 
+        display: block; 
+        animation: slideUp 0.6s ease-out;
+      }
+      @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    </style>
+
     <!-- Open Graph -->
     <meta property="og:title" content="WebBoost Martinique - LE Spécialiste Sites Web Martiniquais">
     <meta property="og:description" content="LE spécialiste martiniquais des sites web haute conversion - Livraison 7-12 jours garantie">
