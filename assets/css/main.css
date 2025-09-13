@@ -1282,3 +1282,83 @@ textarea:focus {
   background: var(--wb-gold);
   color: var(--wb-black);
 }
+
+/* ===== ORDER MODAL (Ancien Tunnel) ===== */
+.order-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 2000;
+}
+.order-modal.active { display: block; }
+
+.order-container {
+  position: relative;
+  max-width: 980px;
+  margin: 80px auto;
+  background: rgba(31, 41, 55, 0.96);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  padding: 20px 24px 16px;
+  max-height: calc(100vh - 160px);
+  overflow: auto;
+}
+
+.order-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 4px 16px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+.order-header h2 { color: var(--wb-white); font-weight: 800; font-size: 1.35rem; }
+.order-close-btn {
+  background: transparent;
+  border: 2px solid rgba(239,68,68,0.5);
+  color: #FCA5A5;
+  width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+}
+
+.order-progress { margin: 16px 0; }
+.progress-steps { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 10px; }
+.progress-step {
+  flex: 1; text-align: center; font-weight: 600; color: rgba(255,255,255,0.6);
+  padding: 6px 8px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.15);
+}
+.progress-step.active { color: var(--wb-black); background: linear-gradient(135deg, var(--wb-gold), var(--wb-yellow)); border-color: var(--wb-gold); }
+.progress-bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--wb-gold), var(--wb-yellow)); }
+
+.order-content { padding: 10px 4px 6px; }
+.order-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 14px 4px 4px; border-top: 1px solid rgba(212,175,55,0.15);
+}
+.order-pricing { text-align: right; }
+.order-pricing .pricing-total { font-weight: 800; color: var(--wb-white); }
+.order-pricing .pricing-deposit { color: var(--wb-gold); font-weight: 700; font-size: 0.95rem; }
+
+/* Step 1: Pack selection */
+.step-content { padding: 8px 0 4px; }
+.step-title { color: var(--wb-yellow); font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; }
+.step-desc { color: var(--wb-gray-300); margin-bottom: 10px; }
+
+.pack-selection-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 14px; }
+.pack-selector {
+  position: relative; cursor: pointer; padding: 16px; border-radius: 16px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  background: rgba(255,255,255,0.04);
+}
+.pack-selector:hover { border-color: rgba(212,175,55,0.4); }
+.pack-selector.selected { outline: 3px solid rgba(212,175,55,0.5); border-color: var(--wb-gold); }
+.selector-price { font-weight: 800; color: var(--wb-black); background: linear-gradient(135deg, var(--wb-gold), var(--wb-yellow)); display: inline-block; padding: 6px 12px; border-radius: 999px; margin: 8px 0; }
+.selector-deposit { color: var(--wb-green); font-weight: 700; font-size: 0.95rem; }
+.selector-check { position: absolute; top: 12px; right: 12px; color: var(--wb-gold); }
+
+@media (max-width: 768px) {
+  .order-container { width: 94%; margin: 12px auto; max-height: calc(100vh - 24px); padding: 16px; }
+  .order-footer { flex-direction: column; align-items: stretch; }
+  .order-pricing { text-align: left; align-self: flex-start; }
+}
