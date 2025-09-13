@@ -186,15 +186,15 @@
         </div>
     </section>
 
-    <!-- Section Divider -->
-    <div class="section-divider"></div>
+    <!-- Section Divider Premium -->
+    <div class="premium-divider"></div>
 
-    <!-- Packs Section -->
-    <section id="packs" class="packs-section">
+    <!-- Packs Section - PREMIUM -->
+    <section id="packs" class="packs-section premium-section fade-in">
         <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <span class="gold-gradient">Choisissez votre pack</span>
+            <div class="section-header fade-in">
+                <h2 class="section-title gradient-text">
+                    Choisissez votre pack
                 </h2>
                 <p class="section-subtitle">
                     Paiement sécurisé • Livraison garantie • Satisfaction ou remboursé
@@ -203,90 +203,90 @@
             
             <div class="packs-grid">
                 <!-- Pack Essentiel -->
-                <div class="pack-card" data-pack="essentiel">
+                <div class="pack-card premium-card fade-in-left" data-pack="essentiel" style="animation-delay: 0.1s;">
                     <div class="pack-header">
-                        <div class="price-badge">
+                        <div class="price-badge counter">
                             €890<span class="price-unit">HT</span>
                         </div>
-                        <h3 class="pack-title">Pack Essentiel</h3>
+                        <h3 class="pack-title gradient-text">Pack Essentiel</h3>
                         <p class="pack-subtitle">Essentiel Local</p>
                         <div class="deposit-info">
-                            <i class="fas fa-arrow-down mr-1"></i>
+                            <i class="fas fa-arrow-down premium-icon"></i>
                             Acompte : €445 seulement
                         </div>
                     </div>
                     
                     <ul class="pack-features">
-                        <li><i class="fas fa-check-circle feature-check"></i> 3 pages professionnelles</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> SEO local de base</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> Tracking appels/clics</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> Design mobile-first</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> 1 révision incluse</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> Délai : 10 jours max</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> 3 pages professionnelles</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> SEO local de base</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> Tracking appels/clics</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> Design mobile-first</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> 1 révision incluse</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> Délai : 10 jours max</li>
                     </ul>
                     
                     <button class="btn-premium pack-btn w-full" onclick="orderPack('essentiel')">
-                        <i class="fas fa-rocket mr-2"></i>
+                        <i class="fas fa-rocket premium-icon"></i>
                         COMMANDER MAINTENANT
                     </button>
                 </div>
 
                 <!-- Pack Pro (Populaire) -->
-                <div class="pack-card pack-popular" data-pack="pro">
-                    <div class="popular-badge">POPULAIRE</div>
+                <div class="pack-card premium-card pack-popular fade-in scale-in" data-pack="pro" style="animation-delay: 0.2s;">
+                    <div class="premium-badge popular-badge">POPULAIRE</div>
                     
                     <div class="pack-header">
-                        <div class="price-badge">
+                        <div class="price-badge counter">
                             €1,290<span class="price-unit">HT</span>
                         </div>
-                        <h3 class="pack-title">Pack Pro</h3>
+                        <h3 class="pack-title gradient-text">Pack Pro</h3>
                         <p class="pack-subtitle">Vitrine Pro</p>
                         <div class="deposit-info">
-                            <i class="fas fa-arrow-down mr-1"></i>
+                            <i class="fas fa-arrow-down premium-icon"></i>
                             Acompte : €645 seulement
                         </div>
                     </div>
                     
                     <ul class="pack-features">
-                        <li><i class="fas fa-check-circle feature-check"></i> 5-6 pages optimisées</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> SEO étendu</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> LCP &lt; 2,5s garanti</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> GA4 & Search Console</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> 2 révisions incluses</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> Délai : 7-10 jours</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> 5-6 pages optimisées</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> SEO étendu</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> LCP &lt; 2,5s garanti</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> GA4 & Search Console</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> 2 révisions incluses</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> Délai : 7-10 jours</li>
                     </ul>
                     
                     <button class="btn-premium pack-btn w-full" onclick="orderPack('pro')">
-                        <i class="fas fa-rocket mr-2"></i>
+                        <i class="fas fa-rocket premium-icon"></i>
                         RÉSERVER MAINTENANT
                     </button>
                 </div>
 
                 <!-- Pack Premium -->
-                <div class="pack-card" data-pack="premium">
+                <div class="pack-card premium-card fade-in-right" data-pack="premium" style="animation-delay: 0.3s;">
                     <div class="pack-header">
-                        <div class="price-badge">
+                        <div class="price-badge counter">
                             €1,790<span class="price-unit">HT</span>
                         </div>
-                        <h3 class="pack-title">Pack Premium</h3>
+                        <h3 class="pack-title gradient-text">Pack Premium</h3>
                         <p class="pack-subtitle">Vitrine Conversion</p>
                         <div class="deposit-info">
-                            <i class="fas fa-arrow-down mr-1"></i>
+                            <i class="fas fa-arrow-down premium-icon"></i>
                             Acompte : €895 seulement
                         </div>
                     </div>
                     
                     <ul class="pack-features">
-                        <li><i class="fas fa-check-circle feature-check"></i> 6-8 pages + conversion</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> Page Réserver/Devis optimisée</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> Tracking avancé</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> Formation 45min incluse</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> 2 révisions incluses</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> Délai : 10-12 jours</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> 6-8 pages + conversion</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> Page Réserver/Devis optimisée</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> Tracking avancé</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> Formation 45min incluse</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> 2 révisions incluses</li>
+                        <li><i class="fas fa-check-circle feature-check premium-icon"></i> Délai : 10-12 jours</li>
                     </ul>
                     
                     <button class="btn-premium pack-btn w-full" onclick="orderPack('premium')">
-                        <i class="fas fa-crown mr-2"></i>
+                        <i class="fas fa-crown premium-icon"></i>
                         DÉMARRER MON PROJET
                     </button>
                 </div>
