@@ -1,40 +1,37 @@
-# SAFE .htaccess for 02switch (no server-level directives)
-# If 500 persists, temporarily rename this file to .htaccess.bak and reload
-
-# Serve index.html by default
-DirectoryIndex index.html
-
-# Keep rewrite engine on, but do not force rewrites (static, multi-page site)
+# 02switch optimisé – sans directives interdites (pas de <Directory>)
+# 1) Redirection HTTPS
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  # Do not rewrite existing files/dirs
+  # Si HTTPS est off, rediriger vers HTTPS
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Ne pas réécrire si fichier/dossier existe
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
+
+  # 2) URLs propres pour quelques pages
+  RewriteRule ^devis/?$ devis.html [L]
+  RewriteRule ^services/?$ services.html [L]
+  RewriteRule ^contact/?$ contact.html [L]
 </IfModule>
 
-# Correct MIME types (defensive)
-AddType text/css .css
-AddType application/javascript .js
-
-# Far-future cache for static assets
+# 3) Cache navigateur (si module présent)
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/css "access plus 1 year"
   ExpiresByType application/javascript "access plus 1 year"
-  ExpiresByType image/svg+xml "access plus 1 year"
-  ExpiresByType image/webp "access plus 1 year"
-  ExpiresByType image/jpeg "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
-  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
 </IfModule>
 
-<IfModule mod_headers.c>
-  <FilesMatch "\.(css|js|ico|png|jpg|jpeg|webp|svg)$">
-    Header set Cache-Control "public, max-age=31536000, immutable"
-  </FilesMatch>
+# 4) Compression GZIP (si module présent)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/plain text/html text/css application/javascript application/json image/svg+xml
 </IfModule>
 
-# IMPORTANT: Do NOT use <Directory> blocks in .htaccess (causes 500). 
-# To protect storage folders, place a separate .htaccess inside each folder with:
-#   Require all denied
+# 5) Fichier par défaut
+DirectoryIndex index.html
