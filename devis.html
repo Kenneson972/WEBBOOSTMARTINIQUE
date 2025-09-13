@@ -24,7 +24,7 @@
         <a href="methode.html">Méthode</a>
         <a href="about.html">À propos</a>
         <a href="contact.html">Contact</a>
-        <a class="btn btn-primary" href="devis.html">Devis</a>
+        <a class="btn btn-primary" href="devis.html" aria-current="page">Devis</a>
       </nav>
       <button class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu">☰</button>
     </div>
@@ -206,7 +206,14 @@
     </div>
   </footer>
 
-  <script src="assets/js/main.js"></script>
-  <script src="assets/js/devis.js"></script>
+  <!-- Chatbot -->
+  <script src="/assets/js/chatbot.js" defer></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function(){
+      try{ if(window.EliseWebBoostChatbot && !window.eliseChatbot){ window.eliseChatbot = new EliseWebBoostChatbot(); } }catch(e){}
+    });
+  </script>
+  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/devis.js"></script>
 </body>
 </html>

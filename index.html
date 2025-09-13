@@ -203,6 +203,13 @@
     </div>
   </footer>
 
-  <script src="assets/js/main.js"></script>
+  <!-- Chatbot (restauration) -->
+  <script src="/assets/js/chatbot.js" defer></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function(){
+      try{ if(window.EliseWebBoostChatbot && !window.eliseChatbot){ window.eliseChatbot = new EliseWebBoostChatbot(); } }catch(e){}
+    });
+  </script>
+  <script src="/assets/js/main.js"></script>
 </body>
 </html>
