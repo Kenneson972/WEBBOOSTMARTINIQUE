@@ -5,13 +5,6 @@
  */
 
 // Configuration globale
-// Stripe Payment Links mapping (to be filled by you)
-const STRIPE_PAYMENT_LINKS = {
-    essentiel: '', // e.g. https://buy.stripe.com/...
-    pro: '',
-    premium: ''
-};
-
 const WEBBOOST_CONFIG = {
     packs: {
         'essentiel': { name: 'Pack Essentiel Local', price: 890, pages: '3', delivery: '10 jours' },
@@ -19,12 +12,11 @@ const WEBBOOST_CONFIG = {
         'premium': { name: 'Pack Vitrine Conversion', price: 1790, pages: '6-8', delivery: '10-12 jours' }
     },
     options: [
-        { id: 'seo_local', name: 'SEO Local Avancé', price: 290 },
-        { id: 'whatsapp_pro', name: 'WhatsApp Business Pro', price: 150 },
-        { id: 'analytics_pro', name: 'Analytics & Conversion', price: 190 },
-        { id: 'photos_pro', name: 'Pack Photos Pro', price: 240 },
-        { id: 'email_marketing', name: 'Email Marketing', price: 170 },
-        { id: 'boutique_simple', name: 'Boutique Simple', price: 350 }
+        { id: 'content', name: 'Rédaction 800 mots', price: 180 },
+        { id: 'images', name: 'Optimisation 20 images', price: 120 },
+        { id: 'page_extra', name: 'Page locale supplémentaire', price: 120 },
+        { id: 'booking', name: 'Intégration réservation', price: 150 },
+        { id: 'translation', name: 'Traduction FR-EN', price: 150 }
     ],
     vatRate: 0.085, // TVA Martinique
     whatsappNumber: '596000000'
@@ -49,29 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initCookieBanner();
     setupNavigation();
     trackPageLoad();
-
-    // Délégation de clic (packs de la page uniquement)
-    document.addEventListener('click', function(e){
-        if (e.target.closest('#order-modal')) return; // ignore clicks inside modal
-        const btn = e.target.closest('.pack-btn');
-        if(!btn) return;
-        const pack = btn.dataset.pack || (btn.closest('.pack-card') && btn.closest('.pack-card').dataset.pack) || 'pro';
-        console.log('🖱️ Delegation (main packs):', pack);
-        try { orderPack(pack); } catch(err) { console.error('orderPack delegation error:', err); }
-    }, { capture: true });
-
-    // Binding direct sur les boutons (renfort)
-    bindPackButtons();
-
-    // Échap pour fermer le tunnel
-    window.addEventListener('keydown', function(e){
-        if (e.key === 'Escape') {
-            const modal = document.getElementById('order-modal');
-            if (modal && modal.classList.contains('active')) {
-                closeOrder();
-            }
-        }
-    });
 });
 
 function initWebBoost() {
@@ -85,9 +54,6 @@ function initWebBoost() {
     
     // Intersection Observer pour animations
     setupScrollAnimations();
-    
-    // Animation des compteurs
-    setupCounterAnimations();
     
     // Resize handler
     window.addEventListener('resize', handleResize);
@@ -173,46 +139,7 @@ function setupNavigation() {
     });
 }
 
-// ===== Renfort: binding direct sur boutons =====
-function bindPackButtons() {
-    try {
-        document.querySelectorAll('.pack-btn').forEach(el => {
-            el.addEventListener('click', (e) => {
-                const pack = el.dataset.pack || (el.closest('.pack-card') && el.closest('.pack-card').dataset.pack) || 'pro';
-                console.log('🧲 Direct bind (main packs):', pack);
-                try { orderPack(pack); } catch(err) { console.error('orderPack bind error:', err); }
-                e.preventDefault();
-                e.stopPropagation();
-            }, { passive: false });
-        });
-    } catch (err) {
-        console.error('bindPackButtons error:', err);
-    }
-}
-
 // Machine de vente - Tunnel de commande
-function ensureOrderModal() {
-    let modal = document.getElementById('order-modal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'order-modal';
-        modal.className = 'order-modal';
-        modal.innerHTML = '<div class="order-container"></div>';
-        document.body.appendChild(modal);
-        console.log('🧩 order-modal injected');
-    }
-    // Binder la fermeture par clic overlay une seule fois
-    if (!modal.dataset.bound) {
-        modal.addEventListener('click', function(e){
-            if (e.target === modal) {
-                closeOrder();
-            }
-        });
-        modal.dataset.bound = '1';
-    }
-    return modal;
-}
-
 function startOrder(preselectedPack = null) {
     // Reset order data
     orderData = {
@@ -225,11 +152,9 @@ function startOrder(preselectedPack = null) {
     };
     
     // Ouvrir modal
-    const modal = ensureOrderModal();
+    const modal = document.getElementById('order-modal');
     modal.classList.add('active');
-    modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
-    console.log('✅ order-modal opened');
     
     // Initialiser tunnel
     renderOrderModal();
@@ -246,8 +171,7 @@ function orderPack(packKey) {
     
     // Scroll vers le tunnel si nécessaire
     setTimeout(() => {
-        const modal = ensureOrderModal();
-        modal.scrollIntoView({ 
+        document.getElementById('order-modal').scrollIntoView({ 
             behavior: 'smooth', 
             block: 'center' 
         });
@@ -255,9 +179,8 @@ function orderPack(packKey) {
 }
 
 function closeOrder() {
-    const modal = ensureOrderModal();
+    const modal = document.getElementById('order-modal');
     modal.classList.remove('active');
-    modal.style.display = 'none';
     document.body.style.overflow = 'auto';
     
     // Analytics
@@ -265,7 +188,7 @@ function closeOrder() {
 }
 
 function renderOrderModal() {
-    const modal = ensureOrderModal();
+    const modal = document.getElementById('order-modal');
     modal.innerHTML = `
         <div class="order-container">
             <div class="order-header">
@@ -364,15 +287,6 @@ function renderOrderStep() {
     switch(orderData.step) {
         case 1:
             contentDiv.innerHTML = renderPackSelection();
-            // Ajouter écouteurs sur les .pack-selector pour choisir le pack
-            setTimeout(() => {
-                document.querySelectorAll('#order-modal .pack-selector').forEach(el => {
-                    el.addEventListener('click', () => {
-                        const key = el.getAttribute('data-pack');
-                        selectPack(key);
-                    });
-                });
-            }, 0);
             break;
         case 2:
             contentDiv.innerHTML = renderOptionsSelection();
@@ -401,7 +315,7 @@ function renderPackSelection() {
             <div class="pack-selection-grid">
                 ${Object.entries(WEBBOOST_CONFIG.packs).map(([key, pack]) => `
                     <div class="pack-selector ${orderData.pack === key ? 'selected' : ''}" 
-                         data-pack="${key}">
+                         onclick="selectPack('${key}')" data-pack="${key}">
                         <h4>${pack.name}</h4>
                         <div class="selector-price">€${pack.price} HT</div>
                         <div class="selector-deposit">Acompte : €${Math.round(pack.price * 0.5)}</div>
@@ -420,105 +334,15 @@ function selectPack(packKey) {
     orderData.pack = packKey;
     calculatePricing();
     
-    // Mettre à jour visual (dans le modal uniquement)
-    document.querySelectorAll('#order-modal .pack-selector').forEach(el => {
+    // Mettre à jour visual
+    document.querySelectorAll('.pack-selector').forEach(el => {
         el.classList.remove('selected');
-        const icon = el.querySelector('.selector-check i');
-        if (icon) icon.className = 'fas fa-circle';
+        el.querySelector('.selector-check i').className = 'fas fa-circle';
     });
     
-    const selected = document.querySelector(`#order-modal .pack-selector[data-pack="${packKey}"]`);
-    if (selected) {
-        selected.classList.add('selected');
-        const icon = selected.querySelector('.selector-check i');
-        if (icon) icon.className = 'fas fa-check-circle';
-    }
-}
-
-function renderOptionsSelection() {
-    return `
-        <div class="step-content">
-            <h3 class="step-title">Options supplémentaires</h3>
-            <p class="step-desc">Ajoutez des services pour booster votre projet</p>
-            <p>Sélection via les cartes options sur la page (retournez en arrière si besoin).</p>
-        </div>
-    `;
-}
-
-function renderCustomerForm() {
-    return `
-        <div class="step-content">
-            <h3 class="step-title">Vos informations</h3>
-            <p class="step-desc">Renseignez vos coordonnées pour la suite du projet</p>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="cust_nom">Nom &amp; Prénom</label>
-                    <input id="cust_nom" type="text" oninput="orderData.customer.nom = this.value" required>
-                </div>
-                <div class="form-group">
-                    <label for="cust_email">Email</label>
-                    <input id="cust_email" type="email" oninput="orderData.customer.email = this.value" required>
-                </div>
-                <div class="form-group">
-                    <label for="cust_tel">Téléphone</label>
-                    <input id="cust_tel" type="tel" oninput="orderData.customer.telephone = this.value" required>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function renderPlanning() {
-    return `
-        <div class="step-content">
-            <h3 class="step-title">Planning</h3>
-            <p class="step-desc">Nous revenons vers vous sous 24h pour fixer les jalons.</p>
-        </div>
-    `;
-}
-
-function renderPayment() {
-    const pack = WEBBOOST_CONFIG.packs[orderData.pack];
-    const subtotal = pack ? pack.price : 0;
-    const vat = subtotal * WEBBOOST_CONFIG.vatRate;
-    const total = subtotal + vat;
-    const deposit = Math.round(subtotal * 0.5);
-
-    return `
-        <div class="step-content">
-            <h3 class="step-title">Paiement de l'acompte (50%)</h3>
-            <p class="step-desc">Redirection vers paiement sécurisé Stripe</p>
-            <div class="recap-total" style="margin:12px 0;">
-                <div class="total-line"><span>Total HT</span><span>€${subtotal}</span></div>
-                <div class="total-line"><span>TVA (8.5%)</span><span>€${Math.round(vat)}</span></div>
-                <div class="total-line total-final"><span>Total TTC</span><span>€${Math.round(total)}</span></div>
-                <div class="total-line"><span>Acompte (50%)</span><span>€${deposit}</span></div>
-            </div>
-            <button class="btn-premium" onclick="redirectToStripe()">
-                <i class="fas fa-lock mr-2"></i>
-                Payer l'acompte
-            </button>
-        </div>
-    `;
-}
-
-function redirectToStripe() {
-    const key = orderData.pack || 'pro';
-    const link = STRIPE_PAYMENT_LINKS[key];
-    if (!link) {
-        alert('Lien de paiement non configuré. Merci de revenir plus tard.');
-        return;
-    }
-    window.location.href = link;
-}
-
-function renderConfirmation() {
-    return `
-        <div class="step-content">
-            <h3 class="step-title">Commande initiée</h3>
-            <p class="step-desc">Merci ! Finalisez le règlement via Stripe pour valider votre acompte.</p>
-        </div>
-    `;
+    const selected = document.querySelector(`[data-pack="${packKey}"]`);
+    selected.classList.add('selected');
+    selected.querySelector('.selector-check i').className = 'fas fa-check-circle';
 }
 
 function calculatePricing() {
@@ -738,51 +562,31 @@ function showNotification(message, type = 'success') {
     }, 4000);
 }
 
-// Formulaire brief projet
-function submitBrief(event) {
+// Formulaire de contact
+function submitContact(event) {
     event.preventDefault();
     
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
     
     // Validation basique
-    if (!data.entreprise || !data.secteur || !data.telephone || !data.email) {
+    if (!data.nom || !data.email || !data.telephone || !data.message) {
         showNotification('Veuillez remplir tous les champs obligatoires', 'error');
         return;
     }
     
-    // Validation email simple
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.email)) {
-        showNotification('Veuillez saisir une adresse email valide', 'error');
-        return;
-    }
+    // Envoi au backend (TODO: implémenter)
+    console.log('📧 Contact envoyé:', data);
     
-    // Validation téléphone martiniquais
-    const phoneRegex = /^(0596|596|\+596)/;
-    if (!phoneRegex.test(data.telephone)) {
-        showNotification('Veuillez saisir un numéro martiniquais (0596...)', 'error');
-        return;
-    }
-    
-    // Stocker les données du brief pour le tunnel de commande
-    localStorage.setItem('webboost_brief', JSON.stringify(data));
-    
-    // Feedback utilisateur
-    showNotification('Brief enregistré ! Choisissez maintenant votre pack ⬇️', 'success');
-    
-    // Scroll vers les packs après 1.5 secondes
-    setTimeout(() => {
-        scrollToSection('packs');
-    }, 1500);
+    // Simulation réussite
+    showNotification('Merci ! Élise vous contactera sous 24h ouvrées.', 'success');
+    event.target.reset();
     
     // Analytics
-    trackEvent('brief_submitted', {
-        secteur: data.secteur,
-        has_objectifs: !!data.objectifs
+    trackEvent('contact_form_submit', {
+        pack: data.pack,
+        has_entreprise: !!data.entreprise
     });
-    
-    console.log('📋 Brief projet soumis:', data);
 }
 
 // Utilitaires
@@ -829,66 +633,9 @@ window.WebBoostApp = {
     acceptCookies,
     refuseCookies,
     showCookieSettings,
-    submitContact: (e)=>{ try{e&&e.preventDefault&&e.preventDefault();}catch(_){} showNotification('Message envoyé, nous vous recontactons sous 24h.', 'success'); },
+    submitContact,
     trackEvent,
     showNotification
 };
-
-// Expose critical functions globally for inline onclick
-try {
-  window.orderPack = orderPack;
-  window.startOrder = startOrder;
-  window.closeOrder = closeOrder;
-} catch(e) { console.error(e); }
-
-// Animation des compteurs
-function setupCounterAnimations() {
-    const counters = document.querySelectorAll('.animate-count');
-    
-    const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const counter = entry.target;
-                const target = parseFloat(counter.dataset.target);
-                const numberElement = counter.querySelector('.badge-number');
-                
-                if (numberElement && !counter.hasAttribute('data-counted')) {
-                    counter.setAttribute('data-counted', 'true');
-                    animateCounter(numberElement, target);
-                }
-                
-                counterObserver.unobserve(counter);
-            }
-        });
-    }, { threshold: 0.5 });
-    
-    counters.forEach(counter => {
-        counterObserver.observe(counter);
-    });
-}
-
-function animateCounter(element, target) {
-    const duration = 2000;
-    const increment = target / (duration / 16);
-    let current = 0;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        
-        if (current >= target) {
-            current = target;
-            clearInterval(timer);
-        }
-        
-        // Format selon le type de nombre
-        if (target === 4.9) {
-            element.textContent = current.toFixed(1) + '/5';
-        } else if (target >= 100) {
-            element.textContent = Math.floor(current) + '%';
-        } else {
-            element.textContent = Math.floor(current) + '+';
-        }
-    }, 16);
-}
 
 console.log('🎯 WebBoost Martinique app ready!');
