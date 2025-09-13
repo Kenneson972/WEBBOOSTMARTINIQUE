@@ -56,6 +56,9 @@ function initWebBoost() {
     // Intersection Observer pour animations
     setupScrollAnimations();
     
+    // Animation des compteurs
+    setupCounterAnimations();
+    
     // Resize handler
     window.addEventListener('resize', handleResize);
 }
