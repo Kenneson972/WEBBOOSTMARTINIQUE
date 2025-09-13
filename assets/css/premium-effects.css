@@ -1,85 +1,58 @@
-/* ===== OPTIMISATIONS PERFORMANCE ===== */
+/* ===== ANIMATIONS COMPLÈTEMENT DÉSACTIVÉES ===== */
 
-/* Supprimer toutes barres de progression */
-.loading-screen, .progress-bar, .preloader, #premium-loader {
+/* SUPPRIMER TOUTES LES ANIMATIONS */
+*, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+}
+
+/* Gradient text SANS animation */
+.gradient-text {
+    background: linear-gradient(45deg, var(--wb-gold) 0%, var(--wb-yellow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Boutons SANS animations */
+.btn-premium {
+    background: linear-gradient(45deg, var(--wb-gold), var(--wb-yellow));
+    border: none;
+    padding: 18px 40px;
+    border-radius: 50px;
+    font-weight: 700;
+    color: var(--wb-black);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Cards SANS animations */
+.premium-card {
+    background: rgba(31, 41, 55, 0.8);
+    border-radius: 24px;
+    padding: 2rem;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+/* Navigation SANS animations */
+.nav-link {
+    color: var(--wb-white);
+    text-decoration: none;
+}
+
+/* SUPPRESSION COMPLÈTE */
+.particles {
     display: none !important;
 }
 
-/* Affichage direct du contenu */
-body {
+.fade-in, .fade-in-left, .fade-in-right, .scale-in, .animate-count, .premium-section {
     opacity: 1 !important;
-    animation: quickFadeIn 0.5s ease-out;
-}
-
-@keyframes quickFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.main-content {
-    display: block !important;
+    transform: none !important;
     animation: none !important;
-}
-
-/* Hero apparaît rapidement */
-.hero-section {
-    animation: slideUp 0.6s ease-out;
-}
-
-@keyframes slideUp {
-    from { 
-        opacity: 0; 
-        transform: translateY(20px); 
-    }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
-    }
-}
-
-/* Optimiser animations pour performance */
-.fade-in {
-    will-change: opacity, transform;
-    animation-duration: 0.4s; /* Plus rapide */
-}
-
-/* Performance mobile - Animations désactivées */
-@media (max-width: 768px) {
-    /* Supprimer toutes animations sur mobile */
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-    
-    /* Chargement instantané mobile */
-    .hero-section {
-        animation: none;
-        opacity: 1;
-    }
-    
-    .fade-in, .scale-in, .fade-in-left, .fade-in-right {
-        opacity: 1 !important;
-        transform: none !important;
-        animation: none !important;
-    }
-}
-
-/* Images optimisées mobile */
-img {
-    max-width: 100%;
-    height: auto;
-    loading: lazy;
-}
-
-/* Lazy load pour images non-critiques */
-img[loading="lazy"] {
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-img[loading="lazy"].loaded {
-    opacity: 1;
 }
 
 /* Variables pour cohérence couleurs */
@@ -90,55 +63,6 @@ img[loading="lazy"].loaded {
   --wb-gray-900: #111827;
   --wb-gray-800: #1F2937;
   --wb-white: #FFFFFF;
-}
-
-/* ===== SCROLL FLUIDE GLOBAL ===== */
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  transition: opacity 0.3s ease;
-}
-
-/* ===== ANIMATIONS SIMPLIFIÉES ===== */
-
-/* Réduire toutes les animations à leur minimum */
-.fade-in, .fade-in-left, .fade-in-right, .scale-in {
-  opacity: 1 !important;
-  transform: none !important;
-  animation: none !important;
-}
-
-/* Animations autorisées - MINIMALISTES */
-.gradient-text {
-  background: linear-gradient(45deg, var(--wb-gold) 0%, var(--wb-yellow) 50%, #F59E0B 100%);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  /* Animation shimmer supprimée */
-}
-
-/* Hover effects réduits */
-.btn-premium:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
-}
-
-.premium-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-}
-
-/* Suppression des particules */
-.particles {
-  display: none !important;
-}
-
-/* Navigation simple */
-.nav-link:hover {
-  color: var(--wb-gold);
 }
 
 /* ===== HERO AVEC DÉGRADÉS PREMIUM ===== */
