@@ -61,7 +61,7 @@
 
 <body class="gradient-bg">
     
-    <!-- Navigation Premium -->
+    <!-- Navigation Premium - SIMPLIFIÉE -->
     <nav class="nav-premium" id="main-nav">
         <div class="nav-container">
             <a href="#" class="logo-premium">
@@ -71,9 +71,8 @@
             
             <!-- Desktop Navigation -->
             <div class="nav-links">
+                <a href="#brief" class="nav-link">Brief</a>
                 <a href="#packs" class="nav-link">Packs</a>
-                <a href="#differentiation" class="nav-link">Spécialiste</a>
-                <a href="#portfolio" class="nav-link">Réalisations</a>
                 <a href="#options" class="nav-link">Options</a>
                 <a href="#contact" class="nav-link">Contact</a>
                 <button class="btn-premium btn-nav" onclick="startOrder()">
@@ -91,60 +90,36 @@
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobile-menu">
             <div class="mobile-menu-content">
+                <a href="#brief" onclick="closeMobileMenu()">Brief</a>
                 <a href="#packs" onclick="closeMobileMenu()">Packs</a>
-                <a href="#differentiation" onclick="closeMobileMenu()">Spécialiste</a>
-                <a href="#portfolio" onclick="closeMobileMenu()">Réalisations</a>
                 <a href="#options" onclick="closeMobileMenu()">Options</a>
                 <a href="#contact" onclick="closeMobileMenu()">Contact</a>
                 <button class="btn-premium w-full mt-4" onclick="startOrder(); closeMobileMenu()">
                     <i class="fas fa-rocket mr-2"></i>
-                    LANCER MON SITE - 7J GARANTI
+                    LANCER MON SITE MAINTENANT
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section" id="hero">
+    <!-- Hero Section - SIMPLIFIÉ -->
+    <section class="hero-section hero-simplified" id="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <h1 class="hero-title animate-fade-in-up">
-                    <span class="gold-gradient">LE SPÉCIALISTE</span> martiniquais<br>
-                    des sites web <span class="text-yellow">haute conversion</span><br>
-                    <span class="hero-subtitle-inline">Livrés en 7-12 jours • Prix fixes • Garantie résultats</span>
+                <h1 class="hero-title-simple animate-fade-in-up">
+                    <span class="gold-gradient">LE SPÉCIALISTE</span><br>
+                    des sites web <span class="text-yellow">7-12 jours</span>
                 </h1>
                 
-                <p class="hero-subtitle animate-fade-in-up animate-delay-200">
-                    L'alternative rapide aux agences traditionnelles<br>
-                    <span class="text-yellow font-bold">Fini les projets qui traînent • Sites performants garantis</span>
+                <p class="hero-subtitle-simple animate-fade-in-up animate-delay-200">
+                    Prix fixes dès 890€ • Délais garantis • Satisfait ou remboursé
                 </p>
                 
-                <div class="hero-cta animate-fade-in-up animate-delay-400">
-                    <button class="btn-premium btn-large" onclick="startOrder()">
+                <div class="hero-cta-simple animate-fade-in-up animate-delay-400">
+                    <button class="btn-premium btn-xl" onclick="scrollToSection('brief')">
                         <i class="fas fa-rocket mr-2"></i>
-                        LANCER MON SITE - 7J GARANTI
+                        LANCER MON SITE MAINTENANT
                     </button>
-                    <button class="btn-outline-premium btn-large" onclick="scrollToSection('contact')">
-                        <i class="fas fa-user mr-2"></i>
-                        PARLER AU SPÉCIALISTE
-                    </button>
-                </div>
-                
-                <div class="hero-urgency animate-fade-in-up animate-delay-500">
-                    <span class="urgency-text">
-                        <i class="fas fa-clock mr-1"></i>
-                        Démarrage sous 24h • Satisfait ou remboursé • Délai garanti
-                    </span>
-                </div>
-                
-                <!-- WhatsApp discret -->
-                <div class="hero-whatsapp">
-                    <a href="https://wa.me/596000000?text=Bonjour%20Kenneson,%20j'ai%20une%20question%20urgente%20concernant%20vos%20services%20WebBoost.%20Pouvez-vous%20m'appeler%20?" 
-                       class="whatsapp-link" 
-                       onclick="trackEvent('click_whatsapp')">
-                        <i class="fab fa-whatsapp mr-1"></i>
-                        Urgence ? Question rapide sur WhatsApp
-                    </a>
                 </div>
             </div>
         </div>
@@ -153,26 +128,55 @@
         <div class="particles-bg"></div>
     </section>
 
-    <!-- Section Crédibilité -->
-    <section class="credibilite-section" id="credibilite">
+    <!-- Section Brief Projet - NOUVEAU AVANT PACKS -->
+    <section class="brief-projet-section" id="brief">
         <div class="section-container">
-            <div class="badges-trust-container">
-                <div class="badge-trust-large animate-count" data-target="50">
-                    <div class="badge-number">50+</div>
-                    <div class="badge-text">Sites livrés en Martinique</div>
-                </div>
-                <div class="badge-trust-large animate-count" data-target="100">
-                    <div class="badge-number">100%</div>
-                    <div class="badge-text">Délais respectés depuis 2023</div>
-                </div>
-                <div class="badge-trust-large animate-count" data-target="4.9">
-                    <div class="badge-number">4.9/5</div>
-                    <div class="badge-text">Note moyenne clients</div>
-                </div>
-                <div class="badge-trust-large">
-                    <div class="badge-number">7-12j</div>
-                    <div class="badge-text">SEUL à garantir ces délais</div>
-                </div>
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="gold-gradient">Brief de votre projet</span> <span class="time-badge">(2 minutes)</span>
+                </h2>
+                <p class="section-subtitle">
+                    Remplissez ce formulaire pour démarrer sous 24h
+                </p>
+            </div>
+            
+            <div class="brief-form-container">
+                <form class="brief-form" id="brief-form" onsubmit="submitBrief(event)">
+                    <div class="brief-grid">
+                        <div class="form-group">
+                            <input type="text" name="entreprise" placeholder="Nom de votre entreprise" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <select name="secteur" required>
+                                <option value="">Votre secteur d'activité</option>
+                                <option value="restaurant-bar">Restaurant/Bar</option>
+                                <option value="coiffure-beaute">Coiffure/Beauté</option>
+                                <option value="garage-auto">Garage/Auto</option>
+                                <option value="commerce-boutique">Commerce/Boutique</option>
+                                <option value="services">Services</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="tel" name="telephone" placeholder="Téléphone (0596...)" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Email professionnel" required>
+                        </div>
+                        
+                        <div class="form-group form-full">
+                            <textarea name="objectifs" rows="3" placeholder="Vos objectifs avec ce site (optionnel)"></textarea>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-premium btn-large w-full">
+                        <i class="fas fa-arrow-right mr-2"></i>
+                        VALIDER & CHOISIR MON PACK
+                    </button>
+                </form>
             </div>
         </div>
     </section>
@@ -180,92 +184,12 @@
     <!-- Section Divider -->
     <div class="section-divider"></div>
 
-    <!-- Section Différenciation -->
-    <section id="differentiation" class="differentiation-section">
-        <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">
-                    Pourquoi choisir <span class="gold-gradient">UN SPÉCIALISTE</span><br>
-                    plutôt qu'une agence traditionnelle ?
-                </h2>
-            </div>
-            
-            <div class="comparison-container">
-                <div class="comparison-side nous-side">
-                    <div class="comparison-header">
-                        <div class="comparison-icon specialist-icon">
-                            <i class="fas fa-rocket"></i>
-                        </div>
-                        <h3>WebBoost Spécialiste</h3>
-                    </div>
-                    <ul class="comparison-list">
-                        <li class="advantage-item">
-                            <i class="fas fa-check-circle advantage-check"></i>
-                            <span>Livraison 7-12 jours GARANTIE</span>
-                        </li>
-                        <li class="advantage-item">
-                            <i class="fas fa-check-circle advantage-check"></i>
-                            <span>Prix transparents dès 890€</span>
-                        </li>
-                        <li class="advantage-item">
-                            <i class="fas fa-check-circle advantage-check"></i>
-                            <span>Expert conversion TPE/PME</span>
-                        </li>
-                        <li class="advantage-item">
-                            <i class="fas fa-check-circle advantage-check"></i>
-                            <span>Satisfait ou remboursé</span>
-                        </li>
-                        <li class="advantage-item">
-                            <i class="fas fa-check-circle advantage-check"></i>
-                            <span>Un contact direct, pas de commercial</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="vs-divider">
-                    <div class="vs-circle">VS</div>
-                </div>
-
-                <div class="comparison-side eux-side">
-                    <div class="comparison-header">
-                        <div class="comparison-icon agency-icon">
-                            <i class="fas fa-building"></i>
-                        </div>
-                        <h3>Agences traditionnelles</h3>
-                    </div>
-                    <ul class="comparison-list">
-                        <li class="disadvantage-item">
-                            <i class="fas fa-times-circle disadvantage-check"></i>
-                            <span>4-8 semaines minimum</span>
-                        </li>
-                        <li class="disadvantage-item">
-                            <i class="fas fa-times-circle disadvantage-check"></i>
-                            <span>Devis "sur mesure" opaques</span>
-                        </li>
-                        <li class="disadvantage-item">
-                            <i class="fas fa-times-circle disadvantage-check"></i>
-                            <span>Généralistes sans spécialisation</span>
-                        </li>
-                        <li class="disadvantage-item">
-                            <i class="fas fa-times-circle disadvantage-check"></i>
-                            <span>Pas de garantie délai</span>
-                        </li>
-                        <li class="disadvantage-item">
-                            <i class="fas fa-times-circle disadvantage-check"></i>
-                            <span>Multiples intermédiaires</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Packs Section -->
     <section id="packs" class="packs-section">
         <div class="section-container">
             <div class="section-header">
                 <h2 class="section-title">
-                    <span class="gold-gradient">Commandez votre pack</span>
+                    <span class="gold-gradient">Choisissez votre pack</span>
                 </h2>
                 <p class="section-subtitle">
                     Paiement sécurisé • Livraison garantie • Satisfaction ou remboursé
@@ -298,7 +222,7 @@
                     
                     <button class="btn-premium pack-btn w-full" onclick="orderPack('essentiel')">
                         <i class="fas fa-rocket mr-2"></i>
-                        LANCER MON SITE - 7J GARANTI
+                        COMMANDER MAINTENANT
                     </button>
                 </div>
 
@@ -329,7 +253,7 @@
                     
                     <button class="btn-premium pack-btn w-full" onclick="orderPack('pro')">
                         <i class="fas fa-rocket mr-2"></i>
-                        DÉMARRAGE SOUS 24H
+                        RÉSERVER MAINTENANT
                     </button>
                 </div>
 
@@ -365,144 +289,30 @@
         </div>
     </section>
 
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="portfolio-section">
+    <!-- Section Crédibilité - RÉDUITE -->
+    <section class="credibilite-section credibilite-simple" id="credibilite">
         <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">
-                    Nos dernières <span class="gold-gradient">réalisations martiniquaises</span>
-                </h2>
-                <p class="section-subtitle">
-                    Sites performants livrés en 7-12 jours dans tous secteurs
-                </p>
-            </div>
-            
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="portfolio-placeholder restaurant">
-                            <i class="fas fa-utensils"></i>
-                        </div>
-                        <div class="portfolio-overlay">
-                            <div class="portfolio-stats">
-                                <span class="stat">+45% réservations</span>
-                                <span class="stat">3 mois</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Restaurant créole - Lamentin</h3>
-                        <p>Site vitrine avec réservation en ligne</p>
-                        <span class="portfolio-sector">Restauration</span>
-                    </div>
+            <div class="badges-trust-simple">
+                <div class="badge-trust-large animate-count" data-target="50">
+                    <div class="badge-number">50+</div>
+                    <div class="badge-text">Sites livrés</div>
                 </div>
-
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="portfolio-placeholder coiffeur">
-                            <i class="fas fa-cut"></i>
-                        </div>
-                        <div class="portfolio-overlay">
-                            <div class="portfolio-stats">
-                                <span class="stat">+60% RDV</span>
-                                <span class="stat">2 mois</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Salon de coiffure - Fort-de-France</h3>
-                        <p>Booking en ligne et galerie photos</p>
-                        <span class="portfolio-sector">Beauté</span>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="portfolio-placeholder garage">
-                            <i class="fas fa-car"></i>
-                        </div>
-                        <div class="portfolio-overlay">
-                            <div class="portfolio-stats">
-                                <span class="stat">+80% devis</span>
-                                <span class="stat">4 mois</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Garage automobile - Schoelcher</h3>
-                        <p>Devis en ligne et services détaillés</p>
-                        <span class="portfolio-sector">Automobile</span>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="portfolio-placeholder immobilier">
-                            <i class="fas fa-home"></i>
-                        </div>
-                        <div class="portfolio-overlay">
-                            <div class="portfolio-stats">
-                                <span class="stat">+35% leads</span>
-                                <span class="stat">5 mois</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Agence immobilière - Le Robert</h3>
-                        <p>Catalogue biens et formulaires contact</p>
-                        <span class="portfolio-sector">Immobilier</span>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="portfolio-placeholder service">
-                            <i class="fas fa-tools"></i>
-                        </div>
-                        <div class="portfolio-overlay">
-                            <div class="portfolio-stats">
-                                <span class="stat">+70% appels</span>
-                                <span class="stat">2 mois</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Plombier - Sainte-Marie</h3>
-                        <p>Site urgence 24h et géolocalisation</p>
-                        <span class="portfolio-sector">Services</span>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="portfolio-placeholder commerce">
-                            <i class="fas fa-shopping-bag"></i>
-                        </div>
-                        <div class="portfolio-overlay">
-                            <div class="portfolio-stats">
-                                <span class="stat">+50% ventes</span>
-                                <span class="stat">3 mois</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Boutique artisanale - Trinité</h3>
-                        <p>E-commerce local avec livraison</p>
-                        <span class="portfolio-sector">Commerce</span>
-                    </div>
+                <div class="badge-trust-large">
+                    <div class="badge-number">7-12j</div>
+                    <div class="badge-text">SEUL à garantir ces délais</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Options Section - NOUVELLES OPTIONS -->
+    <!-- Options Section -->
     <section id="options" class="options-section">
         <div class="section-container">
             <div class="section-header">
                 <h2 class="section-title">
-                    <span class="gold-gradient">Boostez votre impact digital</span>
+                    <span class="gold-gradient">Options professionnelles</span>
                 </h2>
-                <p class="section-subtitle">Options professionnelles pour maximiser vos résultats</p>
+                <p class="section-subtitle">Boostez votre impact digital</p>
             </div>
 
             <div class="options-grid">
@@ -623,190 +433,46 @@
         </div>
     </section>
 
-    <!-- Modalités Section -->
-    <section id="modalites" class="modalites-section">
+    <!-- Contact & Garanties Section -->
+    <section id="contact" class="contact-garanties-section">
         <div class="section-container">
             <div class="section-header">
                 <h2 class="section-title">
-                    <span class="gold-gradient">Modalités & Garanties</span>
+                    <span class="gold-gradient">Contact & Garanties</span>
                 </h2>
             </div>
 
-            <div class="modalites-content">
-                <div class="modalite-card">
-                    <h3 class="modalite-title">
-                        <i class="fas fa-credit-card mr-2"></i>
-                        Paiement échelonné 50/40/10
+            <div class="contact-garanties-grid">
+                <!-- Contact rapide -->
+                <div class="contact-card">
+                    <h3 class="contact-title">
+                        <i class="fas fa-phone mr-2"></i>
+                        Contact direct
                     </h3>
-                    <div class="payment-steps">
-                        <div class="payment-step">
-                            <div class="step-percent">50%</div>
-                            <div class="step-desc">
-                                <strong>À la commande</strong>
-                                <p>Acompte pour lancer votre projet</p>
-                            </div>
-                        </div>
-                        <div class="payment-step">
-                            <div class="step-percent">40%</div>
-                            <div class="step-desc">
-                                <strong>Avant mise en ligne</strong>
-                                <p>Validation finale de votre site</p>
-                            </div>
-                        </div>
-                        <div class="payment-step">
-                            <div class="step-percent">10%</div>
-                            <div class="step-desc">
-                                <strong>À la livraison</strong>
-                                <p>Solde à la mise en ligne</p>
-                            </div>
-                        </div>
+                    <div class="contact-info">
+                        <p>📧 contact@weboostmartinique.com</p>
+                        <p>📱 WhatsApp : 0596 00 00 00</p>
+                        <p>🕒 Réponse sous 24h garantie</p>
                     </div>
+                    <a href="https://wa.me/596000000" class="btn-premium" target="_blank">
+                        <i class="fab fa-whatsapp mr-2"></i>
+                        Contacter sur WhatsApp
+                    </a>
                 </div>
 
-                <div class="modalite-card">
-                    <h3 class="modalite-title">
+                <!-- Garanties -->
+                <div class="garanties-card">
+                    <h3 class="garanties-title">
                         <i class="fas fa-shield-alt mr-2"></i>
-                        Garanties & Révisions
+                        Vos garanties
                     </h3>
-                    <ul class="garanties-list">
-                        <li><i class="fas fa-check-circle feature-check"></i> <strong>Révisions incluses :</strong> Selon votre pack (1 à 2 révisions comprises)</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> <strong>Révisions supplémentaires :</strong> 60€/h (minimum 1h) avec délai 48h</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> <strong>Garantie bugs :</strong> 15 jours post-livraison pour correction gratuite</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> <strong>Délais :</strong> Déclenchés à réception complète de vos contenus</li>
-                        <li><i class="fas fa-check-circle feature-check"></i> <strong>Remboursement :</strong> 15 jours pour changer d'avis</li>
+                    <ul class="garanties-list-simple">
+                        <li><i class="fas fa-check-circle feature-check"></i> <strong>Délais respectés</strong> ou remboursé</li>
+                        <li><i class="fas fa-check-circle feature-check"></i> <strong>Satisfait ou remboursé</strong> 15 jours</li>
+                        <li><i class="fas fa-check-circle feature-check"></i> <strong>Révisions incluses</strong> selon pack</li>
+                        <li><i class="fas fa-check-circle feature-check"></i> <strong>Correction bugs</strong> 15j gratuit</li>
+                        <li><i class="fas fa-check-circle feature-check"></i> <strong>Paiement sécurisé</strong> SSL</li>
                     </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section avec formulaire amélioré -->
-    <section id="contact" class="contact-section">
-        <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <span class="gold-gradient">Brief projet complet</span>
-                </h2>
-                <p class="section-subtitle">Partagez votre vision, nous la transformons en succès digital</p>
-            </div>
-
-            <div class="contact-container">
-                <div class="contact-form-wrapper">
-                    <form class="contact-form enhanced-form" id="contact-form" onsubmit="submitContact(event)">
-                        <!-- Informations entreprise -->
-                        <fieldset class="form-fieldset">
-                            <legend>Votre entreprise</legend>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="contact-nom">Nom et Prénom *</label>
-                                    <input type="text" id="contact-nom" name="nom" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="contact-entreprise">Entreprise *</label>
-                                    <input type="text" id="contact-entreprise" name="entreprise" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="contact-email">Email *</label>
-                                    <input type="email" id="contact-email" name="email" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="contact-telephone">Téléphone *</label>
-                                    <input type="tel" id="contact-telephone" name="telephone" required>
-                                </div>
-                                
-                                <div class="form-group form-full">
-                                    <label for="contact-secteur">Secteur d'activité *</label>
-                                    <select id="contact-secteur" name="secteur" required>
-                                        <option value="">-- Sélectionnez votre secteur --</option>
-                                        <option value="restaurant-bar">Restaurant/Bar</option>
-                                        <option value="coiffure-beaute">Coiffure/Beauté</option>
-                                        <option value="garage-auto">Garage/Automobile</option>
-                                        <option value="immobilier">Immobilier</option>
-                                        <option value="services-particuliers">Services aux particuliers</option>
-                                        <option value="commerce-boutique">Commerce/Boutique</option>
-                                        <option value="sante-medical">Santé/Médical</option>
-                                        <option value="tourisme-hotellerie">Tourisme/Hôtellerie</option>
-                                        <option value="artisan-batiment">Artisan/Bâtiment</option>
-                                        <option value="autre">Autre</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group form-full">
-                                    <label for="contact-pack">Pack souhaité</label>
-                                    <select id="contact-pack" name="pack">
-                                        <option value="">À définir ensemble</option>
-                                        <option value="essentiel">Pack Essentiel (890€ HT)</option>
-                                        <option value="pro">Pack Pro (1290€ HT)</option>
-                                        <option value="premium">Pack Premium (1790€ HT)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </fieldset>
-
-                        <!-- Projet détaillé -->
-                        <fieldset class="form-fieldset">
-                            <legend>Votre projet</legend>
-                            <div class="form-group">
-                                <label for="contact-objectifs">Objectifs principaux *</label>
-                                <textarea id="contact-objectifs" name="objectifs" rows="3" required 
-                                          placeholder="Ex: Augmenter les réservations, générer des devis, vendre en ligne..."></textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="contact-concurrents">Principaux concurrents</label>
-                                <input type="text" id="contact-concurrents" name="concurrents" 
-                                       placeholder="Qui sont vos principaux concurrents ?">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="contact-message">Description complète de votre projet *</label>
-                                <textarea id="contact-message" name="message" rows="5" required 
-                                          placeholder="Décrivez votre activité, vos services, votre clientèle cible, vos besoins spécifiques..."></textarea>
-                            </div>
-                        </fieldset>
-
-                        <!-- Éléments visuels -->
-                        <fieldset class="form-fieldset">
-                            <legend>Vos éléments (optionnel)</legend>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="contact-logo">Logo existant</label>
-                                    <input type="file" id="contact-logo" name="logo" accept=".png,.jpg,.jpeg,.ai,.eps,.pdf">
-                                    <small>Formats: PNG, JPG, AI, EPS, PDF</small>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="contact-photos">Photos de qualité</label>
-                                    <input type="file" id="contact-photos" name="photos[]" multiple accept=".png,.jpg,.jpeg">
-                                    <small>Plusieurs fichiers possible</small>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="contact-couleurs">Couleurs préférées</label>
-                                <input type="text" id="contact-couleurs" name="couleurs" 
-                                       placeholder="Ex: Bleu marine, doré, blanc... ou codes couleurs">
-                            </div>
-                        </fieldset>
-                        
-                        <div class="form-group form-full">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="consent" required>
-                                <span class="checkbox-text">
-                                    J'accepte que mes données soient utilisées pour être recontacté dans le cadre de ce projet. 
-                                    <a href="mentions-legales.html#confidentialite">Politique de confidentialité</a>
-                                </span>
-                            </label>
-                        </div>
-                        
-                        <button type="submit" class="btn-premium btn-large w-full">
-                            <i class="fas fa-rocket mr-2"></i>
-                            LANCER MON PROJET - RÉPONSE SOUS 24H
-                        </button>
-                    </form>
                 </div>
             </div>
         </div>
@@ -823,9 +489,9 @@
             </p>
             
             <div class="cta-buttons">
-                <button class="btn-premium btn-large" onclick="startOrder()">
+                <button class="btn-premium btn-large" onclick="scrollToSection('brief')">
                     <i class="fas fa-rocket mr-2"></i>
-                    LANCER MON SITE - 7J GARANTI
+                    LANCER MON SITE MAINTENANT
                 </button>
                 <button class="btn-outline-premium btn-large" onclick="scrollToSection('contact')">
                     <i class="fas fa-user mr-2"></i>
