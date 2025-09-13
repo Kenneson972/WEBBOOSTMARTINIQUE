@@ -133,27 +133,27 @@
         </div>
     </section>
 
-    <!-- Section Brief Projet - NOUVEAU AVANT PACKS -->
-    <section class="brief-projet-section" id="brief">
+    <!-- Section Brief Projet - PREMIUM -->
+    <section class="brief-projet-section premium-section glass-effect-gold fade-in" id="brief">
         <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <span class="gold-gradient">Brief de votre projet</span> <span class="time-badge">(2 minutes)</span>
+            <div class="section-header fade-in-left">
+                <h2 class="section-title gradient-text">
+                    Brief de votre projet <span class="premium-badge time-badge">(2 minutes)</span>
                 </h2>
                 <p class="section-subtitle">
                     Remplissez ce formulaire pour démarrer sous 24h
                 </p>
             </div>
             
-            <div class="brief-form-container">
+            <div class="brief-form-container premium-card fade-in-right" style="animation-delay: 0.2s;">
                 <form class="brief-form" id="brief-form" onsubmit="submitBrief(event)">
                     <div class="brief-grid">
                         <div class="form-group">
-                            <input type="text" name="entreprise" placeholder="Nom de votre entreprise" required>
+                            <input type="text" name="entreprise" class="premium-input" placeholder="Nom de votre entreprise" required>
                         </div>
                         
                         <div class="form-group">
-                            <select name="secteur" required>
+                            <select name="secteur" class="premium-input" required>
                                 <option value="">Votre secteur d'activité</option>
                                 <option value="restaurant-bar">Restaurant/Bar</option>
                                 <option value="coiffure-beaute">Coiffure/Beauté</option>
@@ -165,20 +165,20 @@
                         </div>
                         
                         <div class="form-group">
-                            <input type="tel" name="telephone" placeholder="Téléphone (0596...)" required>
+                            <input type="tel" name="telephone" class="premium-input" placeholder="Téléphone (0596...)" required>
                         </div>
                         
                         <div class="form-group">
-                            <input type="email" name="email" placeholder="Email professionnel" required>
+                            <input type="email" name="email" class="premium-input" placeholder="Email professionnel" required>
                         </div>
                         
                         <div class="form-group form-full">
-                            <textarea name="objectifs" rows="3" placeholder="Vos objectifs avec ce site (optionnel)"></textarea>
+                            <textarea name="objectifs" rows="3" class="premium-input" placeholder="Vos objectifs avec ce site (optionnel)"></textarea>
                         </div>
                     </div>
                     
                     <button type="submit" class="btn-premium btn-large w-full">
-                        <i class="fas fa-arrow-right mr-2"></i>
+                        <i class="fas fa-arrow-right premium-icon"></i>
                         VALIDER & CHOISIR MON PACK
                     </button>
                 </form>
