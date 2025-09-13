@@ -1,23 +1,23 @@
-# Root .htaccess for 02switch
-# Serves static files correctly and avoids rewrites that could break CSS/JS
+# SAFE .htaccess for 02switch (no server-level directives)
+# If 500 persists, temporarily rename this file to .htaccess.bak and reload
 
-# Force index.html as default
+# Serve index.html by default
 DirectoryIndex index.html
 
-# Enable rewrite engine (no SPA force-redirects here, multi-page site)
+# Keep rewrite engine on, but do not force rewrites (static, multi-page site)
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  # Serve existing files/directories as-is
+  # Do not rewrite existing files/dirs
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 </IfModule>
 
-# Proper MIME types (defensive)
+# Correct MIME types (defensive)
 AddType text/css .css
 AddType application/javascript .js
 
-# Caching for static assets
+# Far-future cache for static assets
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/css "access plus 1 year"
@@ -35,7 +35,6 @@ AddType application/javascript .js
   </FilesMatch>
 </IfModule>
 
-# Security for storage folders (defense-in-depth; we also drop .htaccess inside them)
-<Directory "api/storage">
-  Require all denied
-</Directory>
+# IMPORTANT: Do NOT use <Directory> blocks in .htaccess (causes 500). 
+# To protect storage folders, place a separate .htaccess inside each folder with:
+#   Require all denied
