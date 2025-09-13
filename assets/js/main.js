@@ -12,11 +12,12 @@ const WEBBOOST_CONFIG = {
         'premium': { name: 'Pack Vitrine Conversion', price: 1790, pages: '6-8', delivery: '10-12 jours' }
     },
     options: [
-        { id: 'content', name: 'Rédaction 800 mots', price: 180 },
-        { id: 'images', name: 'Optimisation 20 images', price: 120 },
-        { id: 'page_extra', name: 'Page locale supplémentaire', price: 120 },
-        { id: 'booking', name: 'Intégration réservation', price: 150 },
-        { id: 'translation', name: 'Traduction FR-EN', price: 150 }
+        { id: 'seo_local', name: 'SEO Local Avancé', price: 290 },
+        { id: 'whatsapp_pro', name: 'WhatsApp Business Pro', price: 150 },
+        { id: 'analytics_pro', name: 'Analytics & Conversion', price: 190 },
+        { id: 'photos_pro', name: 'Pack Photos Pro', price: 240 },
+        { id: 'email_marketing', name: 'Email Marketing', price: 170 },
+        { id: 'boutique_simple', name: 'Boutique Simple', price: 350 }
     ],
     vatRate: 0.085, // TVA Martinique
     whatsappNumber: '596000000'
