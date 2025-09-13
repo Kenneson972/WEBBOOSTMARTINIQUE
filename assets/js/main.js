@@ -642,4 +642,54 @@ window.WebBoostApp = {
     showNotification
 };
 
+// Animation des compteurs
+function setupCounterAnimations() {
+    const counters = document.querySelectorAll('.animate-count');
+    
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counter = entry.target;
+                const target = parseFloat(counter.dataset.target);
+                const numberElement = counter.querySelector('.badge-number');
+                
+                if (numberElement && !counter.hasAttribute('data-counted')) {
+                    counter.setAttribute('data-counted', 'true');
+                    animateCounter(numberElement, target);
+                }
+                
+                counterObserver.unobserve(counter);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    counters.forEach(counter => {
+        counterObserver.observe(counter);
+    });
+}
+
+function animateCounter(element, target) {
+    const duration = 2000;
+    const increment = target / (duration / 16);
+    let current = 0;
+    
+    const timer = setInterval(() => {
+        current += increment;
+        
+        if (current >= target) {
+            current = target;
+            clearInterval(timer);
+        }
+        
+        // Format selon le type de nombre
+        if (target === 4.9) {
+            element.textContent = current.toFixed(1) + '/5';
+        } else if (target >= 100) {
+            element.textContent = Math.floor(current) + '%';
+        } else {
+            element.textContent = Math.floor(current) + '+';
+        }
+    }, 16);
+}
+
 console.log('🎯 WebBoost Martinique app ready!');
