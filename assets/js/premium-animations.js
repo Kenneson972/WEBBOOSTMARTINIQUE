@@ -327,99 +327,12 @@ function setupPremiumNavigation() {
 // Setup navigation premium
 setupPremiumNavigation();
 
-// ===== PRÉLOADER PREMIUM =====
-function showPremiumLoader() {
-    const loader = document.createElement('div');
-    loader.id = 'premium-loader';
-    loader.innerHTML = `
-        <div class="loader-content">
-            <div class="loader-icon">
-                <i class="fas fa-rocket"></i>
-            </div>
-            <div class="loader-text gradient-text">WebBoost</div>
-            <div class="loader-progress">
-                <div class="progress-bar"></div>
-            </div>
-        </div>
-    `;
-    
-    const loaderStyles = `
-        #premium-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0B0B0D 0%, #111827 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            opacity: 1;
-            transition: opacity 0.5s ease;
-        }
-        
-        .loader-content {
-            text-align: center;
-        }
-        
-        .loader-icon {
-            font-size: 3rem;
-            color: #D4AF37;
-            margin-bottom: 1rem;
-            animation: float 2s ease-in-out infinite;
-        }
-        
-        .loader-text {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 2rem;
-        }
-        
-        .loader-progress {
-            width: 200px;
-            height: 4px;
-            background: rgba(212, 175, 55, 0.2);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #D4AF37, #FBBF24);
-            width: 0%;
-            transition: width 2s ease;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-    `;
-    
-    const styleSheet = document.createElement('style');
-    styleSheet.textContent = loaderStyles;
-    document.head.appendChild(styleSheet);
-    document.body.appendChild(loader);
-    
-    // Animation de la barre de progression
-    setTimeout(() => {
-        loader.querySelector('.progress-bar').style.width = '100%';
-    }, 100);
-    
-    // Masquer le loader
-    setTimeout(() => {
-        loader.style.opacity = '0';
-        setTimeout(() => {
-            loader.remove();
-            styleSheet.remove();
-        }, 500);
-    }, 2000);
-}
+// ===== PRÉLOADER DÉSACTIVÉ POUR PERFORMANCE =====
+// Preloader supprimé pour chargement instantané
 
-// Afficher le loader au chargement de la page
-if (document.readyState === 'loading') {
-    showPremiumLoader();
-}
+// Afficher le loader au chargement de la page - DÉSACTIVÉ
+// if (document.readyState === 'loading') {
+//     showPremiumLoader();
+// }
 
-console.log('✨ WebBoost Premium 2024 - Toutes les animations chargées !');
+console.log('✨ WebBoost Premium 2024 - Chargement optimisé instantané !');
