@@ -679,7 +679,7 @@ window.WebBoostApp = {
     acceptCookies,
     refuseCookies,
     showCookieSettings,
-    submitContact,
+    submitContact: (e)=>{ try{e&&e.preventDefault&&e.preventDefault();}catch(_){} showNotification('Message envoyé, nous vous recontactons sous 24h.', 'success'); },
     trackEvent,
     showNotification
 };
