@@ -1,144 +1,41 @@
-# WebBoost Martinique - Configuration 02switch
-# Optimisé pour HTML/CSS/JS + API PHP
+# Root .htaccess for 02switch
+# Serves static files correctly and avoids rewrites that could break CSS/JS
 
-RewriteEngine On
+# Force index.html as default
 DirectoryIndex index.html
 
-# Redirection API PHP
-RewriteRule ^api/chat/?$ api/chat.php [L,QSA]
-RewriteRule ^api/contact/?$ api/contact.php [L,QSA]
-
-# Support navigation SPA-like
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !^/api/
-RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg|gif|svg|ico|xml|txt)$
-RewriteRule ^(.*)$ index.html [L]
-
-# Pages légales
-RewriteRule ^mentions/?$ mentions-legales.html [L]
-RewriteRule ^cgv/?$ cgv.html [L]
-RewriteRule ^contact/?$ contact.html [L]
-
-# Redirection HTTPS pour 02switch
-RewriteCond %{HTTPS} off
-RewriteCond %{HTTP_HOST} !^localhost
-RewriteCond %{HTTP_HOST} !^127\.0\.0\.1
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Gestion erreurs
-ErrorDocument 404 /index.html
-ErrorDocument 500 /index.html
-
-# Sécurité fichiers
-<Files ".env">
-    Require all denied
-</Files>
-
-<Files ".git*">
-    Require all denied
-</Files>
-
-<Files "*.log">
-    Require all denied
-</Files>
-
-<FilesMatch "^\.">
-    Require all denied
-</FilesMatch>
-
-# Permissions API PHP
-<Files "*.php">
-    <RequireAll>
-        Require all granted
-    </RequireAll>
-</Files>
-
-# Cache performances
-<IfModule mod_expires.c>
-    ExpiresActive On
-    
-    # Images
-    ExpiresByType image/jpg "access plus 1 year"
-    ExpiresByType image/jpeg "access plus 1 year"
-    ExpiresByType image/png "access plus 1 year"
-    ExpiresByType image/gif "access plus 1 year"
-    ExpiresByType image/webp "access plus 1 year"
-    ExpiresByType image/svg+xml "access plus 1 year"
-    ExpiresByType image/x-icon "access plus 1 year"
-    
-    # CSS/JS
-    ExpiresByType text/css "access plus 1 month"
-    ExpiresByType application/javascript "access plus 1 month"
-    ExpiresByType text/javascript "access plus 1 month"
-    
-    # Fonts
-    ExpiresByType font/woff2 "access plus 1 year"
-    ExpiresByType font/woff "access plus 1 year"
-    ExpiresByType application/font-woff2 "access plus 1 year"
-    
-    # Documents
-    ExpiresByType application/pdf "access plus 1 month"
-    ExpiresByType text/xml "access plus 1 week"
-    ExpiresByType application/xml "access plus 1 week"
-</IfModule>
-
-# Compression GZIP
-<IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html
-    AddOutputFilterByType DEFLATE text/css
-    AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE text/javascript
-    AddOutputFilterByType DEFLATE application/json
-    AddOutputFilterByType DEFLATE text/xml
-    AddOutputFilterByType DEFLATE application/xml
-    AddOutputFilterByType DEFLATE application/rss+xml
-    AddOutputFilterByType DEFLATE text/plain
-</IfModule>
-
-# Headers sécurité
-<IfModule mod_headers.c>
-    # Sécurité de base
-    Header always set X-Content-Type-Options nosniff
-    Header always set X-Frame-Options SAMEORIGIN
-    Header always set X-XSS-Protection "1; mode=block"
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    
-    # Cache Control pour assets
-    <FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg|woff2|woff)$">
-        Header set Cache-Control "max-age=31536000, public, immutable"
-    </FilesMatch>
-    
-    # Cache HTML
-    <FilesMatch "\.(html)$">
-        Header set Cache-Control "max-age=3600, public, must-revalidate"
-    </FilesMatch>
-    
-    # API pas de cache
-    <FilesMatch "\.(php)$">
-        Header set Cache-Control "no-cache, no-store, must-revalidate"
-        Header set Pragma "no-cache"
-        Header set Expires "0"
-    </FilesMatch>
-</IfModule>
-
-# Optimisations serveur
-<IfModule mod_mime.c>
-    # Fonts
-    AddType font/woff2 .woff2
-    AddType font/woff .woff
-    
-    # Images modernes
-    AddType image/webp .webp
-    AddType image/avif .avif
-    
-    # JavaScript modules
-    AddType text/javascript .js .mjs
-</IfModule>
-
-# Hotlinking protection (optionnel)
+# Enable rewrite engine (no SPA force-redirects here, multi-page site)
 <IfModule mod_rewrite.c>
-    RewriteCond %{HTTP_REFERER} !^https?://(.+\.)?weboostmartinique\.com/ [NC]
-    RewriteCond %{HTTP_REFERER} !^$
-    RewriteRule \.(jpg|jpeg|png|gif|webp|svg)$ - [F]
+  RewriteEngine On
+  # Serve existing files/directories as-is
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
 </IfModule>
+
+# Proper MIME types (defensive)
+AddType text/css .css
+AddType application/javascript .js
+
+# Caching for static assets
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js|ico|png|jpg|jpeg|webp|svg)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# Security for storage folders (defense-in-depth; we also drop .htaccess inside them)
+<Directory "api/storage">
+  Require all denied
+</Directory>
