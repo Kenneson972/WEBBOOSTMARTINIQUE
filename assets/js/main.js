@@ -50,9 +50,9 @@ document.addEventListener('DOMContentLoaded', function() {
     setupNavigation();
     trackPageLoad();
 
-    // Délégation de clic robuste (limitée aux packs de la page, pas dans le modal)
+    // Délégation de clic (packs de la page uniquement)
     document.addEventListener('click', function(e){
-        if (e.target.closest('#order-modal')) return; // ignorer les clics à l'intérieur du tunnel
+        if (e.target.closest('#order-modal')) return; // ignore clicks inside modal
         const btn = e.target.closest('.pack-btn');
         if(!btn) return;
         const pack = btn.dataset.pack || (btn.closest('.pack-card') && btn.closest('.pack-card').dataset.pack) || 'pro';
@@ -163,13 +163,13 @@ function setupNavigation() {
     });
 }
 
-// ===== Renfort: binding direct sur boutons et cartes =====
+// ===== Renfort: binding direct sur boutons =====
 function bindPackButtons() {
     try {
-        document.querySelectorAll('.pack-btn, .pack-card[data-pack]').forEach(el => {
+        document.querySelectorAll('.pack-btn').forEach(el => {
             el.addEventListener('click', (e) => {
                 const pack = el.dataset.pack || (el.closest('.pack-card') && el.closest('.pack-card').dataset.pack) || 'pro';
-                console.log('🧲 Direct bind: pack click →', pack);
+                console.log('🧲 Direct bind (main packs):', pack);
                 try { orderPack(pack); } catch(err) { console.error('orderPack bind error:', err); }
                 e.preventDefault();
                 e.stopPropagation();
@@ -344,6 +344,15 @@ function renderOrderStep() {
     switch(orderData.step) {
         case 1:
             contentDiv.innerHTML = renderPackSelection();
+            // Ajouter écouteurs sur les .pack-selector pour choisir le pack
+            setTimeout(() => {
+                document.querySelectorAll('#order-modal .pack-selector').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const key = el.getAttribute('data-pack');
+                        selectPack(key);
+                    });
+                });
+            }, 0);
             break;
         case 2:
             contentDiv.innerHTML = renderOptionsSelection();
@@ -372,7 +381,7 @@ function renderPackSelection() {
             <div class="pack-selection-grid">
                 ${Object.entries(WEBBOOST_CONFIG.packs).map(([key, pack]) => `
                     <div class="pack-selector ${orderData.pack === key ? 'selected' : ''}" 
-                         onclick="selectPack('${key}')" data-pack="${key}">
+                         data-pack="${key}">
                         <h4>${pack.name}</h4>
                         <div class="selector-price">€${pack.price} HT</div>
                         <div class="selector-deposit">Acompte : €${Math.round(pack.price * 0.5)}</div>
@@ -391,14 +400,14 @@ function selectPack(packKey) {
     orderData.pack = packKey;
     calculatePricing();
     
-    // Mettre à jour visual
-    document.querySelectorAll('.pack-selector').forEach(el => {
+    // Mettre à jour visual (dans le modal uniquement)
+    document.querySelectorAll('#order-modal .pack-selector').forEach(el => {
         el.classList.remove('selected');
         const icon = el.querySelector('.selector-check i');
         if (icon) icon.className = 'fas fa-circle';
     });
     
-    const selected = document.querySelector(`[data-pack="${packKey}"]`);
+    const selected = document.querySelector(`#order-modal .pack-selector[data-pack="${packKey}"]`);
     if (selected) {
         selected.classList.add('selected');
         const icon = selected.querySelector('.selector-check i');
