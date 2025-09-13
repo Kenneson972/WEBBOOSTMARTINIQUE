@@ -213,7 +213,7 @@ function closeOrder() {
 }
 
 function renderOrderModal() {
-    const modal = document.getElementById('order-modal');
+    const modal = ensureOrderModal();
     modal.innerHTML = `
         <div class="order-container">
             <div class="order-header">
