@@ -144,6 +144,18 @@ function setupNavigation() {
 }
 
 // Machine de vente - Tunnel de commande
+function ensureOrderModal() {
+    let modal = document.getElementById('order-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'order-modal';
+        modal.className = 'order-modal';
+        modal.innerHTML = '<div class="order-container"></div>';
+        document.body.appendChild(modal);
+    }
+    return modal;
+}
+
 function startOrder(preselectedPack = null) {
     // Reset order data
     orderData = {
