@@ -204,7 +204,7 @@ function orderPack(packKey) {
 }
 
 function closeOrder() {
-    const modal = document.getElementById('order-modal');
+    const modal = ensureOrderModal();
     modal.classList.remove('active');
     document.body.style.overflow = 'auto';
     
