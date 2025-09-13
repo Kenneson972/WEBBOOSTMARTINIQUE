@@ -60,13 +60,31 @@
     </div>
   </footer>
 
-  <!-- Chatbot -->
+  <!-- Chatbot Widget HTML -->
+  <div id="chatbot-widget" aria-live="polite">
+    <button id="chat-fab" type="button" aria-label="Ouvrir le chat" style="position:fixed;right:18px;bottom:18px;z-index:9998;border:0;background:transparent">
+      <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f5c542"/><stop offset="100%" stop-color="#eab308"/></linearGradient></defs>
+        <circle cx="28" cy="28" r="27" fill="url(#g)"/>
+        <path d="M14 18.5A3.5 3.5 0 0 1 17.5 15h21A3.5 3.5 0 0 1 42 18.5v12A3.5 3.5 0 0 1 38.5 34H26l-6 6v-6h-2.5A3.5 3.5 0 0 1 14 30.5v-12Z" fill="#111"/>
+      </svg>
+    </button>
+    <div id="chat-panel" class="chat-panel" style="display:none;position:fixed;right:18px;bottom:86px;z-index:9999;background:#0f1116;border:1px solid #232633;border-radius:16px;overflow:hidden;width:360px;max-width:92vw;">
+      <div class="chat-header" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid #232633;background:rgba(245,197,66,.08)">
+        <div class="elise-avatar-small" style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#f5c542,#eab308)"></div>
+        <strong>Élise – WEBOOSTMARTINIQUE</strong>
+        <button id="fullscreen-btn" type="button" aria-label="Plein écran" style="margin-left:auto;background:transparent;border:0;color:#fff"><i class="fa fa-expand"></i></button>
+      </div>
+      <div id="chat-messages" class="chat-messages" style="height:300px;overflow:auto;padding:12px;color:#eef2f7"></div>
+      <div class="chat-input" style="display:flex;gap:8px;padding:10px;border-top:1px solid #232633;background:#12141a">
+        <textarea id="message-input" rows="1" placeholder="Écrivez votre message…" style="flex:1;background:#0d0f14;border:1px solid #232633;border-radius:10px;color:#fff;padding:10px"></textarea>
+        <button id="send-message-btn" type="button" class="btn btn-primary">Envoyer</button>
+      </div>
+    </div>
+    <div id="chat-notification" style="position:fixed;right:18px;bottom:150px;z-index:9999"></div>
+  </div>
+
   <script src="/assets/js/chatbot.js" defer></script>
-  <script>
-    window.addEventListener('DOMContentLoaded', function(){
-      try{ if(window.EliseWebBoostChatbot && !window.eliseChatbot){ window.eliseChatbot = new EliseWebBoostChatbot(); } }catch(e){}
-    });
-  </script>
   <script src="/assets/js/main.js"></script>
 </body>
 </html>
